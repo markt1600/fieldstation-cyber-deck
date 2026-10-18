@@ -41,7 +41,7 @@ Optional integrations require their own software: VLC, FFmpeg/ffprobe, Kiwix Ser
 
 Gutenberg discovery requires a separately generated `data/gutenberg.sqlite3`; art discovery requires a local collection/index. These generated/downloaded assets are intentionally excluded. The core catalogue scans configured library paths; specific integrations may need additional provisioning.
 
-`start-browser.sh`, `desktop-session.sh`, and `fieldstation-browser.service` provide kiosk-launch examples. Review paths before installing them. The supplied launcher uses `--password-store=basic` to avoid keyring prompts on the original dedicated device; this does not provide OS-keyring protection for stored browser login data. Adjust it for your deployment.
+`start-browser.sh`, `desktop-session.sh`, and `fieldstation-browser.service` provide fullscreen-launch examples (F11 toggles fullscreen). Review paths before installing them. The supplied launcher uses `--password-store=basic` to avoid keyring prompts on the original dedicated device; this does not provide OS-keyring protection for stored browser login data. Adjust it for your deployment.
 
 ## Source layout
 
