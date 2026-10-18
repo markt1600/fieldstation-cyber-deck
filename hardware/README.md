@@ -49,7 +49,7 @@ Hold B2 until the KVM remote-button holder is added to the TEMP column.
 | M3 × 10 bolt + nut | 6 | D-size USB socket flanges |
 | M4 × 40 bolt + nyloc nut | 2 | Kickstand pivots |
 | 4.56 mm magnet cube | 24 | Pod baffles 16, tray door 8 |
-| Foam gasket tape, VHB tape, epoxy, polyfill | – | Pod and sensor seals, post feet and lid cradle, dovetail joins, pod damping |
+| Small cable tie (PMS7003 cradle), foam gasket tape, VHB tape, epoxy, polyfill | – | Pod and sensor seals, post feet and lid cradle, dovetail joins, pod damping |
 | Loctite 770 primer + 406 (or 3M Primer 94 + VHB) | – | Kickstands to the polypropylene case |
 
 ## Assembly notes
@@ -59,7 +59,7 @@ Hold B2 until the KVM remote-button holder is added to the TEMP column.
 3. **Speaker pods.** Fit the driver from the front, with its terminal block in the baffle's single notch, on the same side as the cable hole. Seal the ends of the notch and the cable hole. The four M3 × 20 screws through the panel clamp the panel, baffle and body together; a foam gasket on the rim seals against the panel.
 4. **Panels.** Dry-fit the dovetails, then epoxy the halves face down on a flat surface. Glue the splice strip behind the base-panel seam above the window.
 5. **Lid.** The cradle halves can be dry-fitted. Screw the overlay onto the cradle, drop the assembly into the lid so the overlay centres it, then fix it with VHB (or Dual Lock if you want it removable). The roughly 6 mm gap around the cradle is intentional; it clears the lid's tapered walls and curved floor edge.
-6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs pointing at the panel. Slide the sensor in from the cradle's open end, outlet end first, with the inlet/outlet face toward the panel and the board on the thin-walled side: the connector passes through the window in that side wall, and the 1.2 mm duct wall tucks under the board. The sensor face sits 34 mm behind the panel, which leaves room for the plugs and for the wires to bend out sideways. Run foam gasket round the whole lip, including the short end wall that rests on the sensor face just past the inlet, so it only breathes through the louvres. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
+6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs mid-thickness in front of the inlet face, pointing at the panel. The front of the cradle has two chambers split by a rib: the outlet chamber, and an inlet chamber that also holds the plugs. Drop the sensor in from the back, face first, with the board on the side where the sleeve wall is open, feeding the wires out through the slot in the inlet chamber's end wall. Hold it in with a cable tie round the sleeve and over the sensor's back, between the guide ridges. Then seal it so it only breathes through the louvres: foam gasket round the lip, and foam or putty in the wire slot and the small notch where the header pins pass. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
 7. **Kickstands.** Glue the hinge plates to flat areas about 100 mm up the back of the case.
 
 ## Source (`src/`)

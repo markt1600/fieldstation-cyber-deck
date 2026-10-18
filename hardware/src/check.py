@@ -15,8 +15,7 @@ _S={'__name__':'lib'}; exec(open('pms7003_v2.py').read().split("o=body.to_mesh()
 _mv=lambda m: m.translate([AIR_C[0],AIR_C[1],T])
 _air=_S['body']
 for _m in _S['board_parts']()[1:]: _air=_air+_m       # adapter board, connector, Dupont plugs
-# room for the wires to bend away from the plug ends
-_air=_air+box(6,11,8,20,34,_S['SNOUT']+_S['BRD_BACK'])
+_air=_air+box(-5,24,4,5,36,_S['SNOUT'])      # wires leaving the end-wall slot
 parts['air']=_mv(_air)
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + mini breadboard left half

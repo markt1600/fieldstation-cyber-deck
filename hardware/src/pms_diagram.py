@@ -9,11 +9,11 @@ S={'__name__':'lib'}; exec(open('pms7003_v2.py').read().split("o=body.to_mesh()"
 box=S['box']; SN=S['SNOUT']
 sensor,brd,conn,plugs=S['board_parts']()
 panel=box(-40,-50,-4,40,45,0)
-for k in range(-5,5):                                   # louvres in front of the cradle (as frame.py)
+for k in range(-5,6):                                   # louvres in front of the cradle (as frame.py)
     if k==0: continue
     panel=panel-box(-5,k*4.2-1.0,-5,5,k*4.2+1.0,1)
 parts=[('panel',panel,'#9aa3ad'),('cradle',S['body'],'#f2a23a'),('sensor',sensor,'#3a9fbf'),
-       ('connector',conn,'#333333'),('adapter board',brd,'#2e9e4f'),('Dupont plugs',plugs,'#222222')]
+       ('connector',conn,'#333333'),('adapter board',brd,'#2e9e4f'),('Dupont plugs + pins',plugs,'#222222')]
 
 def draw(ax,axis,at,title):
     for name,m,c in parts:
@@ -29,16 +29,17 @@ def draw(ax,axis,at,title):
     ax.set_xlabel('depth behind the back of the panel (mm)')
 
 fig,axs=plt.subplots(1,2,figsize=(15,7.5))
-draw(axs[0],'y',16.0,'Section through the inlet and the adapter board (y = +16)\npanel on the left, case interior to the right')
+draw(axs[0],'y',18.0,'Section through the plugs and the adapter board (y = +18)\npanel on the left, case interior to the right')
 axs[0].set_ylabel('across the sensor (x, mm); board side up')
-draw(axs[1],'x',0.0,'Section down the middle of the duct (x = 0)\ninlet (top) and outlet (bottom) split by the rib')
+draw(axs[1],'x',0.0,'Section down the middle of the duct (x = 0)\ninlet + plugs chamber (top) and outlet chamber (bottom), split by the rib')
 axs[1].set_ylabel('along the sensor (y, mm); board end up')
 h,l=axs[0].get_legend_handles_labels(); axs[0].legend(h,l,loc='lower right',fontsize=8)
-for ax in axs: ax.set_xlim(-8,80)
-axs[0].annotate('1.2 mm duct wall\nunder the board',xy=(SN-3,6.8),xytext=(SN-30,22),arrowprops=dict(arrowstyle='->'),fontsize=8)
-axs[0].annotate('sleeve window: the\nconnector slides past',xy=(SN+6,8),xytext=(SN+20,22),arrowprops=dict(arrowstyle='->'),fontsize=8)
-axs[0].annotate('plugs point at the panel,\nwires bend out sideways',xy=(SN-15,11),xytext=(SN-36,-22),arrowprops=dict(arrowstyle='->'),fontsize=8)
-axs[1].annotate('sensor slides in from this\nopen end, outlet end first',xy=(SN+18,26),xytext=(SN+15,38),arrowprops=dict(arrowstyle='->'),fontsize=8)
+for ax in axs: ax.set_xlim(-8,80); ax.set_ylim(-50,48)
+axs[0].annotate('pin notch: pack\nwith foam',xy=(SN-4,7),xytext=(SN-28,24),arrowprops=dict(arrowstyle='->'),fontsize=8)
+axs[0].annotate('sleeve open on the board side\nso the connector slides past',xy=(SN+8,8),xytext=(SN+12,24),arrowprops=dict(arrowstyle='->'),fontsize=8)
+axs[0].annotate('plugs sit mid-thickness\nin the inlet chamber',xy=(SN-12,0),xytext=(SN-36,-24),arrowprops=dict(arrowstyle='->'),fontsize=8)
+axs[1].annotate('wires leave through the\nend-wall slot (seal with foam)',xy=(8,25),xytext=(4,38),arrowprops=dict(arrowstyle='->'),fontsize=8)
+axs[1].annotate('sensor drops in from the back,\nface first; cable tie over its back',xy=(SN+30,10),xytext=(SN+8,-44),arrowprops=dict(arrowstyle='->'),fontsize=8)
 fig.suptitle('PMS7003 cradle: the sensor face sits %.0f mm behind the panel, sealed to the louvres by the duct (foam on the lip)'%SN,fontsize=11)
 fig.tight_layout(); fig.savefig('../docs/pms7003_cradle.png',dpi=130)
 print('wrote ../docs/pms7003_cradle.png')
