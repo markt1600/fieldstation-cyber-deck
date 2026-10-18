@@ -59,7 +59,7 @@ Hold B2 until the KVM remote-button holder is added to the TEMP column.
 3. **Speaker pods.** Fit the driver from the front, with its terminal block in the baffle's single notch, on the same side as the cable hole. Seal the ends of the notch and the cable hole. The four M3 × 20 screws through the panel clamp the panel, baffle and body together; a foam gasket on the rim seals against the panel.
 4. **Panels.** Dry-fit the dovetails, then epoxy the halves face down on a flat surface. Glue the splice strip behind the base-panel seam above the window.
 5. **Lid.** The cradle halves can be dry-fitted. Screw the overlay onto the cradle, drop the assembly into the lid so the overlay centres it, then fix it with VHB (or Dual Lock if you want it removable). The roughly 6 mm gap around the cradle is intentional; it clears the lid's tapered walls and curved floor edge.
-6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. Slide the sensor into the cradle face-first (inlet and outlet toward the panel), board end last; the plug end of the cradle is open so the plugs sit beside the duct. Run foam gasket round the whole lip, including the short end wall that rests on the sensor face just past the inlet, so it only breathes through the louvres. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
+6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs pointing at the panel. Slide the sensor in from the cradle's open end, outlet end first, with the inlet/outlet face toward the panel and the board on the thin-walled side: the connector passes through the window in that side wall, and the 1.2 mm duct wall tucks under the board. The sensor face sits 34 mm behind the panel, which leaves room for the plugs and for the wires to bend out sideways. Run foam gasket round the whole lip, including the short end wall that rests on the sensor face just past the inlet, so it only breathes through the louvres. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
 7. **Kickstands.** Glue the hinge plates to flat areas about 100 mm up the back of the case.
 
 ## Source (`src/`)
@@ -83,7 +83,7 @@ python placement_sheet.py # redraws ../docs/placement_sheet.png
 | `screen_clamp.py` | Screen corner clamps |
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Kickstand hinge plate and leg |
-| `placement_sheet.py`, `assembly_sheet.py` | The placement and exploded-assembly drawings in `docs/` |
+| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py` | The placement, exploded-assembly and sensor-cradle drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
 

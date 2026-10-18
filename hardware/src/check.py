@@ -11,8 +11,13 @@ for cx,cy,sx,sy in [(SC_X0,SC_Y0,1,1),(SC_X0+SC_W,SC_Y0,-1,1),(SC_X0,SC_Y0+SC_H,
     cl=(a+b) if cl is None else cl+a+b
 parts['clamps']=cl
 parts['tray']=build_tray()
-parts['air']=box(AIR_C[0]-17.5,AIR_C[1]-37.2,T,AIR_C[0]+17.5,AIR_C[1]+23.5,T+65.4)
-parts['air_board_keepout']=box(AIR_C[0]-15,AIR_C[1]+24.2,T+8,AIR_C[0]+15,AIR_C[1]+34.5,T+65)   # adapter board + plugs
+_S={'__name__':'lib'}; exec(open('pms7003_v2.py').read().split("o=body.to_mesh()")[0],_S)
+_mv=lambda m: m.translate([AIR_C[0],AIR_C[1],T])
+_air=_S['body']
+for _m in _S['board_parts']()[1:]: _air=_air+_m       # adapter board, connector, Dupont plugs
+# room for the wires to bend away from the plug ends
+_air=_air+box(6,11,8,20,34,_S['SNOUT']+_S['BRD_BACK'])
+parts['air']=_mv(_air)
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + mini breadboard left half
 parts['pi']=box(145,105,FLOOR_Z-62.75,145+98.75,105+90.2,FLOOR_Z)
