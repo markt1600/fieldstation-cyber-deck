@@ -4,6 +4,8 @@ The 3D-printed enclosure for the FieldStation cyber deck: a Peli 1400 case stand
 
 ![Assembly](docs/assembly_sheet.png)
 
+Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png)
+
 ## Layout
 
 - **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; AIR column (Plantower PMS7003 behind louvres) on the left; TEMP column on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
@@ -69,6 +71,7 @@ pip install -r requirements.txt
 python build_all.py      # rebuilds every plate in ../print
 python check.py          # collision check of everything behind the base panel
 python assembly_sheet.py # redraws ../docs/assembly_sheet.png
+python placement_sheet.py # redraws ../docs/placement_sheet.png
 ```
 
 | File | Builds |
@@ -79,6 +82,7 @@ python assembly_sheet.py # redraws ../docs/assembly_sheet.png
 | `screen_clamp.py` | Screen corner clamps |
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Kickstand hinge plate and leg |
+| `placement_sheet.py`, `assembly_sheet.py` | The placement and exploded-assembly drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
 
