@@ -11,8 +11,8 @@ for cx,cy,sx,sy in [(SC_X0,SC_Y0,1,1),(SC_X0+SC_W,SC_Y0,-1,1),(SC_X0,SC_Y0+SC_H,
     cl=(a+b) if cl is None else cl+a+b
 parts['clamps']=cl
 parts['tray']=build_tray()
-parts['air']=box(AIR_C[0]-17.5,AIR_C[1]-37.2,T,AIR_C[0]+17.5,AIR_C[1]+26.2,T+65.4)
-parts['air_board_keepout']=box(AIR_C[0]-13,AIR_C[1]+26.5,T,AIR_C[0]+13,AIR_C[1]+40.2,T+65)
+parts['air']=box(AIR_C[0]-17.5,AIR_C[1]-37.2,T,AIR_C[0]+17.5,AIR_C[1]+23.5,T+65.4)
+parts['air_board_keepout']=box(AIR_C[0]-15,AIR_C[1]+24.2,T+8,AIR_C[0]+15,AIR_C[1]+34.5,T+65)   # adapter board + plugs
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + mini breadboard left half
 parts['pi']=box(145,105,FLOOR_Z-62.75,145+98.75,105+90.2,FLOOR_Z)

@@ -11,14 +11,20 @@ INS=4.0; INS_D=6.0
 INSERTS=[(-13.0,-12.0),(13.0,-12.0),(0.0,-(ih/2+WALL+6.0))]
 def box(x0,y0,z0,x1,y1,z1): return Manifold.cube([x1-x0,y1-y0,z1-z0]).translate([x0,y0,z0])
 ox,oy=iw/2+WALL,ih/2+WALL
-# snout duct, open both ends, with a divider rib across the middle (separates inlet from outlet)
-snout=box(-ox,-oy,0,ox,oy,SNOUT)-box(-iw/2,-ih/2,-1,iw/2,ih/2,SNOUT+1)
+# Measured on the sensor face, from the board end: inlet slot 4.73..14.85 mm, outlet starts 30.45 mm.
+# Sensor spans y -24..+24 with the board end at +24, so: inlet y +9.15..+19.27, outlet y < -6.45.
+INLET_NEAR=24.0-4.73
+END0=INLET_NEAR+1.0            # inner face of the duct's end wall (1 mm clear of the inlet slot)
+END1=END0+3.0                  # wall is 3 mm thick and lands on the sensor face, short of its end,
+                               # so the area beyond the sensor's end stays open for the board and Dupont plugs
+# snout duct, open both ends, with a divider rib between inlet and outlet
+snout=box(-ox,-oy,0,ox,END1,SNOUT)-box(-iw/2,-ih/2,-1,iw/2,END0,SNOUT+1)
 snout=snout+box(-iw/2,-1.0,0,iw/2,1.0,SNOUT)
-# face stop: 1.2 mm lip at the back of the snout; sensor face (and a foam gasket) presses on it
-stop=box(-ox,-oy,SNOUT-1.5,ox,oy,SNOUT)-box(-iw/2+LIP,-ih/2+LIP,SNOUT-2,iw/2-LIP,ih/2-LIP,SNOUT+1)
+# face stop: lip at the back of the snout; the sensor face (with a foam gasket) presses on it all round
+stop=box(-ox,-oy,SNOUT-1.5,ox,END1,SNOUT)-box(-iw/2+LIP,-ih/2+LIP,SNOUT-2,iw/2-LIP,END0,SNOUT+1)
 # sleeve behind: long sides + closed outlet end; inlet end open so the adapter board can plug on
 z0,z1=SNOUT,SNOUT+SD+CL
-sleeve=box(-ox,-oy,z0,ox,ih/2,z1)-box(-iw/2,-ih/2,z0-1,iw/2,ih/2+1,z1+1)
+sleeve=box(-ox,-oy,z0,ox,23.0,z1)-box(-iw/2,-ih/2,z0-1,iw/2,ih/2+1,z1+1)   # side walls stop 1 mm short of the board end
 # back retainers: two straps across the back face
 straps=box(-ox,-ih/2+4,z1,ox,-ih/2+10,z1+2)+box(-ox,ih/2-14,z1,ox,ih/2-8,z1+2)
 # mounting flange (kept clear of the inlet end, where the plugs are)

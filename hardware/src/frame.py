@@ -51,7 +51,7 @@ def panel_2d():
                 if math.hypot(xx,yy)<=GRILLE_R-1.5: p=p-circ(3.0,cx+xx,cy+yy,16)
     # AIR louvres over PMS7003 face (12 x 48), solid bar in the middle as inlet/outlet divider
     ax,ay=AIR_C
-    for k in range(-5,6):
+    for k in range(-5,5):          # top louvre dropped: it sat over the duct's end wall
         if k==0: continue
         y=ay+k*4.2; p=p-rrect(10,2.0,0.99,ax,y)
     # TEMP column vent slots
