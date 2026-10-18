@@ -1,0 +1,7 @@
+mutagen
+pypdf
+qrcode
+Pillow
+pyserial
+smbus2
+tornado

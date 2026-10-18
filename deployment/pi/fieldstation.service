@@ -1,0 +1,10 @@
+[Unit]
+Description=Fieldstation offline library
+After=graphical-session.target
+[Service]
+WorkingDirectory=%h/fieldstation
+ExecStart=/usr/bin/python3 %h/fieldstation/server.py
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=default.target

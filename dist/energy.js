@@ -1,0 +1,88 @@
+// Trend of the gauge's reported state of charge; never an amperage estimate.
+function batteryChargeTrend(history,now=Date.now()/1000){
+ const rows=[...new Map(history.filter(x=>Number.isFinite(x.timestamp)&&Number.isFinite(x.reported_percent)&&x.reported_percent>=0&&x.reported_percent<=100&&x.timestamp>=now-1800&&x.timestamp<=now).map(x=>[x.timestamp,x])).values()].sort((a,b)=>a.timestamp-b.timestamp);
+ if(rows.length<10||now-rows.at(-1).timestamp>90)return null;
+ const span=rows.at(-1).timestamp-rows[0].timestamp;if(span<600)return null;
+ if(rows.some((r,i)=>i&&r.timestamp-rows[i-1].timestamp>180))return null;
+ const xs=rows.map(r=>(r.timestamp-rows[0].timestamp)/3600),ys=rows.map(r=>r.reported_percent),mx=xs.reduce((a,b)=>a+b,0)/xs.length,my=ys.reduce((a,b)=>a+b,0)/ys.length;
+ const numerator=xs.reduce((sum,x,i)=>sum+(x-mx)*(ys[i]-my),0),denominator=xs.reduce((sum,x)=>sum+(x-mx)**2,0);
+ return {pointsPerHour:numerator/denominator,minutes:Math.round(span/60)};
+}
+let energyBuilt=false,energyPending=false;
+function renderLiveEnergy(){
+ if(!energyBuilt){
+  energyBuilt=true;
+  document.querySelector('#energy').innerHTML=`<div class="energy-status"><span class="badge" id="battery-status">CONNECTING</span><span id="battery-power"></span><span id="battery-age" role="status">Reading X1202…</span></div>
+  <p class="battery-note">Runtime uses the October 17 discharge test: screen on, amplifier off. A 3.40 V reporting reserve excludes the deeply discharged tail; this is not an automatic shutdown setting. Different loads change runtime. UPS percentage is shown unchanged and reached zero well before power-off.</p>
+  <div class="energy-grid"><article class="metric"><span>Reported charge</span><div class="reading"><span id="battery-percent">—</span> <small>%</small></div><p>Fuel-gauge estimate · not yet verified</p></article>
+  <article class="metric"><span>Battery voltage</span><div class="reading"><span id="battery-voltage">—</span> <small>V</small></div><p>Live X1202 gauge reading</p></article>
+  <article class="metric"><span>Reported charge trend</span><div class="reading"><span id="battery-rate">—</span> <small>points/hour</small></div><p id="battery-rate-note">Needs 10 minutes of recent readings</p><p>Gauge trend only · not measured amps or watts</p></article>
+  
+  
+  
+  <article class="metric"><span>Time remaining to reserve</span><div class="reading" id="battery-runtime">—</div><p id="battery-runtime-note"></p></article></div>
+  <section class="battery-history"><h2>Recent battery readings</h2><p>Samples every 5 seconds; saves a reading every 30 seconds. Saved history survives restarts. Sampling runs while Fieldstation is on.</p><p id="battery-log-status" role="status"></p><p id="battery-trend"></p><table><thead><tr><th>Time</th><th>Voltage</th><th>Reported charge</th></tr></thead><tbody id="battery-history"></tbody></table></section>`;
+ }
+ refreshBattery();
+}
+async function refreshBattery(){
+ if(energyPending)return;
+ if(!energyBuilt){renderLiveEnergy();return;}
+ energyPending=true;
+ try{
+  const r=await fetch('/api/battery',{signal:AbortSignal.timeout(4000),cache:'no-store'});
+  if(!r.ok)throw Error();const d=await r.json(),live=d.status==='live'&&d.readings;
+  updateBatterySummary(d);
+  document.querySelector('#battery-power').textContent=d.external_power===true?'⚡ Plugged in':d.external_power===false?'On battery':'Power source unknown';
+  document.querySelector('#battery-status').textContent=live?'LIVE · UNVERIFIED':d.status==='stale'?'STALE':'UNAVAILABLE';
+  document.querySelector('#battery-age').textContent=d.age_seconds===null?'Waiting for the battery gauge':(live?'Updated ':'Last successful reading ')+Math.round(d.age_seconds)+' seconds ago';
+  document.querySelector('#battery-percent').textContent=live?d.readings.reported_percent.toFixed(2):'—';
+  document.querySelector('#battery-voltage').textContent=live?d.readings.voltage_v.toFixed(2):'—';
+  const trend=live?batteryChargeTrend(d.history||[]):null;
+  document.querySelector('#battery-rate').textContent=trend?(trend.pointsPerHour>=0?'+':'')+trend.pointsPerHour.toFixed(1):'—';
+  document.querySelector('#battery-rate-note').textContent=trend?`${Math.abs(trend.pointsPerHour)<.2?'Nearly steady':trend.pointsPerHour>0?'Rising':'Falling'} over the last ${trend.minutes} minutes. External power and gauge corrections affect this trend.`:'Needs 10 minutes of continuous recent readings';
+  const h=d.history||[],tbody=document.querySelector('#battery-history');tbody.replaceChildren();
+  const tracking=d.tracking||{};
+  document.querySelector('#battery-log-status').textContent=tracking.error|| (tracking.started_at?`${tracking.saved_samples} records saved since ${new Date(tracking.started_at*1000).toLocaleString()}`:'Starting persistent log…');
+  h.slice(-8).reverse().forEach(v=>{const tr=document.createElement('tr');[new Date(v.timestamp*1000).toLocaleTimeString(),v.voltage_v.toFixed(2)+' V',v.reported_percent.toFixed(2)+'%'].forEach(t=>{const td=document.createElement('td');td.textContent=t;tr.append(td)});tbody.append(tr)});
+  const change=h.length>1?h.at(-1).voltage_v-h[0].voltage_v:null;
+  document.querySelector('#battery-trend').textContent=change===null?'Collecting readings…':`Voltage change over ${Math.round((h.at(-1).timestamp-h[0].timestamp)/60)} minutes: ${change>=0?'+':''}${change.toFixed(2)} V`;
+ }catch{
+  updateBatterySummary({status:'unavailable'});
+  document.querySelector('#battery-power').textContent='Power source unknown';
+  document.querySelector('#battery-status').textContent='UNAVAILABLE';document.querySelector('#battery-age').textContent='Could not refresh battery readings';
+  document.querySelector('#battery-rate').textContent='—';
+  document.querySelector('#battery-rate-note').textContent='No recent readings';
+  document.querySelector('#battery-percent').textContent='—';document.querySelector('#battery-voltage').textContent='—';
+ }finally{energyPending=false;}
+}
+setInterval(refreshBattery,5000);
+
+// Measured elapsed minutes / voltage, screen on and amplifier off.
+const dischargeCurve=[[0,4.10],[16.60,4.0462],[31.61,4.0275],[50.21,4.01],[66.14,3.9813],[81.57,3.9375],[97.08,3.8887],[112.59,3.845],[128.11,3.815],[143.62,3.78],[159.13,3.7575],[174.64,3.7175],[190.82,3.6612],[206.25,3.6175],[221.59,3.56],[237.11,3.5088],[252.62,3.455],[268.14,3.4112],[283.65,3.3325]];
+function measuredElapsed(voltage){
+ if(voltage>=dischargeCurve[0][1])return 0;
+ for(let i=1;i<dischargeCurve.length;i++){const [t,v]=dischargeCurve[i],[pt,pv]=dischargeCurve[i-1];if(voltage>=v)return pt+(pv-voltage)/(pv-v)*(t-pt);}
+ return dischargeCurve.at(-1)[0];
+}
+function batteryRuntime(d,now=Date.now()/1000){
+ const r=d.readings;
+ if(d.status!=='live'||!r||!Number.isFinite(r.voltage_v)||!Number.isFinite(r.timestamp)||Math.abs(now-r.timestamp)>90)return {text:'Unavailable',note:'Waiting for fresh battery readings'};
+ const rows=(d.history||[]).filter(x=>Number.isFinite(x.voltage_v)&&x.timestamp>=now-900&&x.timestamp<=now).sort((a,b)=>a.timestamp-b.timestamp);
+ const continuous=rows.length>=10&&rows.at(-1).timestamp-rows[0].timestamp>=600&&!rows.some((x,i)=>i&&x.timestamp-rows[i-1].timestamp>90);
+ const falling=d.external_power!==true&&continuous&&rows.at(-1).voltage_v-rows[0].voltage_v<-.005;
+ if(r.voltage_v<=3.4)return {text:'<5 min',note:'Below 3.40 V reporting reserve · keep external power connected'};
+ const minutes=Math.max(0,measuredElapsed(3.4)-measuredElapsed(r.voltage_v));
+ const rounded=Math.round(minutes/5)*5;
+ return {text:rounded<5?'<5 min':`≈ ${Math.floor(rounded/60)}h ${rounded%60}m`,note:falling?'To 3.40 V reserve · screen on, amp off · approximate':'Provisional battery-only runtime · charging voltage may overestimate · screen on, amp off'};
+
+}
+function updateBatterySummary(d){
+ const model=batteryRuntime(d),live=d.status==='live'&&d.readings&&Math.abs(Date.now()/1000-d.readings.timestamp)<90;
+ let box=document.querySelector('#home-battery');
+ if(!box){box=document.createElement('section');box.id='home-battery';box.className='rail-power';box.setAttribute('aria-label','Battery and external power');document.querySelector('.brand')?.after(box);}
+ if(box){box.replaceChildren();const content=document.createElement('div'),title=document.createElement('strong'),note=document.createElement('p'),button=document.createElement('button');title.textContent=live?`${d.external_power===true?'⚡ ':''}${d.readings.reported_percent.toFixed(0)}% · ${d.readings.voltage_v.toFixed(2)} V · ${model.text}`:'Battery unavailable';note.textContent=(d.external_power===true?'Plugged in · ':d.external_power===false?'On battery · ':'Power unknown · ')+(model.note.startsWith('Provisional')?'provisional runtime':'to reserve');box.title=model.note+(live?' · '+d.readings.voltage_v.toFixed(2)+' V':'');button.textContent='Energy →';button.onclick=()=>go('energy');content.append(title,note);box.append(content,button);}
+ const runtime=document.querySelector('#battery-runtime'),note=document.querySelector('#battery-runtime-note');if(runtime)runtime.textContent=model.text;if(note)note.textContent=model.note;
+}
+
+setTimeout(refreshBattery,0);

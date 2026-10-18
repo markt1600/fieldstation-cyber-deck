@@ -1,0 +1,22 @@
+# Runtime, downloaded content, credentials and local state
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.pem
+*.key
+*.log
+*.sqlite*
+*.db
+*.before-*
+*.bak
+/vendor/
+/vendor-terminal/
+/kiwix-tools/
+/llm/
+/data/*
+!/data/wiki-topics.json
+!/data/wiki-topics-source.json
+/pending-work.json
+.venv/
+node_modules/

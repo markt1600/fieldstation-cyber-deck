@@ -1,0 +1,10 @@
+const term=new Terminal({fontSize:14,theme:{background:'#101518'},scrollback:3000});
+const fit=new FitAddon.FitAddon();term.loadAddon(fit);term.open(document.getElementById('terminal'));
+let socket;
+const status=document.getElementById('status'),start=document.getElementById('connect'),stop=document.getElementById('disconnect');
+const send=d=>{if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(d));};
+term.onData(data=>send({type:'input',data}));term.onResize(({cols,rows})=>send({type:'resize',cols,rows}));
+new ResizeObserver(()=>{try{fit.fit();}catch{}}).observe(document.getElementById('terminal'));
+start.onclick=()=>{start.disabled=true;term.clear();socket=new WebSocket('ws://127.0.0.1:8767/ws');socket.onopen=()=>{fit.fit();send({type:'resize',cols:term.cols,rows:term.rows});stop.disabled=false;status.textContent='Connected · sign in when prompted';term.focus();};socket.onmessage=e=>term.write(e.data);socket.onerror=()=>{status.textContent='Connection failed. Try Start Codex again.';};socket.onclose=e=>{start.disabled=false;stop.disabled=true;status.textContent=e.reason||'Session ended. Saved conversations remain in Codex.';};};
+stop.onclick=()=>{if(confirm('End this Codex session? Any active work will stop.'))socket?.close();};
+window.addEventListener('pagehide',()=>socket?.close());
