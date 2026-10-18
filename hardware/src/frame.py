@@ -92,9 +92,11 @@ def build_panel():
     return full,left,right
 # ---------------- port tray ----------------
 USB=[(PK_CX-30,PK_CY+18.5),(PK_CX,PK_CY+18.5),(PK_CX+30,PK_CY+18.5)]
-BTN=(PK_CX-40,PK_CY-20); DCJ=(PK_CX-18,PK_CY-20); TOG=(PK_CX+4,PK_CY-20); POT=(PK_CX+32,PK_CY-20)
+CTRL_Y=PK_CY-14                    # controls row (raised to make room for the keyboard slot below it)
+BTN=(PK_CX-40,CTRL_Y); DCJ=(PK_CX-18,CTRL_Y); TOG=(PK_CX+4,CTRL_Y); POT=(PK_CX+32,CTRL_Y)
 TOG_HOLE=12.2                      # audio on/off toggle (assumed 12 mm thread - confirm)
-KB_PASS=(122.2,PK_CY-4.5); KB_PASS_W,KB_PASS_H=24.0,14.0   # keyboard USB-A pass-through, in line with the lid slot
+KB_PASS_W,KB_PASS_H=24.0,12.0
+KB_PASS=(122.2,PK_CY-PK_H/2+1.5+KB_PASS_H/2)   # keyboard USB-A pass-through at the very bottom, same x as the lid slot
 def build_tray():
     WALLT=3.0; FLOOR=3.0
     zf=PK_DEPTH-T                         # floor front face behind panel back
