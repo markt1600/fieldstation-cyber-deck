@@ -110,7 +110,7 @@ def build_tray():
     def through(cs): return Manifold.extrude(cs,zf+FLOOR+2).translate([0,0,-1])
     for x,y in USB:
         body=body-through(circ(24.2,x,y))
-        for dx,dy in [(9.5,12),(-9.5,-12)]: body=body-through(circ(3.3,x+dx,y+dy,24))
+        for dx,dy in [(-9.5,12),(9.5,-12)]: body=body-through(circ(3.3,x+dx,y+dy,24))
     body=body-through(circ(12.3,*BTN))-through(circ(11.2,*DCJ))-through(circ(TOG_HOLE,*TOG))-through(circ(7.2,*POT))
     body=body-through(rrect(KB_PASS_W,KB_PASS_H,KB_PASS_H/2-0.01,*KB_PASS))
     for x,y in TRAY_INS: body=body-Manifold.cylinder(6.0,2.0,2.0,32).translate([x,y,-0.01])

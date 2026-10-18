@@ -67,7 +67,7 @@ ax.add_patch(Rectangle((cx-W/2,cy-H/2),W,H,fc='#e9ebe8',ec=INK,lw=1.3))
 labels=[]
 for i,((x,y),t) in enumerate(zip(F['USB'],['USB-A  (to Pi USB 3)','USB-A  (to Pi USB 3)','USB-C  (KVM laptop input)'])):
     ax.add_patch(Rectangle((x-13,y-15.5),26,31,fc=PART,ec='none')); ax.add_patch(Circle((x,y),12.1,fc='#6b7178',ec='none'))
-    for dx,dy in [(9.5,12),(-9.5,-12)]: ax.add_patch(Circle((x+dx,y+dy),1.65,fc='white',ec='none'))
+    for dx,dy in [(-9.5,12),(9.5,-12)]: ax.add_patch(Circle((x+dx,y+dy),1.65,fc='white',ec='none'))
     ax.text(x,y,['A','A','C'][i],ha='center',va='center',color='white',fontsize=11,fontweight='bold')
     labels.append((x,y+15.5,t,'up'))
 for (p,d,t) in [(F['BTN'],12.3,'Power (X1202 button)  ⌀12.3'),(F['DCJ'],11.2,'DC 12 V in  ⌀11.2'),(F['TOG'],12.2,'Audio on/off  ⌀12.2'),(F['POT'],7.2,'Volume pot  ⌀7.2')]:
