@@ -69,3 +69,6 @@ plate('B4_kickstands.3mf',[('stand_plate_L',20,20,0),('stand_plate_R',90,20,0),(
 # both complete speaker pods (2 bodies + 2 baffles) on one plate
 c=128
 plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+5,c+5,0),('pod_baffle_L',c-85,c-85,0),('pod_baffle_R',c+5,c-85,0)])
+
+# port tray on its own, for printing ahead of the rest of B3
+plate('B3a_port_tray_only.3mf',[('port_tray',*centred('port_tray'),0)])

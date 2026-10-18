@@ -27,6 +27,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B1 | Base panel left half, both speaker baffles, seam splice strip |
 | B2 | Base panel right half, both speaker pod bodies |
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
+| B3a | Port tray only (the same tray as on B3, for printing it first) |
 | B4 | Two kickstand hinge plates and legs |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
