@@ -71,4 +71,4 @@ c=128
 plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+5,c+5,0),('pod_baffle_L',c-85,c-85,0),('pod_baffle_R',c+5,c-85,0)])
 
 # port tray on its own, for printing ahead of the rest of B3
-plate('B3a_port_tray_only.3mf',[('port_tray',*centred('port_tray'),0)])
+plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle',M+20+w('port_tray')+25,M+60,0)])
