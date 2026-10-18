@@ -15,6 +15,10 @@ A Raspberry Pi touchscreen interface for an offline library, music and video, ar
 - Embedded websites with a persistent sidebar and maximize/restore controls.
 - Optional local Codex terminal and read-only VeraCrypt file browsing.
 
+## Hardware
+
+The 3D-printed Peli 1400 enclosure (print files, source scripts and assembly notes) is in [`hardware/`](hardware/README.md).
+
 ## Status
 
 This is a source snapshot of an actively used, customized Raspberry Pi installation, not a turnkey operating-system image. Hardware services, external applications, downloaded collections, and generated catalogue databases must be provisioned separately. Some paths and device choices reflect the original build. Runtime estimates are calibrated to that build and should not be treated as universal battery measurements.
