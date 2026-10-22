@@ -11,9 +11,10 @@ FP=(52.0,85.0,250.0,211.0)              # x0,y0,x1,y1: clear of the post feet (x
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
-# 70 x 50 perfboard, M3 holes on 65.5 x 45.5 centres (measured), on 6 mm insert bosses
+# 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 heat-set inserts (3.2 mm hole, 4 mm deep) on 6 mm bosses
 PB=(60.0,90.0,130.0,140.0); PB_HX,PB_HY=65.5,45.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
+M2_D,M2_L=3.2,4.0
 # 65 x 55 GPIO breakout turned 90 deg (55 across, 65 up) so the Pi ribbon runs straight; M3 holes ~48 x 57 (measured)
 BO=(60.0,143.0,115.0,208.0); BO_HX,BO_HY=48.0,57.0
 BO_BOSS_H=9.0                    # parts under the board need 8.65 mm; the 35 mm total includes them
@@ -33,10 +34,10 @@ def build_floor_plate():
     for y in ((b+d)/2,):
         wall=wall-box(a-PK_WALL-1,y-12,z0-PK_HT-1,a+0.1,y+12,z0+0.01)-box(c-0.1,y-12,z0-PK_HT-1,c+PK_WALL+1,y+12,z0+0.01)
     p=p+wall
-    for holes,h in ((pb_holes(),BOSS_H),(bo_holes(),BO_BOSS_H)):
+    for holes,h,d,l in ((pb_holes(),BOSS_H,M2_D,M2_L),(bo_holes(),BO_BOSS_H,INS_D,INS_L)):
         for x,y in holes:
             p=p+Manifold.cylinder(h,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-h])
-            p=p-Manifold.cylinder(INS_L+0.3,INS_D/2,INS_D/2,32).translate([x,y,z0-h-0.01])
+            p=p-Manifold.cylinder(l+0.3,d/2,d/2,32).translate([x,y,z0-h-0.01])
     return p
 def draw(fn):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt, numpy as np
