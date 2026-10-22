@@ -1,6 +1,6 @@
 """Floor plate: a 3 mm PETG plate glued to the case floor (Loctite 770 + 406, or VHB with 3M Primer 94).
 It carries a low-walled pocket for the Pi 5 in its X1202-C1 case and heat-set insert bosses for the
-70 x 50 mm soldered perfboard. GPIO breakout bosses to come once its hole pattern is known.
+70 x 50 mm soldered perfboard and the 65 x 55 mm GPIO breakout.
 Panel coordinates (x right, y up, z = depth behind the panel front); the plate's underside sits on the floor."""
 exec(open('frame.py').read())
 from manifold3d import Manifold
@@ -14,6 +14,11 @@ PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
 # 70 x 50 perfboard, M3 holes on 65.5 x 45.5 centres (measured), on 6 mm insert bosses
 PB=(60.0,90.0,130.0,140.0); PB_HX,PB_HY=65.5,45.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
+# 65 x 55 GPIO breakout, M3 holes on ~57 x 48 centres (measured), above the perfboard with a 2 mm gap
+BO=(60.0,142.0,125.0,197.0); BO_HX,BO_HY=57.0,48.0
+def bo_holes():
+    cx,cy=(BO[0]+BO[2])/2,(BO[1]+BO[3])/2
+    return [(cx+sx*BO_HX/2,cy+sy*BO_HY/2) for sx in (-1,1) for sy in (-1,1)]
 def pb_holes():
     cx,cy=(PB[0]+PB[2])/2,(PB[1]+PB[3])/2
     return [(cx+sx*PB_HX/2,cy+sy*PB_HY/2) for sx in (-1,1) for sy in (-1,1)]
@@ -27,7 +32,7 @@ def build_floor_plate():
     for y in ((b+d)/2,):
         wall=wall-box(a-PK_WALL-1,y-12,z0-PK_HT-1,a+0.1,y+12,z0+0.01)-box(c-0.1,y-12,z0-PK_HT-1,c+PK_WALL+1,y+12,z0+0.01)
     p=p+wall
-    for x,y in pb_holes():
+    for x,y in pb_holes()+bo_holes():
         p=p+Manifold.cylinder(BOSS_H,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-BOSS_H])
         p=p-Manifold.cylinder(INS_L+0.5,INS_D/2,INS_D/2,32).translate([x,y,z0-BOSS_H-0.01])
     return p
