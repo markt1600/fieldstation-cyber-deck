@@ -95,7 +95,7 @@ def build_panel():
 USB=[(PK_CX-30,PK_CY+18.5),(PK_CX,PK_CY+18.5),(PK_CX+30,PK_CY+18.5)]
 CTRL_Y=PK_CY-14                    # controls row (raised to make room for the keyboard slot below it)
 BTN=(PK_CX-40,CTRL_Y); DCJ=(PK_CX-18,CTRL_Y); TOG=(PK_CX+4,CTRL_Y); POT=(PK_CX+32,CTRL_Y)
-TOG_HOLE=12.2                      # audio on/off toggle (assumed 12 mm thread - confirm)
+TOG_HOLE=17.6                      # audio on/off toggle: largest part 17.2 mm (measured), passes through the hole
 KB_PASS_W,KB_PASS_H=24.0,12.0
 KB_PASS=(122.2,PK_CY-PK_H/2+1.5+KB_PASS_H/2)   # keyboard USB-A pass-through at the very bottom, same x as the lid slot
 def build_tray():
