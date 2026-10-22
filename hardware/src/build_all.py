@@ -20,7 +20,7 @@ full,pl,pr=F['build_panel'](); parts['base_panel_L']=tm(pl.mirror([1,0,0])); par
 parts['port_tray']=tm(F['build_tray']().mirror([0,0,1]))
 for n in F['POSTS']: parts['post_'+n]=tm(F['build_post'](n))
 cr=L['build_cradle'](); ov=L['build_overlay']()
-cl,crr=L['split'](cr,L['CRADLE_H'],L['CRADLE_TABS']); ol,orr=L['split'](ov,L['OT'],L['OVERLAY_TABS'])
+cl,crr=L['split'](cr,L['CRADLE_H'],L['CRADLE_TABS']); ol,orr=L['split'](ov,L['OT'],L['OVERLAY_TABS']); ol=L['stretch_left'](ol)
 parts['kb_door']=tm(L['build_door']().mirror([0,0,1])); parts['kb_cradle_L']=tm(cl); parts['kb_cradle_R']=tm(crr); parts['kb_overlay_L']=tm(ol.mirror([0,0,1])); parts['kb_overlay_R']=tm(orr.mirror([0,0,1]))
 for s in ('L','R'): parts['pod_body_'+s]=tm(P['body']); parts['pod_baffle_'+s]=tm(P['baf'])
 clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])

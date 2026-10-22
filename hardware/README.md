@@ -11,7 +11,7 @@ Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What
 - **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; TEMP column on the left (the screen's HDMI and micro-USB plugs come out of its left edge into the space behind it); AIR column (Plantower PMS7003 behind louvres) on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
 - **Port pocket** (106 × 76 mm, floor 18 mm deep so nothing touches the keyboard): 2 × USB-A and 1 × USB-C D-size sockets on top; power button, 12 V DC jack, audio button and volume pot below; a 24 × 12 mm slot at the very bottom for the keyboard cable, in line with the lid's cable slot.
 - **Behind the panel:** Pi 5 in a Geekworm X1202-C1 case (UPS, 4 × 18650) on the case floor behind the screen, with the GPIO breakout and mini breadboard beside it.
-- **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, and a magnetic accessory tray along the hinge.
+- **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, a magnetic accessory tray along the hinge, and an open pocket at the hinge's left end for the KVM remote.
 - **Back of the case:** two folding kickstands that stop at a 15° lean.
 
 ![Port pocket](docs/port_pocket.png) ![Front panel](docs/placement_sheet.png) ![Lid](docs/lid_layout_render.png)
@@ -34,7 +34,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B5 | Floor plate: Pi case pocket, insert bosses for the perfboard (6 mm) and the GPIO breakout (9 mm, board turned 90°); 60 × 60 × 2 mm KVM spacer |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
-The KVM remote button lives in the lid's magnetic tray; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
+The KVM remote button lives in the open pocket at the left end of the lid's hinge strip; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
 
 **Settings:** PETG, 0.2 mm layers, 4 walls, textured PEI plate. Use a brim on B3 (the posts are 87 mm tall). The whole set uses about 850–900 g.
 

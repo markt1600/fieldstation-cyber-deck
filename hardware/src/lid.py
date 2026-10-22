@@ -18,6 +18,9 @@ MAG_S=4.56; MAG_P=4.56+0.2            # magnet cubes, pocket size
 D_POCKET=2.1; D_PROUD=MAG_S-D_POCKET   # door pocket depth; cube stands proud under the door
 BLOCK_POCKET=D_PROUD+MAG_S+0.1
 MAGS=[(DOOR_X0+9,DOOR_Y0+8.5),(DOOR_X1-9,DOOR_Y0+8.5),(DOOR_X0+9,DOOR_Y1-8.5),(DOOR_X1-9,DOOR_Y1-8.5)]
+# open pocket for the KVM remote: the hinge-strip cell left of the cable rib, exposed through the overlay
+REM_X0,REM_X1,REM_Y0,REM_Y1,REM_R=9.75,77.75,172.0,214.0,4.0
+OVL_STRETCH=(PW/2-3.0,1.3)          # left overlay half lengthened 1.3 mm next to the seam so its holes meet the cradle's (measured)
 NOTCH=( 245.0, DOOR_Y0 )               # finger notch, centred between the two overlay screws below it
 CX0,CX1,CY0,CY1=PW/2-147.5,PW/2+147.5,4.0,224.0
 WALL=8.0; END=4.0; CH=4.0
@@ -75,6 +78,7 @@ def build_overlay():
     p=p-rrect(PASS_W,PASS_H,PASS_H/2-0.01,CABLE_X,PASS_Y)          # USB-A plug pass-through
     p=p-rrect(DOOR_X1-DOOR_X0,DOOR_Y1-DOOR_Y0,DOOR_R,(DOOR_X0+DOOR_X1)/2,(DOOR_Y0+DOOR_Y1)/2)   # tray door opening
     p=p-circ(18,NOTCH[0],NOTCH[1]-1.0)                              # finger notch
+    p=p-rrect(REM_X1-REM_X0,REM_Y1-REM_Y0,REM_R,(REM_X0+REM_X1)/2,(REM_Y0+REM_Y1)/2)   # KVM remote pocket opening
     o=Manifold.extrude(p,OT)
     for x,y in insert_points():
         o=o-Manifold.cylinder(1.95,1.7,3.45,SEG).translate([x,y,OT-1.95+0.001])-Manifold.cylinder(OT+2,1.7,1.7,SEG).translate([x,y,-1])
@@ -92,6 +96,13 @@ def tabs_region(tabs):
     return L
 CRADLE_TABS=[(8.0,3.0,5.0,4.0),(KY1+C+WALL/2,3.0,5.0,4.0),(CY1-WALL/2,3.0,5.0,4.0)]
 OVERLAY_TABS=[(8.75,5.0,8.0,6.0),(165.5,5.0,8.0,5.0),(221.0,5.0,8.0,5.0)]   # clear of the door opening and cable slot
+def stretch_left(m,a=None,d=None):
+    """lengthen a left half by d: everything left of x=a moves -d, and the band just left of a is repeated"""
+    a,d=OVL_STRETCH if a is None else (a,d)
+    big=1000
+    lo=m^Manifold.cube([big,big,big]).translate([a-big,-big/2,-big/2])
+    hi=m^Manifold.cube([big,big,big]).translate([a-d,-big/2,-big/2])
+    return lo.translate([-d,0,0])+hi
 def split(m,h,tabs):
     L=tabs_region(tabs)
     left=m^Manifold.extrude(L,h+2).translate([0,0,-1])
