@@ -16,6 +16,7 @@ PB=(60.0,90.0,130.0,140.0); PB_HX,PB_HY=65.5,45.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
 # 65 x 55 GPIO breakout, M3 holes on ~57 x 48 centres (measured), above the perfboard with a 2 mm gap
 BO=(60.0,142.0,125.0,197.0); BO_HX,BO_HY=57.0,48.0
+BO_BOSS_H=3.0                    # low bosses: the breakout needs ~35 mm above it and the KVM sits just in front
 def bo_holes():
     cx,cy=(BO[0]+BO[2])/2,(BO[1]+BO[3])/2
     return [(cx+sx*BO_HX/2,cy+sy*BO_HY/2) for sx in (-1,1) for sy in (-1,1)]
@@ -32,9 +33,10 @@ def build_floor_plate():
     for y in ((b+d)/2,):
         wall=wall-box(a-PK_WALL-1,y-12,z0-PK_HT-1,a+0.1,y+12,z0+0.01)-box(c-0.1,y-12,z0-PK_HT-1,c+PK_WALL+1,y+12,z0+0.01)
     p=p+wall
-    for x,y in pb_holes()+bo_holes():
-        p=p+Manifold.cylinder(BOSS_H,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-BOSS_H])
-        p=p-Manifold.cylinder(INS_L+0.5,INS_D/2,INS_D/2,32).translate([x,y,z0-BOSS_H-0.01])
+    for holes,h in ((pb_holes(),BOSS_H),(bo_holes(),BO_BOSS_H)):
+        for x,y in holes:
+            p=p+Manifold.cylinder(h,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-h])
+            p=p-Manifold.cylinder(INS_L+0.3,INS_D/2,INS_D/2,32).translate([x,y,z0-h-0.01])
     return p
 if __name__=='__main__':
     m=build_floor_plate(); print('floor plate volume %.1f cm3'%(m.volume()/1000), 'perfboard holes',[(round(x,2),round(y,2)) for x,y in pb_holes()])
