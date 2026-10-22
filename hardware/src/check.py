@@ -28,7 +28,7 @@ _FP={'__name__':'lib'}; exec(open('floorplate.py').read(),_FP)
 parts['floor_plate']=_FP['build_floor_plate']()
 # boards sit on the floor plate (3 mm); the Pi in its pocket, the boards on 6 mm bosses
 parts['pi']=box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3)
-parts['breakout']=box(60,140,FLOOR_Z-9-25,60+65,140+56.2,FLOOR_Z-9)
+parts["breakout"]=box(60,140,FLOOR_Z-9-25,60+65,140+55,FLOOR_Z-9)   # 65 x 55 (measured), 25 mm tall (assumed)
 parts['breadboard']=box(60,90,FLOOR_Z-9-1.6-15,60+70,90+50,FLOOR_Z-9)
 names=list(parts); bad=0
 for i in range(len(names)):
