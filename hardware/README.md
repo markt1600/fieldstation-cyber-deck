@@ -4,7 +4,7 @@ The 3D-printed enclosure for the FieldStation cyber deck: a Peli 1400 case stand
 
 ![Assembly](docs/assembly_sheet.png)
 
-Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What sits behind the base panel, layer by layer, with the proposed KVM spot: [docs/internal_layout.png](docs/internal_layout.png)
+Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What sits behind the base panel, layer by layer: [docs/internal_layout.png](docs/internal_layout.png). The base assembled in the case and exploded in assembly order: [docs/case_assembly.png](docs/case_assembly.png)
 
 ## Layout
 
@@ -88,7 +88,7 @@ python placement_sheet.py # redraws ../docs/placement_sheet.png
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Kickstand hinge plate and leg |
 | `floorplate.py` | Floor plate glued to the case floor: Pi case pocket, perfboard and breakout bosses |
-| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
+| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py`, `case_render.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
 
