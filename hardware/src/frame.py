@@ -95,6 +95,9 @@ def build_panel():
 USB=[(PK_CX-30,PK_CY+18.5),(PK_CX,PK_CY+18.5),(PK_CX+30,PK_CY+18.5)]
 CTRL_Y=PK_CY-14                    # controls row (raised to make room for the keyboard slot below it)
 BTN=(PK_CX-40,CTRL_Y); DCJ=(PK_CX-18,CTRL_Y); TOG=(PK_CX+4,CTRL_Y); POT=(PK_CX+32,CTRL_Y)
+BTN_HOLE=12.1                      # power button: 11.7 mm thread (measured)
+DCJ_HOLE=11.1                      # 12 V DC jack: 10.7 mm thread (measured)
+POT_HOLE=6.4                       # volume pot: 6 mm bushing (measured)
 TOG_HOLE=17.6                      # audio on/off toggle: largest part 17.2 mm (measured), passes through the hole
 KB_PASS_W,KB_PASS_H=24.0,12.0
 KB_PASS=(122.2,PK_CY-PK_H/2+1.5+KB_PASS_H/2)   # keyboard USB-A pass-through at the very bottom, same x as the lid slot
@@ -112,7 +115,7 @@ def build_tray():
     for x,y in USB:
         body=body-through(circ(24.2,x,y))
         for dx,dy in [(-9.5,12),(9.5,-12)]: body=body-through(circ(3.3,x+dx,y+dy,24))
-    body=body-through(circ(12.3,*BTN))-through(circ(11.2,*DCJ))-through(circ(TOG_HOLE,*TOG))-through(circ(7.2,*POT))
+    body=body-through(circ(BTN_HOLE,*BTN))-through(circ(DCJ_HOLE,*DCJ))-through(circ(TOG_HOLE,*TOG))-through(circ(POT_HOLE,*POT))
     body=body-through(rrect(KB_PASS_W,KB_PASS_H,KB_PASS_H/2-0.01,*KB_PASS))
     for x,y in TRAY_INS: body=body-Manifold.cylinder(6.0,2.0,2.0,32).translate([x,y,-0.01])
     return body.translate([0,0,T])        # place behind panel
