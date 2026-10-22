@@ -99,7 +99,7 @@ BTN_HOLE=12.1                      # power button: 11.7 mm thread (measured)
 DCJ_HOLE=11.1                      # 12 V DC jack: 10.7 mm thread (measured)
 POT_HOLE=6.4                       # volume pot: 6 mm bushing (measured)
 POT_TAB_R,POT_TAB_D=7.55,2.8       # pot anti-rotation tab: 7.55 mm from shaft centre, 2.35 mm long (measured); round hole fits it any way round
-TOG_HOLE=17.6                      # audio on/off toggle: largest part 17.2 mm (measured), passes through the hole
+TOG_HOLE=16.3                      # audio on/off toggle: 15.9 mm body passes through (measured); wider front section holds it
 KB_PASS_W,KB_PASS_H=24.0,12.0
 KB_PASS=(122.2,PK_CY-PK_H/2+1.5+KB_PASS_H/2)   # keyboard USB-A pass-through at the very bottom, same x as the lid slot
 def build_tray():
