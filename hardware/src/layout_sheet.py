@@ -24,7 +24,7 @@ for i,(cx,cy,sx,sy) in enumerate(cl):
 items.append(('screen HDMI + micro-USB plugs',[SC_X0-42,SC_Y0+26,T+1,SC_X0,SC_Y0+69,T+SC_T],'#1d3557','xx'))
 items.append(('screen cables turning up/back',[SC_X0-48,SC_Y0+26,T+SC_T,SC_X0-14,SC_Y0+97,T+44],'#457b9d','..'))
 KVM=[42,114,25,139,205,48]
-items.append(('KVM (C2-H46) — proposed',KVM,'#e63946',None))
+items.append(('KVM (C2-H46), on the screen back',KVM,'#e63946',None))
 items.append(('right-angle HDMI/USB-A plugs',[60,205,25,121,223,48],'#e63946','///'))
 items.append(('host-cable bend + coil',[55,89,25,126,114,48],'#ffb3b8','..'))
 

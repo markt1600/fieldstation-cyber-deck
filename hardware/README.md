@@ -31,7 +31,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate: Pi case pocket, insert bosses for the perfboard and the GPIO breakout |
+| B5 | Floor plate: Pi case pocket, insert bosses for the perfboard and the GPIO breakout; 60 × 60 × 2 mm KVM spacer |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The KVM remote button lives in the lid's magnetic tray; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -61,7 +61,8 @@ The KVM remote button lives in the lid's magnetic tray; its cable runs through t
 4. **Panels.** Dry-fit the dovetails, then epoxy the halves face down on a flat surface. Glue the splice strip behind the base-panel seam above the window.
 5. **Lid.** The cradle halves can be dry-fitted. Screw the overlay onto the cradle, drop the assembly into the lid so the overlay centres it, then fix it with VHB (or Dual Lock if you want it removable). The roughly 6 mm gap around the cradle is intentional; it clears the lid's tapered walls and curved floor edge.
 6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs mid-thickness in front of the inlet face, pointing at the panel. The front of the cradle has two chambers split by a rib: the outlet chamber, and an inlet chamber that also holds the plugs. Drop the sensor in from the back, face first, with the board on the side where the sleeve wall is open, feeding the wires out through the slot in the inlet chamber's end wall. Hold it in with a cable tie round the sleeve and over the sensor's back, between the guide ridges. Then seal it so it only breathes through the louvres: foam gasket round the lip, and foam or putty in the wire slot and the small notch where the header pins pass. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
-7. **Kickstands.** Glue the hinge plates to flat areas about 100 mm up the back of the case.
+7. **KVM.** Stick the 2 mm spacer (B5) to the back of the screen case with VHB, centred about 40 mm in from the screen's left edge and 50 mm down from its top, then stick the KVM onto it with its console edge (HDMI, USB-A) facing the top of the case and its built-in cables facing down. The spacer lifts it clear of the top-left screen clamp. Use right-angle HDMI and USB-A plugs on the console side, and coil the spare host cable over the perfboard, not the breakout. See [docs/internal_layout.png](docs/internal_layout.png).
+8. **Kickstands.** Glue the hinge plates to flat areas about 100 mm up the back of the case.
 
 ## Source (`src/`)
 
@@ -91,5 +92,4 @@ The case interior dimensions come from measurements of the real Peli 1400: 99 mm
 
 ## Still to do
 
-- KVM (StarTech C2-H46-UAC-CBL-KVM): mount behind the left half of the screen (see docs/internal_layout.png); needs a photo of the screen case's back. Needs right-angle HDMI and USB-A plugs on its console side.
 - Confirm the D-size USB socket screw spacing (19 × 24 mm assumed) before printing the port tray.

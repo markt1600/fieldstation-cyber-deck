@@ -25,6 +25,7 @@ clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
 parts['pms7003_cradle']=tm(S['body'].mirror([1,0,0]))   # mirrored: board side faces the screen
 parts['panel_splice']=tm(Manifold.cube([40,10,2]))
+parts['kvm_spacer']=tm(Manifold.cube([60,60,2.0]))   # VHB both sides: KVM to the back of the screen
 FPm=ns('floorplate.py'); parts['floor_plate']=tm(FPm['build_floor_plate']().mirror([0,0,1]))   # glued face down
 for s in ('L','R'):
     parts['stand_plate_'+s]=tm(K['plate'])
@@ -75,4 +76,4 @@ plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+
 plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle',M+20+w('port_tray')+25,M+60,0)])
 
 # floor plate on its own (Pi pocket, perfboard bosses; breakout bosses to come)
-plate('B5_floor_plate.3mf',[('floor_plate',28,70,0)])
+plate('B5_floor_plate.3mf',[('floor_plate',28,70,0),('kvm_spacer',28,4,0)])
