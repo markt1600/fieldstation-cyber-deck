@@ -14,7 +14,7 @@ Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What
 - **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, and a magnetic accessory tray along the hinge.
 - **Back of the case:** two folding kickstands that stop at a 15° lean.
 
-![Port pocket](docs/port_pocket.png) ![Front panel](docs/frame_front.png) ![Lid](docs/lid_layout_render.png)
+![Port pocket](docs/port_pocket.png) ![Front panel](docs/placement_sheet.png) ![Lid](docs/lid_layout_render.png)
 
 ## Print files (`print/`)
 

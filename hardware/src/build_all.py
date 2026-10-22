@@ -14,7 +14,9 @@ from manifold3d import Manifold
 def tm(m):
     o=m.to_mesh(); return trimesh.Trimesh(o.vert_properties[:,:3],o.tri_verts,process=False)
 parts={}
-full,pl,pr=F['build_panel'](); parts['base_panel_L']=tm(pl); parts['base_panel_R']=tm(pr)
+# The base is modelled in panel coordinates (x right and y up as seen from the front, z away from you into the case),
+# which is a left-handed frame. Every base part must be reflected once on export or it prints as a mirror image.
+full,pl,pr=F['build_panel'](); parts['base_panel_L']=tm(pl.mirror([1,0,0])); parts['base_panel_R']=tm(pr.mirror([1,0,0]))   # front face stays on the bed
 parts['port_tray']=tm(F['build_tray']().mirror([0,0,1]))
 for n in F['POSTS']: parts['post_'+n]=tm(F['build_post'](n))
 cr=L['build_cradle'](); ov=L['build_overlay']()
@@ -23,7 +25,7 @@ parts['kb_door']=tm(L['build_door']().mirror([0,0,1])); parts['kb_cradle_L']=tm(
 for s in ('L','R'): parts['pod_body_'+s]=tm(P['body']); parts['pod_baffle_'+s]=tm(P['baf'])
 clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
-parts['pms7003_cradle']=tm(S['body'].mirror([1,0,0]))   # mirrored: board side faces the screen
+parts['pms7003_cradle']=tm(S['body'])   # placed mirrored in the base (board toward the screen); that mirror and the export reflection cancel
 parts['panel_splice']=tm(Manifold.cube([40,10,2]))
 parts['kvm_spacer']=tm(Manifold.cube([60,60,2.0]))   # VHB both sides: KVM to the back of the screen
 FPm=ns('floorplate.py'); parts['floor_plate']=tm(FPm['build_floor_plate']().mirror([0,0,1]))   # glued face down

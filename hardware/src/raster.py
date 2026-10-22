@@ -1,9 +1,10 @@
 import numpy as np, trimesh
-def render(items, view=(1,-1.2,0.9), up=(0,0,1), W=1400, H=1000, margin=40, light=(0.4,-0.6,0.9), bg=(1,1,1)):
+def render(items, view=(1,-1.2,0.9), up=(0,0,1), W=1400, H=1000, margin=40, light=(0.4,-0.6,0.9), bg=(1,1,1), lh=False):
     """items: list of (trimesh, rgb(0-1)). Orthographic z-buffer render with flat shading and outline edges.
     Returns image (H,W,3) and a project(points)->pixel function."""
     v=np.array(view,float); v/=np.linalg.norm(v)
     u=np.array(up,float); r=np.cross(u,v); r/=np.linalg.norm(r); u2=np.cross(v,r)
+    if lh: r=-r      # model is in a left-handed frame (the base's panel coordinates): mirror so it looks like the real thing
     allv=np.vstack([m.vertices for m,_ in items])
     P=np.c_[allv@r, allv@u2]
     mn,mx=P.min(0),P.max(0); s=min((W-2*margin)/(mx[0]-mn[0]),(H-2*margin)/(mx[1]-mn[1]))

@@ -56,7 +56,7 @@ for sx in (-1,1):
     for sy in (-1,1): items.append((T(csk_screw(20),sx*36,sy*36,zp+F['T']+22),STEEL))
 labels.append(('M3 × 20 countersunk ×4, from the front',[36,36,zp+F['T']+22]))
 guides=[([sx*36,sy*36,BD],[sx*36,sy*36,zp+F['T']+22]) for sx in (-1,1) for sy in (-1,1)]
-sheets.append(('A  Speaker pod  (×2)',items,labels,guides,(1.1,-1.35,0.75)))
+sheets.append(('A  Speaker pod  (×2)',items,labels,guides,(1.1,-1.35,0.75),False))
 # ---------------- B: base panel (front face down, parts attach to the back) ----------------
 items=[];labels=[];guides=[]
 full=tm(F['build_panel']()[0]); items.append((full,(0.30,0.33,0.36))); labels.append(('Base panel (2 halves, epoxied)',[20,-5,0]))
@@ -80,7 +80,7 @@ pms=tm(S['body'].mirror([1,0,0])); pms.apply_translation([F['AIR_C'][0],F['AIR_C
 for nme,(x,y) in F['POSTS'].items():
     p=tm(F['build_post'](nme)); p.apply_transform(trimesh.transformations.rotation_matrix(math.pi,[1,0,0])); p.apply_translation([0,2*y,F['T']+F['POST_H']+120]); items.append((p,PLA)); guides.append(([x,y,0],[x,y,F['T']+120]))
 labels.append(('Floor posts ×4 (VHB feet)',[F['POSTS']['TR'][0],F['POSTS']['TR'][1],F['T']+210]))
-sheets.append(('B  Base panel: everything screws in from the front',items,labels,guides,(0.9,-1.6,1.9)))
+sheets.append(('B  Base panel: everything screws in from the front',items,labels,guides,(0.9,-1.6,1.9),True))
 # ---------------- C: keyboard lid ----------------
 items=[];labels=[];guides=[]
 cr=tm(LID['build_cradle']()); items.append((cr,PLA)); labels.append(('Keyboard cradle (VHB to lid floor)',[20,20,5]))
@@ -90,7 +90,7 @@ dr=tm(LID['build_door']()); dr.apply_translation([0,0,LID['PLATE_Z']+110]); item
 for x,y in LID['insert_points']():
     items.append((T(csk_screw(8),x,y,LID['PLATE_Z']+95),STEEL)); guides.append(([x,y,LID['CRADLE_H']],[x,y,LID['PLATE_Z']+95]))
 labels.append(('M3 × 8 countersunk ×12',[LID['insert_points']()[-1][0],LID['insert_points']()[-1][1],LID['PLATE_Z']+95]))
-sheets.append(('C  Keyboard lid',items,labels,guides,(0.8,-1.5,1.4)))
+sheets.append(('C  Keyboard lid',items,labels,guides,(0.8,-1.5,1.4),False))
 # ---------------- D: kickstand ----------------
 items=[];labels=[];guides=[]
 pl=tm(K['plate']); items.append((pl,PLA)); labels.append(('Hinge plate (glued to case back)',[-25,30,1]))
@@ -101,13 +101,13 @@ hd=cyl(3.5,3,6); hd.apply_transform(trimesh.transformations.rotation_matrix(math
 nut=cyl(3.9,4,6); nut.apply_transform(trimesh.transformations.rotation_matrix(math.pi/2,[0,1,0])); nut.apply_translation([45,0,K['H_P']]); items.append((nut,STEEL))
 labels.append(('M4 × 40 bolt',[-70,0,K['H_P']+4])); labels.append(('M4 nyloc nut',[45,0,K['H_P']+5]))
 guides.append(([-78,0,K['H_P']],[50,0,K['H_P']]))
-sheets.append(('D  Kickstand  (×2)',items,labels,guides,(1.4,-0.9,0.8)))
+sheets.append(('D  Kickstand  (×2)',items,labels,guides,(1.4,-0.9,0.8),False))
 print('built %.1fs'%(time.time()-t0))
 # ---------------- render ----------------
 fig=plt.figure(figsize=(16,20),dpi=100)
 pos=[[0.02,0.50,0.47,0.47],[0.51,0.50,0.47,0.47],[0.02,0.06,0.47,0.42],[0.51,0.06,0.47,0.42]]
-for (title,items,labels,guides,view),p in zip(sheets,pos):
-    t0=time.time(); img,proj=render(items,view=view,W=1100,H=1000)
+for (title,items,labels,guides,view,lh),p in zip(sheets,pos):
+    t0=time.time(); img,proj=render(items,view=view,W=1100,H=1000,lh=lh)
     ax=fig.add_axes(p); ax.imshow(img); ax.set_axis_off(); ax.set_title(title,fontsize=15,loc='left',fontweight='bold',color='#1d2124')
     for a,b in guides:
         q=proj(np.array([a,b])); ax.plot(q[:,0],q[:,1],ls=(0,(4,3)),lw=0.9,color='#2f6e8f',alpha=0.8)

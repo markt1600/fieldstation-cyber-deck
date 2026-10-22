@@ -90,13 +90,13 @@ for k,(m,c,g) in cache.items():
 view2=(-0.95,0.5,-0.7)
 
 fig=plt.figure(figsize=(18,25),dpi=100)
-t0=time.time(); img,proj=render(items,view=view1,up=(0,1,0),W=1700,H=1150,margin=110); print('view1 %.0fs'%(time.time()-t0))
+t0=time.time(); img,proj=render(items,view=view1,up=(0,1,0),W=1700,H=1150,margin=110,lh=True); print('view1 %.0fs'%(time.time()-t0))
 ax=fig.add_axes([0.02,0.535,0.96,0.40]); ax.imshow(img); ax.set_axis_off()
-ax.set_title('Assembled: everything cut through at %.0f mm up and seen from above (panel at the top of the picture, case floor at the bottom)'%YC,fontsize=14,loc='left',color='#1d2124')
+ax.set_title('Assembled: everything cut through at %.0f mm up and seen from above (panel along the upper-left edge, case floor along the lower right)'%YC,fontsize=14,loc='left',color='#1d2124')
 labels_column(ax,img,proj,anch,top=True)
-t0=time.time(); img2,proj2=render(items2,view=view2,up=(0,1,0),W=1700,H=1250,margin=110); print('view2 %.0fs'%(time.time()-t0))
+t0=time.time(); img2,proj2=render(items2,view=view2,up=(0,1,0),W=1700,H=1250,margin=110,lh=True); print('view2 %.0fs'%(time.time()-t0))
 ax=fig.add_axes([0.02,0.07,0.96,0.44]); ax.imshow(img2); ax.set_axis_off()
-ax.set_title('Exploded, front to back in assembly order (panel at the front left, case at the back right)',fontsize=14,loc='left',color='#1d2124')
+ax.set_title('Exploded, front to back in assembly order (panel at the front, case at the back)',fontsize=14,loc='left',color='#1d2124')
 labels_column(ax,img2,proj2,anch2,top=True)
 steps=("ORDER  1 Inserts into every printed part · 2 Floor plate: inserts, then glue it to the case floor (Primer 94 / 770) · 3 Pi in its pocket, breakout and perfboard on the bosses\n"
        "       4 On the panel's back: pods, port tray + controls, PMS7003 cradle, screen + clamps · 5 Spacer + KVM onto the screen back (VHB), plug in the console side\n"
