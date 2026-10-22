@@ -40,6 +40,6 @@ axs[0].annotate('sleeve open on the board side\nso the connector slides past',xy
 axs[0].annotate('plugs sit mid-thickness\nin the inlet chamber',xy=(SN-12,0),xytext=(SN-36,-24),arrowprops=dict(arrowstyle='->'),fontsize=8)
 axs[1].annotate('wires leave through the\nend-wall slot (seal with foam)',xy=(8,25),xytext=(4,38),arrowprops=dict(arrowstyle='->'),fontsize=8)
 axs[1].annotate('sensor drops in from the back,\nface first; cable tie over its back',xy=(SN+30,10),xytext=(SN+8,-44),arrowprops=dict(arrowstyle='->'),fontsize=8)
-fig.suptitle('PMS7003 cradle: the sensor face sits %.0f mm behind the panel, sealed to the louvres by the duct (foam on the lip)'%SN,fontsize=11)
+fig.suptitle('PMS7003 cradle: the sensor face sits %.0f mm behind the panel, sealed to the louvres by the duct (foam on the lip)\nDrawn as modelled; the printed part is the mirror image so the board faces the screen (sensor is in the right-hand column)'%SN,fontsize=11)
 fig.tight_layout(); fig.savefig('../docs/pms7003_cradle.png',dpi=130)
 print('wrote ../docs/pms7003_cradle.png')

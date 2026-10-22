@@ -76,7 +76,7 @@ for i,(px,py) in enumerate(F['PODS']):
     for sx in (-1,1):
         for sy in (-1,1): guides.append(([px+sx*36,py+sy*36,0],[px+sx*36,py+sy*36,F['T']+70]))
 labels.append(('Speaker pods ×2',[F['PODS'][1][0],F['PODS'][1][1]-40,F['T']+150]))
-pms=tm(S['body']); pms.apply_translation([F['AIR_C'][0],F['AIR_C'][1],F['T']+45]); items.append((pms,BLUE)); labels.append(('PMS7003 cradle',[F['AIR_C'][0],F['AIR_C'][1]+30,F['T']+110]))
+pms=tm(S['body'].mirror([1,0,0])); pms.apply_translation([F['AIR_C'][0],F['AIR_C'][1],F['T']+45]); items.append((pms,BLUE)); labels.append(('PMS7003 cradle',[F['AIR_C'][0],F['AIR_C'][1]+30,F['T']+110]))
 for nme,(x,y) in F['POSTS'].items():
     p=tm(F['build_post'](nme)); p.apply_transform(trimesh.transformations.rotation_matrix(math.pi,[1,0,0])); p.apply_translation([0,2*y,F['T']+F['POST_H']+120]); items.append((p,PLA)); guides.append(([x,y,0],[x,y,F['T']+120]))
 labels.append(('Floor posts ×4 (VHB feet)',[F['POSTS']['TR'][0],F['POSTS']['TR'][1],F['T']+210]))

@@ -20,6 +20,8 @@ cl=[(SC_X0,SC_Y0,1,1),(SC_X0+SC_W,SC_Y0,-1,1),(SC_X0,SC_Y0+SC_H,1,-1),(SC_X0+SC_
 for i,(cx,cy,sx,sy) in enumerate(cl):
     x0,x1=sorted([cx-sx*9,cx+sx*24]); y0,y1=sorted([cy-sy*9,cy+sy*24])
     items.append(('screen clamps' if i==0 else None,[x0,y0,T,x1,y1,T+19.7],'#adb5bd',None))
+items.append(('screen HDMI + micro-USB plugs',[SC_X0-42,SC_Y0+26,T+1,SC_X0,SC_Y0+69,T+SC_T],'#1d3557','xx'))
+items.append(('screen cables turning up/back',[SC_X0-48,SC_Y0+26,T+SC_T,SC_X0-14,SC_Y0+97,T+44],'#457b9d','..'))
 KVM=[42,114,25,139,205,48]
 items.append(('KVM (C2-H46) — proposed',KVM,'#e63946',None))
 items.append(('right-angle HDMI/USB-A plugs',[60,205,25,121,223,48],'#e63946','///'))
@@ -59,6 +61,6 @@ ax.set_title('Side view (from the right; panel on the left; dotted lines = layer
 ax.set_xlabel('depth behind the panel front, z (mm)'); ax.set_ylabel('y (mm, up)')
 h,l=ax.get_legend_handles_labels(); d=dict(zip(l,h)); d.pop(None,None); d={k:v for k,v in d.items() if k and k!='_nolegend_'}
 ax.legend(d.values(),d.keys(),loc='center left',bbox_to_anchor=(1.02,0.5),fontsize=9,title='Behind the base panel')
-fig.suptitle('FieldStation base: what sits where behind the panel, with the proposed KVM spot\n(bounding boxes; the clash check uses the real shapes. Remote button position still to be decided.)',fontsize=13)
+fig.suptitle('FieldStation base: what sits where behind the panel, with the proposed KVM spot\n(bounding boxes; the clash check uses the real shapes. Remote button lives in the lid’s magnetic tray.)',fontsize=13)
 fig.tight_layout(rect=[0,0,1,0.95]); fig.savefig('../docs/internal_layout.png',dpi=100)
 print('wrote ../docs/internal_layout.png')

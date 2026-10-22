@@ -12,7 +12,8 @@ SC_CX,SC_CY=PW/2,SC_Y0+SC_H/2
 WIN_W,WIN_H=156.0,88.0                    # visible window (centred on case)
 POD=80.0; POD_DEPTH=78.0; PODS=[(52.0,48.0),(PW-52.0,48.0)]; POD_SCREW=36.0; GRILLE_R=33.0
 PK_W,PK_H=106.0,76.0; PK_CX,PK_CY=PW/2,48.0; PK_DEPTH=18.0   # pocket, depth from panel front
-AIR_C=(25.5,SC_CY); TEMP_C=(PW-25.5,SC_CY)
+# AIR on the right: the screen's HDMI and micro-USB plugs come out of its left edge
+AIR_C=(PW-25.5,SC_CY); TEMP_C=(25.5,SC_CY)
 CLAMP_WALL,CLAMP_ARM=9.0,24.0
 POSTS={'TL':(26.0,205.0),'TR':(PW-26.0,205.0),'ML':(26.0,93.5),'MR':(PW-26.0,93.5)}
 TRAY_INS=[(PW/2-48,5.0),(PW/2+48,5.0),(PW/2-48,SC_Y0-6.4),(PW/2+48,SC_Y0-6.4)]

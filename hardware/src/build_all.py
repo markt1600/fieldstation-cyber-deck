@@ -23,7 +23,7 @@ parts['kb_door']=tm(L['build_door']().mirror([0,0,1])); parts['kb_cradle_L']=tm(
 for s in ('L','R'): parts['pod_body_'+s]=tm(P['body']); parts['pod_baffle_'+s]=tm(P['baf'])
 clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
-parts['pms7003_cradle']=tm(S['body'])
+parts['pms7003_cradle']=tm(S['body'].mirror([1,0,0]))   # mirrored: board side faces the screen
 parts['panel_splice']=tm(Manifold.cube([40,10,2]))
 for s in ('L','R'):
     parts['stand_plate_'+s]=tm(K['plate'])

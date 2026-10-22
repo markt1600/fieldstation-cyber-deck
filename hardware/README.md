@@ -8,7 +8,7 @@ Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What
 
 ## Layout
 
-- **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; AIR column (Plantower PMS7003 behind louvres) on the left; TEMP column on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
+- **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; TEMP column on the left (the screen's HDMI and micro-USB plugs come out of its left edge into the space behind it); AIR column (Plantower PMS7003 behind louvres) on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
 - **Port pocket** (106 × 76 mm, floor 18 mm deep so nothing touches the keyboard): 2 × USB-A and 1 × USB-C D-size sockets on top; power button, 12 V DC jack, audio button and volume pot below; a 24 × 12 mm slot at the very bottom for the keyboard cable, in line with the lid's cable slot.
 - **Behind the panel:** Pi 5 in a Geekworm X1202-C1 case (UPS, 4 × 18650) on the case floor behind the screen, with the GPIO breakout and mini breadboard beside it.
 - **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, and a magnetic accessory tray along the hinge.
@@ -33,7 +33,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B4 | Two kickstand hinge plates and legs |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
-Hold B2 until the KVM remote-button holder is added to the TEMP column.
+The KVM remote button lives in the lid's magnetic tray; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
 
 **Settings:** PETG, 0.2 mm layers, 4 walls, textured PEI plate. Use a brim on B3 (the posts are 87 mm tall). The whole set uses about 850–900 g.
 
@@ -89,5 +89,6 @@ The case interior dimensions come from measurements of the real Peli 1400: 99 mm
 
 ## Still to do
 
-- KVM (StarTech C2-H46-UAC-CBL-KVM): a mount behind the port pocket and a holder for its remote button in the TEMP column.
-- Confirm the KVM's HDMI and USB-C routing to the front panel.
+- KVM (StarTech C2-H46-UAC-CBL-KVM): mount behind the left half of the screen (see docs/internal_layout.png); needs a photo of the screen case's back. Needs right-angle HDMI and USB-A plugs on its console side.
+- Printed floor plate: low-walled pocket for the Pi case, insert bosses for the GPIO breakout and the soldered board (needs their hole patterns).
+- Confirm the D-size USB socket screw spacing (19 × 24 mm assumed) before printing the port tray.

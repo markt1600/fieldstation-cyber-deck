@@ -12,11 +12,15 @@ for cx,cy,sx,sy in [(SC_X0,SC_Y0,1,1),(SC_X0+SC_W,SC_Y0,-1,1),(SC_X0,SC_Y0+SC_H,
 parts['clamps']=cl
 parts['tray']=build_tray()
 _S={'__name__':'lib'}; exec(open('pms7003_v2.py').read().split("o=body.to_mesh()")[0],_S)
-_mv=lambda m: m.translate([AIR_C[0],AIR_C[1],T])
+_mv=lambda m: m.mirror([1,0,0]).translate([AIR_C[0],AIR_C[1],T])   # cradle is mirrored on the right
 _air=_S['body']
 for _m in _S['board_parts']()[1:]: _air=_air+_m       # adapter board, connector, Dupont plugs
 _air=_air+box(-5,24,4,5,36,_S['SNOUT'])      # wires leaving the end-wall slot
 parts['air']=_mv(_air)
+# screen plugs on its left edge (measured from a photo): micro-USB 30-39 mm and HDMI 47-65 mm up from the
+# screen's bottom edge, ~40 mm long straight plugs, then the cables turn up/back beside the screen
+parts['screen_plugs']=box(SC_X0-42,SC_Y0+26,T+1,SC_X0,SC_Y0+69,T+SC_T)+box(SC_X0-48,SC_Y0+26,T+SC_T,SC_X0-14,SC_Y0+97,T+44)
+parts['kvm']=box(42,114,25,139,205,48)+box(60,205,25,121,223,48)+box(55,89,25,126,114,48)   # body, right-angle console plugs, host-cable bend
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + mini breadboard left half
 parts['pi']=box(145,105,FLOOR_Z-62.75,145+98.75,105+90.2,FLOOR_Z)
