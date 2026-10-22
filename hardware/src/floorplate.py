@@ -11,10 +11,10 @@ FP=(52.0,85.0,250.0,211.0)              # x0,y0,x1,y1: clear of the post feet (x
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
-# 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 heat-set inserts (3.2 mm hole, 4 mm deep) on 6 mm bosses
+# 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 self-tapping screws straight into 1.7 mm pilot holes on 6 mm bosses
 PB=(60.0,90.0,130.0,140.0); PB_HX,PB_HY=65.5,45.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
-M2_D,M2_L=3.2,4.0
+M2_D,M2_L=1.7,6.2               # pilot hole, blind (stops 0.8 mm short of the plate's underside)
 # 65 x 55 GPIO breakout turned 90 deg (55 across, 65 up) so the Pi ribbon runs straight; M3 holes ~48 x 57 (measured)
 BO=(60.0,143.0,115.0,208.0); BO_HX,BO_HY=48.0,57.0
 BO_BOSS_H=9.0                    # parts under the board need 8.65 mm; the 35 mm total includes them
