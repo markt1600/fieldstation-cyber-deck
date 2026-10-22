@@ -50,18 +50,32 @@ for i,(title,z0,z1) in enumerate(LAYERS):
         ax.annotate('PC2 USB-C → back of the\npocket USB-C socket',xy=(PK_CX,PK_CY+18.5),xytext=(150,40),fontsize=8,arrowprops=dict(arrowstyle='->',color='r'))
         ax.annotate('PC1 HDMI + USB-A → Pi\n(micro-HDMI adapter)',xy=(160,150),xytext=(160,70),fontsize=8,arrowprops=dict(arrowstyle='->',color='r'))
         ax.annotate('console edge: HDMI → screen,\nUSB-A → keyboard cable',xy=(90,214),xytext=(150,218),fontsize=8,arrowprops=dict(arrowstyle='->',color='r'))
-# side view
+# section through the stack at x = XS (screen, KVM, breakout, perfboard, floor plate)
+XS=92.0
+for a in fig.axes[:3]: a.axvline(XS,color='k',ls='-.',lw=0.8); a.text(XS+1,2,'section',fontsize=7)
 ax=fig.add_subplot(gs[1,1])
 ax.add_patch(Rectangle((0,0),FLOOR_Z,PH,fc='#f8f9fa',ec='k',lw=1.2)); ax.axvspan(0,T,color='#ced4da')
-for lab,bx,c,h in sorted(items,key=lambda it:it[1][0]):
-    ax.add_patch(Rectangle((bx[2],bx[1]),bx[5]-bx[2],bx[4]-bx[1],fc=c if h is None else 'none',ec=c if h else 'k',hatch=h,alpha=0.45 if h is None else 0.9,lw=0.8,label=lab))
-for z,l in [(z0,'') for _,z0,_ in LAYERS[1:]]: ax.axvline(z,color='k',ls=':',lw=0.8)
-ax.text(2,PH+6,'panel',fontsize=8); ax.text(FLOOR_Z-14,PH+6,'case floor',fontsize=8)
-ax.set_xlim(-4,FLOOR_Z+4); ax.set_ylim(-4,PH+12); ax.set_aspect('equal')
-ax.set_title('Side view (from the right; panel on the left; dotted lines = layer boundaries)',fontsize=11)
+ax.text(0.5,PH+3,'panel',fontsize=8); ax.text(FLOOR_Z-16,PH+3,'case floor',fontsize=8)
+for lab,bx,c,h in items:
+    if not (bx[0]<=XS<=bx[3]): continue
+    if lab=='floor plate': bx=bx[:2]+[FLOOR_Z-3]+bx[3:]
+    ax.add_patch(Rectangle((bx[2],bx[1]),bx[5]-bx[2],bx[4]-bx[1],fc=c if h is None else 'none',ec=c if h else 'k',hatch=h,alpha=0.6 if h is None else 0.9,lw=0.8,label=lab))
+def gap(z0,z1,y,txt):
+    ax.annotate('',xy=(z0,y),xytext=(z1,y),arrowprops=dict(arrowstyle='<->',lw=0.8)); ax.text((z0+z1)/2,y+2,txt,ha='center',fontsize=7)
+gap(T+SC_T,25,175,'4'); gap(48,50,185,'2'); gap(48,FLOOR_Z-9-1.6-15,120,'17')
+ax.text(12,160,'screen',rotation=90,fontsize=8,va='center'); ax.text(36,160,'KVM',rotation=90,fontsize=8,va='center')
+ax.text(67,170,'breakout\n(35 mm space)',fontsize=7,ha='center',va='center'); ax.text(74,115,'perfboard\nwire space',fontsize=7,ha='center',va='center')
+ax.text(40,50,'speaker pod',fontsize=8,ha='center'); ax.text(84,140,'floor plate',rotation=90,fontsize=7,va='center')
+ax.set_xlim(-4,FLOOR_Z+4); ax.set_ylim(-4,PH+8); ax.set_aspect('equal')
+ax.set_title('Section at x = %.0f mm, seen from the right (panel on the left)\nnumbers = gaps in mm'%XS,fontsize=11)
 ax.set_xlabel('depth behind the panel front, z (mm)'); ax.set_ylabel('y (mm, up)')
-h,l=ax.get_legend_handles_labels(); d=dict(zip(l,h)); d.pop(None,None); d={k:v for k,v in d.items() if k and k!='_nolegend_'}
+h,l=[],[]
+for a in fig.axes:
+    hh,ll=a.get_legend_handles_labels(); h+=hh; l+=ll
+d={}
+for hh,ll in zip(h,l):
+    if ll and not ll.startswith('_') and ll not in d: d[ll]=hh
 ax.legend(d.values(),d.keys(),loc='center left',bbox_to_anchor=(1.02,0.5),fontsize=9,title='Behind the base panel')
-fig.suptitle('FieldStation base: what sits where behind the panel, with the proposed KVM spot\n(bounding boxes; the clash check uses the real shapes. Remote button lives in the lid’s magnetic tray.)',fontsize=13)
+fig.suptitle('FieldStation base: everything behind the panel, layer by layer\n(bounding boxes; the clash check uses the real shapes. Remote button lives in the lid’s magnetic tray.)',fontsize=13)
 fig.tight_layout(rect=[0,0,1,0.95]); fig.savefig('../docs/internal_layout.png',dpi=100)
 print('wrote ../docs/internal_layout.png')
