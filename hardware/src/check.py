@@ -23,10 +23,13 @@ parts['screen_plugs']=box(SC_X0-42,SC_Y0+26,T+1,SC_X0,SC_Y0+69,T+SC_T)+box(SC_X0
 parts['kvm']=box(42,114,25,139,205,48)+box(60,205,25,121,223,48)+box(55,89,25,126,114,48)   # body, right-angle console plugs, host-cable bend
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + 70 x 50 soldered perfboard left half
-# perfboard: on the floor plate (3 mm) + 6 mm spacers, 1.6 mm board, parts up to 20 mm tall (assumed)
-parts['pi']=box(145,105,FLOOR_Z-62.75,145+98.75,105+90.2,FLOOR_Z)
-parts['breakout']=box(60,140,FLOOR_Z-25,60+65,140+56.2,FLOOR_Z)
-parts['breadboard']=box(60,90,FLOOR_Z-3-6-1.6-20,60+70,90+50,FLOOR_Z-3)
+# perfboard: on the floor plate (3 mm) + 6 mm bosses, 1.6 mm board, 15 mm kept clear above it for the soldered wires
+_FP={'__name__':'lib'}; exec(open('floorplate.py').read(),_FP)
+parts['floor_plate']=_FP['build_floor_plate']()
+# boards sit on the floor plate (3 mm); the Pi in its pocket, the boards on 6 mm bosses
+parts['pi']=box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3)
+parts['breakout']=box(60,140,FLOOR_Z-9-25,60+65,140+56.2,FLOOR_Z-9)
+parts['breadboard']=box(60,90,FLOOR_Z-9-1.6-15,60+70,90+50,FLOOR_Z-9)
 names=list(parts); bad=0
 for i in range(len(names)):
     for j in range(i+1,len(names)):
@@ -34,7 +37,7 @@ for i in range(len(names)):
         if v>0.5: print('CLASH',names[i],names[j],round(v,1),'mm3'); bad+=1
 print('clashes:',bad)
 print('pod back to floor gap %.1f mm'%(FLOOR_Z-(T+POD_DEPTH)))
-print('pi top to screen back gap %.1f mm'%((FLOOR_Z-62.75)-(T+SC_T)))
+print('pi top to screen back gap %.1f mm'%((FLOOR_Z-3-62.75)-(T+SC_T)))
 print('tray floor back face %.1f mm behind panel front; rim-to-tray-back %.1f'%(PK_DEPTH+3, RIM_DROP+PK_DEPTH+3))
 
 # posts' feet must sit on the flat floor: >= ~18 mm in from the wall line at panel height (wall ~1.7 mm outside panel edge)

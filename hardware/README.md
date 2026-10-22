@@ -31,6 +31,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
+| B5 | Floor plate: Pi case pocket and perfboard insert bosses (hold until the GPIO breakout bosses are added) |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The KVM remote button lives in the lid's magnetic tray; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -41,7 +42,7 @@ The KVM remote button lives in the lid's magnetic tray; its cable runs through t
 
 | Item | Qty | Used for |
 |---|---|---|
-| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 39 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12 |
+| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 43 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 4 (perfboard) |
 | M3 × 8 countersunk | 24 | Lid overlay, screen clamps, port tray, sensor cradle |
 | M3 × 10 countersunk | 4 | Floor posts |
 | M3 × 20 countersunk | 8 | Speaker pods through the panel |
@@ -83,6 +84,7 @@ python placement_sheet.py # redraws ../docs/placement_sheet.png
 | `screen_clamp.py` | Screen corner clamps |
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Kickstand hinge plate and leg |
+| `floorplate.py` | Floor plate glued to the case floor: Pi case pocket, perfboard bosses |
 | `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
@@ -90,5 +92,5 @@ The case interior dimensions come from measurements of the real Peli 1400: 99 mm
 ## Still to do
 
 - KVM (StarTech C2-H46-UAC-CBL-KVM): mount behind the left half of the screen (see docs/internal_layout.png); needs a photo of the screen case's back. Needs right-angle HDMI and USB-A plugs on its console side.
-- Printed floor plate: low-walled pocket for the Pi case, insert bosses for the GPIO breakout and the soldered board (needs their hole patterns).
+- Floor plate (B5): add insert bosses for the GPIO breakout once its hole pattern is known.
 - Confirm the D-size USB socket screw spacing (19 × 24 mm assumed) before printing the port tray.
