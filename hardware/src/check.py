@@ -22,10 +22,11 @@ parts['air']=_mv(_air)
 parts['screen_plugs']=box(SC_X0-42,SC_Y0+26,T+1,SC_X0,SC_Y0+69,T+SC_T)+box(SC_X0-48,SC_Y0+26,T+SC_T,SC_X0-14,SC_Y0+97,T+44)
 parts['kvm']=box(42,114,25,139,205,48)+box(60,205,25,121,223,48)+box(55,89,25,126,114,48)   # body, right-angle console plugs, host-cable bend
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
-# Pi case on floor, right half behind screen; breakout + mini breadboard left half
+# Pi case on floor, right half behind screen; breakout + 70 x 50 soldered perfboard left half
+# perfboard: on the floor plate (3 mm) + 6 mm spacers, 1.6 mm board, parts up to 20 mm tall (assumed)
 parts['pi']=box(145,105,FLOOR_Z-62.75,145+98.75,105+90.2,FLOOR_Z)
 parts['breakout']=box(60,140,FLOOR_Z-25,60+65,140+56.2,FLOOR_Z)
-parts['breadboard']=box(70,105,FLOOR_Z-10,70+46.4,105+34.5,FLOOR_Z)
+parts['breadboard']=box(60,90,FLOOR_Z-3-6-1.6-20,60+70,90+50,FLOOR_Z-3)
 names=list(parts); bad=0
 for i in range(len(names)):
     for j in range(i+1,len(names)):

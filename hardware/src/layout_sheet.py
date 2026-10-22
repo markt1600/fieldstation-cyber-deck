@@ -15,7 +15,7 @@ items.append(('PMS7003 + cradle',bb(parts['air']),'#f2a23a',None))
 for n in POSTS: items.append(('floor posts' if n=='TL' else None,bb(parts['post'+n]),'#6c757d',None))
 items.append(('Pi 5 in X1202 case',bb(parts['pi']),'#2a9d8f',None))
 items.append(('GPIO breakout',bb(parts['breakout']),'#80b918',None))
-items.append(('mini breadboard',bb(parts['breadboard']),'#e9c46a',None))
+items.append(('soldered perfboard (70 × 50)',bb(parts['breadboard']),'#e9c46a',None))
 cl=[(SC_X0,SC_Y0,1,1),(SC_X0+SC_W,SC_Y0,-1,1),(SC_X0,SC_Y0+SC_H,1,-1),(SC_X0+SC_W,SC_Y0+SC_H,-1,-1)]
 for i,(cx,cy,sx,sy) in enumerate(cl):
     x0,x1=sorted([cx-sx*9,cx+sx*24]); y0,y1=sorted([cy-sy*9,cy+sy*24])

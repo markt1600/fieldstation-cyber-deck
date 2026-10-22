@@ -34,7 +34,7 @@ dash(ax,F['AIR_C'][0]-17.5,F['AIR_C'][1]-37.2,35,63.4)                          
 for n,(x,y) in F['POSTS'].items(): ax.add_patch(Rectangle((x-5,y-5),10,10,fc='#7a5c3a',ec='none',zorder=7))
 dash(ax,145,105,98.75,90.2,col='#888',lw=0.8); ax.text(145+49,105+8,'Pi 5 + UPS case (on case floor)',ha='center',fontsize=7.5,color='#666')
 dash(ax,60,140,65,56.2,col='#888',lw=0.8); ax.text(92,143,'GPIO breakout',ha='center',fontsize=7.5,color='#666')
-dash(ax,70,105,46.4,34.5,col='#888',lw=0.8); ax.text(93,108,'breadboard',ha='center',fontsize=7.5,color='#666')
+dash(ax,60,90,70,50,col='#888',lw=0.8); ax.text(95,93,'perfboard',ha='center',fontsize=7.5,color='#666')
 # numbered tags
 T=[(F['SC_CX'],F['SC_CY']+20,1),(F['SC_X0']+4,F['SC_Y0']+4,2),(F['PODS'][0][0],F['PODS'][0][1],3),(F['PODS'][1][0],F['PODS'][1][1],3),
    (F['PK_CX'],F['PK_CY'],4),(F['AIR_C'][0],F['AIR_C'][1]+10,5),(F['POSTS']['TL'][0],F['POSTS']['TL'][1]+12,6),(F['POSTS']['MR'][0],F['POSTS']['MR'][1]+12,6),
