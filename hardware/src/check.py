@@ -26,11 +26,12 @@ parts['kvm']=box(42,114,25,139,205,48)+box(60,205,25,121,223,48)+box(55,89,25,12
 for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLOOR_Z-VHB])
 # Pi case on floor, right half behind screen; breakout + 70 x 50 soldered perfboard left half
 # perfboard: on the floor plate (3 mm) + 6 mm bosses, 1.6 mm board, 15 mm kept clear above it for the soldered wires
-_FP={'__name__':'lib'}; exec(open('floorplate.py').read(),_FP)
+_FP={'__name__':'lib'}; exec(open('floorplate.py').read().split("if __name__")[0],_FP)
 parts['floor_plate']=_FP['build_floor_plate']()
 # boards sit on the floor plate (3 mm); the Pi in its pocket, the boards on 6 mm bosses
 parts['pi']=box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3)
-parts["breakout"]=box(60,142,FLOOR_Z-6-35,60+65,142+55,FLOOR_Z-6)   # 65 x 55, needs 35 mm above it (measured); 3 mm plate + 3 mm bosses
+# breakout turned 90 deg: 55 x 65; 35 mm from the plate, incl. parts under the board around its 9 mm bosses
+parts["breakout"]=box(60,143,FLOOR_Z-3-35,60+55,143+65,FLOOR_Z-12)+(box(60,143,FLOOR_Z-12,60+55,143+65,FLOOR_Z-3)-parts["floor_plate"])
 parts['breadboard']=box(60,90,FLOOR_Z-9-1.6-15,60+70,90+50,FLOOR_Z-9)
 names=list(parts); bad=0
 for i in range(len(names)):
