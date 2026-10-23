@@ -6,6 +6,10 @@ The 3D-printed enclosure for the FieldStation cyber deck: a Peli 1400 case stand
 
 Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What sits behind the base panel, layer by layer: [docs/internal_layout.png](docs/internal_layout.png). The base assembled in the case and exploded in assembly order: [docs/case_assembly.png](docs/case_assembly.png)
 
+## Audio wiring guide
+
+[Download the perfboard assembly guide (PDF)](docs/fieldstation-perfboard-guide.pdf). Revision 4 includes component-side and mirrored solder-side layouts, hole-by-hole left/right amplifier labels, connector types, toggle wire colours and the updated switch wiring.
+
 ## Layout
 
 - **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; TEMP column on the left (the screen's HDMI and micro-USB plugs come out of its left edge into the space behind it); AIR column (Plantower PMS7003 behind louvres) on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
