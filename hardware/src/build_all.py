@@ -79,3 +79,7 @@ plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle
 
 # floor plate on its own (Pi pocket, perfboard bosses; breakout bosses to come)
 plate('B5_floor_plate.3mf',[('floor_plate',28,70,0),('kvm_spacer',28,4,0)])
+
+# panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
+plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])
+plate('B2p_base_panel_right_only.3mf',[('base_panel_R',M,M+12,0)])
