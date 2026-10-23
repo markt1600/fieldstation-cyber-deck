@@ -83,3 +83,10 @@ plate('B5_floor_plate.3mf',[('floor_plate',28,70,0),('kvm_spacer',28,4,0)])
 # panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
 plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])
 plate('B2p_base_panel_right_only.3mf',[('base_panel_R',M,M+12,0)])
+
+# posts and screen clamps on their own (tray and sensor cradle printed separately); brim recommended for the posts
+items=[]
+for i,n in enumerate(['post_TL','post_TR','post_ML','post_MR']): items.append((n,M+20+i*(pw+14),M+20,0))
+cx=M+20
+for i in range(4): items.append((f'screen_clamp_{i+1}',cx+i*(cw+10),M+20+h('post_TL')+20,0))
+plate('B3p_posts_and_screen_clamps.3mf',items)
