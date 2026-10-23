@@ -34,6 +34,7 @@ _lock=threading.Lock()
 _reading=None
 _power=None
 _power_timestamp=None
+_power_connected_since=None
 _history=deque(maxlen=360)
 _started=False
 
@@ -51,10 +52,11 @@ def status():
         history=list(_history)
         tracking=dict(_tracking)
         power=_power if _power_timestamp and time.time()-_power_timestamp<20 else None
+        connected_since=_power_connected_since if power is True else None
     age=max(0,time.time()-reading['timestamp']) if reading else None
     return {'status':'waiting' if age is None else ('live' if age<20 else 'stale'),
             'age_seconds':round(age,1) if age is not None else None,
-            'external_power':power,'power_source':'X1202 GPIO6','verified':False,'readings':reading,'history':history,'tracking':tracking}
+            'external_power':power,'power_connected_since':connected_since,'power_source':'X1202 GPIO6','verified':False,'readings':reading,'history':history,'tracking':tracking}
 
 def start():
     global _started
@@ -63,7 +65,7 @@ def start():
     threading.Thread(target=_run,daemon=True,name='X1202-readonly').start()
 
 def _run():
-    global _reading, _power, _power_timestamp
+    global _reading, _power, _power_timestamp, _power_connected_since
     try:
         from smbus2 import SMBus
     except ImportError:return
@@ -75,10 +77,18 @@ def _run():
             result=subprocess.run(['gpioget','-c','gpiochip0','--bias','disabled','--numeric','GPIO6'],capture_output=True,text=True,timeout=2)
             value=result.stdout.strip() if result.returncode==0 else ''
             with _lock:
-                _power={'1':True,'0':False}.get(value)
-                _power_timestamp=time.time()
+                observed={'1':True,'0':False}.get(value)
+                observed_at=time.time()
+                if observed is not True:
+                    _power_connected_since=None
+                elif _power is not True or not _power_timestamp or observed_at-_power_timestamp>=20:
+                    _power_connected_since=observed_at
+                _power=observed
+                _power_timestamp=observed_at
         except (OSError,subprocess.SubprocessError):
-            with _lock:_power=None
+            with _lock:
+                _power=None
+                _power_connected_since=None
         try:
             with SMBus(1) as bus:
                 reading=decode(bus.read_i2c_block_data(0x36,2,4))

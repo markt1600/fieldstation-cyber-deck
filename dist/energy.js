@@ -21,8 +21,10 @@ function renderLiveEnergy(){
   
   
   
+  <article class="metric"><span>Estimated time to full*</span><div class="reading" id="battery-charge-duration">—</div><p id="battery-charge-note"></p></article>
+  <article class="metric"><span>Estimated full-charge time</span><div class="reading" id="battery-charge-clock">—</div><p>Local time · recorded near-full charge level, not charger confirmation</p></article>
   <article class="metric"><span>Time remaining to reserve</span><div class="reading" id="battery-runtime">—</div><p id="battery-runtime-note"></p></article></div>
-  <section class="battery-history"><h2>Recent battery readings</h2><p>Samples every 5 seconds; saves a reading every 30 seconds. Saved history survives restarts. Sampling runs while Fieldstation is on.</p><p id="battery-log-status" role="status"></p><p id="battery-trend"></p><table><thead><tr><th>Time</th><th>Voltage</th><th>Reported charge</th></tr></thead><tbody id="battery-history"></tbody></table></section>`;
+  <p class="battery-note">*Charging estimates use the October 18 recharge curve and its observed near-full region (about 98% raw UPS charge). Unlike the voltage-based display, this model includes the charging taper. It is not a verified charger-completion time. Discharge runtime uses the separate measured discharge curve.</p><section class="battery-history"><h2>Recent battery readings</h2><p>Samples every 5 seconds; saves a reading every 30 seconds. Saved history survives restarts. Sampling runs while Fieldstation is on.</p><p id="battery-log-status" role="status"></p><p id="battery-trend"></p><table><thead><tr><th>Time</th><th>Voltage</th><th>Reported charge</th></tr></thead><tbody id="battery-history"></tbody></table></section>`;
  }
  refreshBattery();
 }
@@ -34,6 +36,7 @@ async function refreshBattery(){
   const r=await fetch('/api/battery',{signal:AbortSignal.timeout(4000),cache:'no-store'});
   if(!r.ok)throw Error();const d=await r.json(),live=d.status==='live'&&d.readings;
   updateBatterySummary(d);
+  updateChargeEstimate(d);
   document.querySelector('#battery-power').textContent=d.external_power===true?'⚡ Plugged in':d.external_power===false?'On battery':'Power source unknown';
   document.querySelector('#battery-status').textContent=live?'LIVE · UNVERIFIED':d.status==='stale'?'STALE':'UNAVAILABLE';
   document.querySelector('#battery-age').textContent=d.age_seconds===null?'Waiting for the battery gauge':(live?'Updated ':'Last successful reading ')+Math.round(d.age_seconds)+' seconds ago';
@@ -52,6 +55,7 @@ async function refreshBattery(){
   document.querySelector('#battery-trend').textContent=change===null?'Collecting readings…':`Voltage change over ${Math.round((h.at(-1).timestamp-h[0].timestamp)/60)} minutes: ${change>=0?'+':''}${change.toFixed(2)} V`;
  }catch{
   updateBatterySummary({status:'unavailable'});
+  updateChargeEstimate({status:'unavailable'});
   document.querySelector('#battery-power').textContent='Power source unknown';
   document.querySelector('#battery-status').textContent='UNAVAILABLE';document.querySelector('#battery-age').textContent='Could not refresh battery readings';
   document.querySelector('#battery-rate').textContent='—';
@@ -95,3 +99,58 @@ function updateBatterySummary(d){
 }
 
 setTimeout(refreshBattery,0);
+
+// October 18 recharge: [elapsed minutes, raw UPS percentage].
+// First observed crossings, deduplicated from saved 30-second samples. Loads varied.
+// 98.133% is the observed near-full point, not a charger termination signal.
+const rechargeCurve=[[94.91,.102],[111.92,1],[143.45,3.023],[154.96,5.062],[174.16,10.258],[196.22,20.09],[212.24,30.402],[225.17,40.105],[237.19,50.012],[249.2,60.109],[262.22,70.117],[276.24,80.258],[283.75,85.195],[293.76,90.066],[310.28,95.129],[328.31,98.133]];
+function rechargeElapsed(percent){
+ if(percent<=rechargeCurve[0][1])return rechargeCurve[0][0];
+ for(let i=1;i<rechargeCurve.length;i++){
+  const [t,p]=rechargeCurve[i],[pt,pp]=rechargeCurve[i-1];
+  if(percent<=p)return pt+(percent-pp)/(p-pp)*(t-pt);
+ }
+ return rechargeCurve.at(-1)[0];
+}
+function batteryChargeETA(d,now=Date.now()/1000){
+ const result=(text,note,minutes=null)=>({text,note,minutes,finish:minutes===null?null:now+minutes*60});
+ const r=d.readings;
+ if(d.status!=='live'||!r||!Number.isFinite(r.reported_percent)||!Number.isFinite(r.voltage_v)||!Number.isFinite(r.timestamp)||Math.abs(now-r.timestamp)>90)
+  return result('Unavailable','Waiting for fresh battery readings');
+ if(d.external_power!==true)return result(d.external_power===false?'On battery':'Power unknown','Connect external power for a charging estimate');
+ const p=r.reported_percent;
+ if(p>=98.133||(p>=97.5&&r.voltage_v>=4.16&&r.voltage_v<=4.18))
+  return result('Estimated full','Matches the recorded near-full region; actual charging completion is not reported');
+ if(p<.102)return result('Learning rate','Gauge is near zero; the deep-discharge recovery phase is too uncertain for a completion time');
+ const base=rechargeCurve.at(-1)[0]-rechargeElapsed(p);
+ let scale=1,adjusted=false;
+ const start=d.power_connected_since;
+ if(Number.isFinite(start)&&start<=now){
+  const history=(d.history||[]).filter(x=>x.timestamp>=start+600);
+  const trend=batteryChargeTrend(history,now);
+  if(trend&&trend.minutes>=20){
+   if(trend.pointsPerHour<=.2)return result('No clear charge gain','The recent gauge trend is flat or falling; completion cannot be predicted reliably');
+   const rows=history.filter(x=>x.timestamp>=now-1800&&x.timestamp<=now&&Number.isFinite(x.reported_percent)).sort((a,b)=>a.timestamp-b.timestamp);
+   const first=rows[0],last=rows.at(-1);
+   const progress=rechargeElapsed(last.reported_percent)-rechargeElapsed(first.reported_percent);
+   if(progress>1){
+    scale=(last.timestamp-first.timestamp)/60/progress;
+    if(scale<.5||scale>3)return result('Trend unstable','Recent progress differs too much from the measured recharge curve');
+    adjusted=true;
+   }
+  }
+ }
+ const minutes=Math.max(5,Math.ceil(base*scale/5)*5);
+ return result(`≈ ${Math.floor(minutes/60)}h ${minutes%60}m`,
+  (adjusted?'Measured recharge curve, adjusted for recent progress. ':'Measured recharge curve baseline; recent rate not yet established. ')+
+  'Includes the observed taper near full. Approximate: workload, solar input and gauge corrections can change the time.',minutes);
+}
+function updateChargeEstimate(d){
+ const estimate=batteryChargeETA(d);
+ const duration=document.querySelector('#battery-charge-duration'),clock=document.querySelector('#battery-charge-clock'),note=document.querySelector('#battery-charge-note');
+ if(duration)duration.textContent=estimate.text;
+ if(note)note.textContent=estimate.note;
+ if(clock){
+  clock.textContent=estimate.finish===null?'—':'≈ '+new Date(estimate.finish*1000).toLocaleString([], {weekday:'short',hour:'numeric',minute:'2-digit'});
+ }
+}

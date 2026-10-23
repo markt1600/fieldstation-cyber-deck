@@ -17,3 +17,19 @@ assert.equal(ctx.batteryRuntime({status:'stale',readings:{voltage_v:4.17,timesta
 assert.equal(ctx.batteryRuntime({status:'live',readings:{voltage_v:4.17,timestamp:now-100}},now).text,'Unavailable');
 assert.ok(percent(3.78)>45&&percent(3.78)<50);
 console.log('Battery calibration endpoints, monotonic curve, runtime and stale readings passed.');
+const now2=2000000000;
+const charging=p=>({status:'live',external_power:true,readings:{reported_percent:p,voltage_v:4.1975,timestamp:now2},history:[]});
+assert.equal(ctx.batteryChargeETA(charging(90),now2).minutes,35);
+assert.equal(ctx.batteryChargeETA(charging(95),now2).minutes,20);
+assert.equal(ctx.batteryChargeETA(charging(80),now2).minutes,55);
+assert.equal(ctx.batteryChargeETA(charging(98.133),now2).text,'Estimated full');
+assert.equal(ctx.batteryChargeETA({...charging(50),external_power:false},now2).finish,null);
+assert.equal(ctx.batteryChargeETA({...charging(50),status:'stale'},now2).finish,null);
+assert.equal(ctx.batteryChargeETA(charging(0),now2).finish,null);
+let steady=charging(90);steady.power_connected_since=now2-4000;
+steady.history=Array.from({length:61},(_,i)=>({timestamp:now2-1800+i*30,reported_percent:90}));
+assert.equal(ctx.batteryChargeETA(steady,now2).text,'No clear charge gain');
+assert.equal(ctx.batteryChargeETA(charging(90),now2).finish,now2+35*60);
+// Equal five-point gains take longer near full, rather than linear extrapolation.
+assert.ok(ctx.rechargeElapsed(98)-ctx.rechargeElapsed(93)>ctx.rechargeElapsed(60)-ctx.rechargeElapsed(55));
+console.log('Recharge taper, completion timestamp, baseline, flat trend, stale and unplugged states passed.');
