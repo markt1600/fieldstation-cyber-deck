@@ -16,7 +16,7 @@ def tm(m):
 parts={}
 # The base is modelled in panel coordinates (x right and y up as seen from the front, z away from you into the case),
 # which is a left-handed frame. Every base part must be reflected once on export or it prints as a mirror image.
-full,pl,pr=F['build_panel'](); parts['base_panel_L']=tm(pl.mirror([1,0,0])); parts['base_panel_R']=tm(pr.mirror([1,0,0]))   # front face stays on the bed
+full,pl,pr=F['build_panel'](); parts['base_panel_L']=tm(pl.mirror([0,0,1])); parts['base_panel_R']=tm(pr.mirror([0,0,1]))   # back face on the bed, front face up
 parts['port_tray']=tm(F['build_tray']().mirror([0,0,1]))
 for n in F['POSTS']: parts['post_'+n]=tm(F['build_post'](n))
 cr=L['build_cradle'](); ov=L['build_overlay']()
