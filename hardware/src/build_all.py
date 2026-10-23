@@ -21,7 +21,8 @@ parts['port_tray']=tm(F['build_tray']().mirror([0,0,1]))
 for n in F['POSTS']: parts['post_'+n]=tm(F['build_post'](n))
 cr=L['build_cradle'](); ov=L['build_overlay']()
 cl,crr=L['split'](cr,L['CRADLE_H'],L['CRADLE_TABS']); ol,orr=L['split'](ov,L['OT'],L['OVERLAY_TABS']); ol=L['stretch_left'](ol)
-parts['kb_door']=tm(L['build_door']().mirror([0,0,1])); parts['kb_cradle_L']=tm(cl); parts['kb_cradle_R']=tm(crr); parts['kb_overlay_L']=tm(ol.mirror([0,0,1])); parts['kb_overlay_R']=tm(orr.mirror([0,0,1]))
+parts['kb_door']=tm(L['build_door']());   # outside face up, magnet pockets open on the bed side
+parts['kb_cradle_L']=tm(cl); parts['kb_cradle_R']=tm(crr); parts['kb_overlay_L']=tm(ol.mirror([0,0,1])); parts['kb_overlay_R']=tm(orr.mirror([0,0,1]))
 for s in ('L','R'): parts['pod_body_'+s]=tm(P['body']); parts['pod_baffle_'+s]=tm(P['baf'])
 clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
@@ -82,7 +83,7 @@ plate('B5_floor_plate.3mf',[('floor_plate',28,70,0),('kvm_spacer',28,4,0)])
 
 # panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
 plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])
-plate('B2p_base_panel_right_only.3mf',[('base_panel_R',M,M+12,0)])
+plate('B2p_base_panel_right_+_tray_door.3mf',[('base_panel_R',M,M+12,0),('kb_door',M+w('base_panel_R')+12,M+40,90)])
 
 # posts and screen clamps on their own (tray and sensor cradle printed separately); brim recommended for the posts
 items=[]
