@@ -382,7 +382,7 @@ class Handler(BaseHTTPRequestHandler):
             if route=='/api/private/list':return self.send_json({'items':PRIVATE.listing(rel,token)})
             if route=='/api/private/thumbnail':
                 p=PRIVATE.path(rel,token)
-                if not p.is_file() or p.suffix.lower() not in VIDEO:raise ValueError('Not a video file.')
+                if not p.is_file() or p.suffix.lower() not in VIDEO | video_thumbnails.PRIVATE_IMAGES:raise ValueError('Not an image or video file.')
                 raw=video_thumbnails.private_preview(p)
                 PRIVATE.authorize(token)
                 self.send_response(200);self.send_header('Content-Type','image/jpeg');self.send_header('Content-Length',str(len(raw)))

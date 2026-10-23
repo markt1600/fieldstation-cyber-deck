@@ -33,8 +33,30 @@ async function renderPrivate(){
   privateThumbObserver?.disconnect();
   const currentThumbToken=privateToken;
   privateThumbObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;privateThumbObserver.unobserve(entry.target);loadPrivateThumb(entry.target,currentThumbToken);}});
-  result.items.forEach(item=>{if(!item.directory&&['.mp4','.mkv','.avi','.mov','.webm','.m4v'].includes(item.extension)){const card=document.createElement('article');card.className='video-card';const button=document.createElement('button');button.className='video-preview';button.setAttribute('aria-label','Play '+item.name);button.innerHTML='<span aria-hidden="true">▶</span>';const img=document.createElement('img');img.alt='';img.hidden=true;img.dataset.path=item.path;button.append(img);button.onclick=()=>viewPrivate(item);const title=document.createElement('div');title.className='row-text row-title';title.textContent=item.name;card.append(button,title);videoGrid.append(card);privateThumbObserver.observe(button);button.dataset.path=item.path;return;}const row=document.createElement('article');row.className='row';row.innerHTML='<div class="row-text"><div class="row-title">'+esc(item.name)+'</div><div class="meta">'+(item.directory?'Folder':size(item.size))+'</div></div>';const b=document.createElement('button');b.className='action';b.textContent=item.directory?'Browse':'View';b.onclick=()=>{if(item.directory){privateFolder=item.path;renderPrivate()}else viewPrivate(item)};row.append(b);rows.append(row)});
-  if(videoGrid.children.length)rows.append(videoGrid);
+  // Put the media gallery first; keep folders and documents below it.
+  rows.append(videoGrid);
+  result.items.forEach(item=>{
+   const isVideo=['.mp4','.mkv','.avi','.mov','.webm','.m4v'].includes(item.extension);
+   const isImage=['.jpg','.jpeg','.png','.gif','.webp','.bmp'].includes(item.extension);
+   if(!item.directory&&(isVideo||isImage)){
+    const card=document.createElement('article');card.className='video-card';
+    const button=document.createElement('button');button.className='video-preview';
+    button.setAttribute('aria-label',(isVideo?'Play ':'View ')+item.name);
+    button.dataset.path=item.path;
+    const fallback=document.createElement('span');fallback.setAttribute('aria-hidden','true');fallback.textContent=isVideo?'▶':'▧';
+    const img=document.createElement('img');img.alt='';img.hidden=true;img.onerror=()=>{img.hidden=true;};
+    button.append(fallback,img);button.onclick=()=>viewPrivate(item);
+    const title=document.createElement('div');title.className='row-text row-title';title.textContent=item.name;
+    const meta=document.createElement('div');meta.className='row-text meta';meta.textContent=(isVideo?'Video':'Photo')+' · '+size(item.size);
+    card.append(button,title,meta);videoGrid.append(card);privateThumbObserver.observe(button);return;
+   }
+   const row=document.createElement('article');row.className='row';
+   row.innerHTML='<div class="row-text"><div class="row-title">'+esc(item.name)+'</div><div class="meta">'+(item.directory?'Folder':size(item.size))+'</div></div>';
+   const b=document.createElement('button');b.className='action';b.textContent=item.directory?'Browse':'View';
+   b.onclick=()=>{if(item.directory){privateFolder=item.path;renderPrivate()}else viewPrivate(item)};
+   row.append(b);rows.append(row);
+  });
+  if(!videoGrid.children.length)videoGrid.remove();
   if(!result.items.length)rows.textContent='This folder is empty.';
  }catch(e){panel.textContent=e.message}
 }

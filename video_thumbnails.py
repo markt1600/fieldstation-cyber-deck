@@ -5,6 +5,9 @@ from pathlib import Path
 import shutil
 import subprocess
 import threading
+from io import BytesIO
+
+PRIVATE_IMAGES = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'}
 
 CACHE = Path(__file__).parent / 'data/video-thumbnails'
 LOCK = threading.Lock()
@@ -12,6 +15,17 @@ FAILED = set()
 
 def private_preview(path):
     """Return a frame in memory only; never write private media to the disk cache."""
+    if path.suffix.lower() in PRIVATE_IMAGES:
+        from PIL import Image, ImageOps
+        with LOCK, Image.open(path) as source:
+            source.seek(0)
+            preview = ImageOps.exif_transpose(source)
+            preview.thumbnail((480, 320))
+            if preview.mode != 'RGB':
+                preview = preview.convert('RGB')
+            output = BytesIO()
+            preview.save(output, format='JPEG', quality=82)
+            return output.getvalue()
     exe=shutil.which('ffmpeg')
     if not exe: raise RuntimeError('Video previews require ffmpeg.')
     with LOCK:
