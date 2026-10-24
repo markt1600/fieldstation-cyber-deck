@@ -9,12 +9,13 @@ FLOOR_Z=BASE_DEPTH-RIM_DROP
 FP_T=3.0
 FP=(52.0,85.0,250.0,211.0)              # x0,y0,x1,y1: clear of the post feet (x 21-47 / 255.5-281.5) and the floor fillet
 FP_EXT=(18.0,100.5,56.0,190.0)          # extension to the left, between the left posts' feet (y 88.5-98.5 and 192-210)
-FP_TAB=(246.0,128.0,258.5,172.0)        # small tab on the right for the strap loop (clear of the right posts' feet and the sensor cradle)
+FP_TAB=(246.0,101.0,258.5,139.0)        # small tab on the right for the strap loop (clear of the right posts' feet and the sensor cradle)
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
 # strap loops: a 20 mm hook-and-loop strap threads under a bar below and above the pocket and runs over the Pi case
 STRAP_W,STRAP_GAP,STRAP_BAR,STRAP_LEN=26.0,3.0,2.5,8.0
+STRAP_Y=PI[1]+(PI[3]-PI[1])/6     # bottom third of the Pi case, clear of the GPIO ribbon
 # 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 heat-set inserts (3.2 mm hole, 4.3 mm deep) on 6 mm bosses
 # turned 90 deg (50 across, 70 up) and placed between the breakout and the Pi
 PB=(82.0,100.0,132.0,170.0); PB_HX,PB_HY=45.5,65.5; BOSS_H,BOSS_D=6.0,8.0
@@ -38,11 +39,11 @@ def build_floor_plate():
     a=PI[0]-PK_CL; b=PI[1]-PK_CL; c=PI[2]+PK_CL; d=PI[3]+PK_CL
     wall=box(a-PK_WALL,b-PK_WALL,z0-PK_HT,c+PK_WALL,d+PK_WALL,z0)-box(a,b,z0-PK_HT-1,c,d,z0+0.01)
     # finger notches in the long walls so the case lifts out
-    for y in ((b+d)/2,):
+    for y in (STRAP_Y,):
         wall=wall-box(a-PK_WALL-1,y-12,z0-PK_HT-1,a+0.1,y+12,z0+0.01)-box(c-0.1,y-12,z0-PK_HT-1,c+PK_WALL+1,y+12,z0+0.01)
     p=p+wall
     # strap runs left to right over the front of the Pi case, through the finger notches in the side walls
-    yc=(b+d)/2
+    yc=STRAP_Y
     for xl in ((PB[2]+4.0+a-PK_WALL)/2, c+PK_WALL+1.0+STRAP_LEN/2):     # left: between perfboard bosses and wall; right: on a plate tab
         for sy in (-1,1):
             y0=yc+sy*STRAP_W/2; y1=y0+sy*3.0
@@ -64,9 +65,9 @@ def draw(fn):
         ax.add_patch(PathPatch(Path(v,cd),fc=c,ec='k',lw=0.6))
     for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 inserts',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n2 bosses (8.2 mm) on the far side;\nthe Pi side rests on its connector\n70 mm from the Pi',BO)]:
         ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,fc='none',ec='r',ls='--')); ax.text((x0+x1)/2,(y0+y1)/2,lab,ha='center',va='center',fontsize=8,color='r')
-    yc=(PI[1]+PI[3])/2
-    ax.annotate('strap loops: the strap runs left to right\nover the front of the Pi case, through the\nfinger gaps in the pocket walls',xy=(252,yc),xytext=(146,83.5),fontsize=7,color='#c1121f',arrowprops=dict(arrowstyle='->',color='#c1121f'))
-    ax.annotate('',xy=(138,yc),xytext=(150,90),arrowprops=dict(arrowstyle='->',color='#c1121f'))
+    yc=STRAP_Y
+    ax.annotate('strap loops: the strap runs left to right\nover the front of the Pi case, through the\nfinger gaps in the pocket walls',xy=(252,yc),xytext=(160,165),fontsize=7,color='#c1121f',arrowprops=dict(arrowstyle='->',color='#c1121f'))
+    ax.annotate('',xy=(138,yc),xytext=(165,163),arrowprops=dict(arrowstyle='->',color='#c1121f'))
     ax.set_xlim(10,262); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
     ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)
     fig.tight_layout(); fig.savefig(fn,dpi=90)
