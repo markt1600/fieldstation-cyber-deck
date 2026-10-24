@@ -14,7 +14,7 @@ Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What
 
 - **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; TEMP column on the left, vent slots only, no sensor (the screen's HDMI and micro-USB plugs come out of its left edge into the space behind it); AIR column (Plantower PMS7003 behind louvres) on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
 - **Port pocket** (106 × 76 mm, floor 18 mm deep so nothing touches the keyboard): 2 × USB-A and 1 × USB-C D-size sockets on top; power button, 12 V DC jack, audio button and volume pot below; a 24 × 12 mm slot at the very bottom for the keyboard cable, in line with the lid's cable slot.
-- **Behind the panel:** Pi 5 in a Geekworm X1202-C1 case (UPS, 4 × 18650) on the case floor behind the screen, with the GPIO breakout and mini breadboard beside it.
+- **Behind the panel:** Pi 5 in a Geekworm X1202-C1 case (UPS, 4 × 18650) on the case floor behind the screen, with the GPIO breakout and a soldered perfboard beside it, all on a printed floor plate.
 - **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, a magnetic accessory tray along the hinge, and an open pocket at the hinge's left end for the KVM remote.
 - **Back of the case:** two folding kickstands that stop at a 15° lean.
 
