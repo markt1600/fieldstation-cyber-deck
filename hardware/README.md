@@ -49,7 +49,7 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 | Item | Qty | Used for |
 |---|---|---|
 | M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 43 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 4 (GPIO breakout) |
-| M2 × 6 self-tapping pan screw | 4 | Perfboard on the floor plate (straight into the bosses' 1.7 mm pilot holes) |
+| M2 heat-set insert (for a 3.2 mm hole, up to 4 mm long) + M2 × 5 pan screw | 4 | Perfboard on the floor plate |
 | M3 × 6 pan screw | 4 | GPIO breakout on the floor plate |
 | M3 × 8 countersunk | 24 | Lid overlay, screen clamps, port tray, sensor cradle |
 | M3 × 10 countersunk | 4 | Floor posts |

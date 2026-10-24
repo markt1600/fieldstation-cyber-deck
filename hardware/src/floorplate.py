@@ -12,11 +12,11 @@ FP_EXT=(18.0,100.5,56.0,190.0)          # extension to the left, between the lef
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
-# 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 self-tapping screws straight into 1.7 mm pilot holes on 6 mm bosses
+# 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 heat-set inserts (3.2 mm hole, 4.3 mm deep) on 6 mm bosses
 # turned 90 deg (50 across, 70 up) and placed between the breakout and the Pi
 PB=(82.0,100.0,132.0,170.0); PB_HX,PB_HY=45.5,65.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
-M2_D,M2_L=1.7,6.2               # pilot hole, 6.5 mm deep, blind (stops 2.5 mm short of the plate's underside)
+M2_D,M2_L=3.2,4.0               # M2 insert hole (OD 3.2, up to 4 mm long); cut 4.3 mm deep
 # 65 x 55 GPIO breakout turned 90 deg (55 across, 65 up) so the Pi ribbon runs straight; M3 holes ~48 x 57 (measured)
 # far left, 70 mm from the Pi case so the ribbon clears the Pi's HDMI ports (needs >= 65 mm, measured)
 BO=(20.0,102.0,75.0,167.0); BO_HX,BO_HY=48.0,57.0
@@ -52,7 +52,7 @@ def draw(fn):
         for p in m.slice(z).to_polygons():
             p=np.asarray(p); v+=list(map(tuple,p))+[tuple(p[0])]; cd+=[Path.MOVETO]+[Path.LINETO]*(len(p)-1)+[Path.CLOSEPOLY]
         ax.add_patch(PathPatch(Path(v,cd),fc=c,ec='k',lw=0.6))
-    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 self-tappers',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n9 mm bosses\n70 mm from the Pi',BO)]:
+    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 inserts',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n9 mm bosses\n70 mm from the Pi',BO)]:
         ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,fc='none',ec='r',ls='--')); ax.text((x0+x1)/2,(y0+y1)/2,lab,ha='center',va='center',fontsize=8,color='r')
     ax.set_xlim(10,255); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
     ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)
