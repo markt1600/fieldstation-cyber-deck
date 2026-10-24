@@ -20,10 +20,10 @@ M2_D,M2_L=3.2,4.0               # M2 insert hole (OD 3.2, up to 4 mm long); cut 
 # 65 x 55 GPIO breakout turned 90 deg (55 across, 65 up) so the Pi ribbon runs straight; M3 holes ~48 x 57 (measured)
 # far left, 70 mm from the Pi case so the ribbon clears the Pi's HDMI ports (needs >= 65 mm, measured)
 BO=(20.0,102.0,75.0,167.0); BO_HX,BO_HY=48.0,57.0
-BO_BOSS_H=9.0                    # parts under the board need 8.65 mm; the 35 mm total includes them
+BO_BOSS_H=8.2                    # two bosses on the side away from the Pi; the Pi side rests on the board's own GPIO connector (measured)
 def bo_holes():
     cx,cy=(BO[0]+BO[2])/2,(BO[1]+BO[3])/2
-    return [(cx+sx*BO_HX/2,cy+sy*BO_HY/2) for sx in (-1,1) for sy in (-1,1)]
+    return [(cx-BO_HX/2,cy+sy*BO_HY/2) for sy in (-1,1)]   # only the two holes farthest from the Pi
 def pb_holes():
     cx,cy=(PB[0]+PB[2])/2,(PB[1]+PB[3])/2
     return [(cx+sx*PB_HX/2,cy+sy*PB_HY/2) for sx in (-1,1) for sy in (-1,1)]
@@ -52,7 +52,7 @@ def draw(fn):
         for p in m.slice(z).to_polygons():
             p=np.asarray(p); v+=list(map(tuple,p))+[tuple(p[0])]; cd+=[Path.MOVETO]+[Path.LINETO]*(len(p)-1)+[Path.CLOSEPOLY]
         ax.add_patch(PathPatch(Path(v,cd),fc=c,ec='k',lw=0.6))
-    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 inserts',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n9 mm bosses\n70 mm from the Pi',BO)]:
+    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 inserts',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n2 bosses (8.2 mm) on the far side;\nthe Pi side rests on its connector\n70 mm from the Pi',BO)]:
         ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,fc='none',ec='r',ls='--')); ax.text((x0+x1)/2,(y0+y1)/2,lab,ha='center',va='center',fontsize=8,color='r')
     ax.set_xlim(10,255); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
     ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)

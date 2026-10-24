@@ -37,7 +37,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate: Pi case pocket, insert bosses for the perfboard (6 mm) and the GPIO breakout (9 mm, board turned 90°); 60 × 60 × 2 mm KVM spacer |
+| B5 | Floor plate: Pi case pocket, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The KVM remote button lives in the open pocket at the left end of the lid's hinge strip; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -48,9 +48,9 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 
 | Item | Qty | Used for |
 |---|---|---|
-| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 43 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 4 (GPIO breakout) |
+| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 41 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 2 (GPIO breakout) |
 | M2 heat-set insert (for a 3.2 mm hole, up to 4 mm long) + M2 × 5 pan screw | 4 | Perfboard on the floor plate |
-| M3 × 6 pan screw | 4 | GPIO breakout on the floor plate |
+| M3 × 6 pan screw | 2 | GPIO breakout on the floor plate |
 | M3 × 8 countersunk | 24 | Lid overlay, screen clamps, port tray, sensor cradle |
 | M3 × 10 countersunk | 4 | Floor posts |
 | M3 × 20 countersunk | 8 | Speaker pods through the panel |
