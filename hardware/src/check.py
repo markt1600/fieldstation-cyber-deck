@@ -31,8 +31,10 @@ parts['floor_plate']=_FP['build_floor_plate']()
 # boards sit on the floor plate (3 mm); the Pi in its pocket, the boards on 6 mm bosses
 parts['pi']=box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3)
 # breakout turned 90 deg: 55 x 65; 35 mm from the plate, incl. parts under the board around its 9 mm bosses
-parts["breakout"]=box(60,143,FLOOR_Z-3-35,60+55,143+65,FLOOR_Z-12)+(box(60,143,FLOOR_Z-12,60+55,143+65,FLOOR_Z-3)-parts["floor_plate"])
-parts['breadboard']=box(60,90,FLOOR_Z-9-1.6-15,60+70,90+50,FLOOR_Z-9)
+_BO=_FP["BO"]
+parts["breakout"]=box(_BO[0],_BO[1],FLOOR_Z-3-35,_BO[2],_BO[3],FLOOR_Z-12)+(box(_BO[0],_BO[1],FLOOR_Z-12,_BO[2],_BO[3],FLOOR_Z-3)-parts["floor_plate"])
+_PB=_FP['PB']
+parts['breadboard']=box(_PB[0],_PB[1],FLOOR_Z-9-1.6-15,_PB[2],_PB[3],FLOOR_Z-9)
 names=list(parts); bad=0
 for i in range(len(names)):
     for j in range(i+1,len(names)):

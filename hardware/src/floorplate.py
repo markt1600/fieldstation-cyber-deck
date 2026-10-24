@@ -8,15 +8,18 @@ def box(x0,y0,z0,x1,y1,z1): return Manifold.cube([x1-x0,y1-y0,z1-z0]).translate(
 FLOOR_Z=BASE_DEPTH-RIM_DROP
 FP_T=3.0
 FP=(52.0,85.0,250.0,211.0)              # x0,y0,x1,y1: clear of the post feet (x 21-47 / 255.5-281.5) and the floor fillet
+FP_EXT=(18.0,100.5,56.0,190.0)          # extension to the left, between the left posts' feet (y 88.5-98.5 and 192-210)
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
 # 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 self-tapping screws straight into 1.7 mm pilot holes on 6 mm bosses
-PB=(60.0,90.0,130.0,140.0); PB_HX,PB_HY=65.5,45.5; BOSS_H,BOSS_D=6.0,8.0
+# turned 90 deg (50 across, 70 up) and placed between the breakout and the Pi
+PB=(82.0,100.0,132.0,170.0); PB_HX,PB_HY=45.5,65.5; BOSS_H,BOSS_D=6.0,8.0
 INS_D,INS_L=4.0,5.7
 M2_D,M2_L=1.7,6.2               # pilot hole, 6.5 mm deep, blind (stops 2.5 mm short of the plate's underside)
 # 65 x 55 GPIO breakout turned 90 deg (55 across, 65 up) so the Pi ribbon runs straight; M3 holes ~48 x 57 (measured)
-BO=(60.0,143.0,115.0,208.0); BO_HX,BO_HY=48.0,57.0
+# far left, 70 mm from the Pi case so the ribbon clears the Pi's HDMI ports (needs >= 65 mm, measured)
+BO=(20.0,102.0,75.0,167.0); BO_HX,BO_HY=48.0,57.0
 BO_BOSS_H=9.0                    # parts under the board need 8.65 mm; the 35 mm total includes them
 def bo_holes():
     cx,cy=(BO[0]+BO[2])/2,(BO[1]+BO[3])/2
@@ -26,7 +29,8 @@ def pb_holes():
     return [(cx+sx*PB_HX/2,cy+sy*PB_HY/2) for sx in (-1,1) for sy in (-1,1)]
 def build_floor_plate():
     z1=FLOOR_Z; z0=z1-FP_T
-    p=Manifold.extrude(rrect(FP[2]-FP[0],FP[3]-FP[1],6.0,(FP[0]+FP[2])/2,(FP[1]+FP[3])/2),FP_T).translate([0,0,z0])
+    outline=rrect(FP[2]-FP[0],FP[3]-FP[1],6.0,(FP[0]+FP[2])/2,(FP[1]+FP[3])/2)+rrect(FP_EXT[2]-FP_EXT[0],FP_EXT[3]-FP_EXT[1],4.0,(FP_EXT[0]+FP_EXT[2])/2,(FP_EXT[1]+FP_EXT[3])/2)
+    p=Manifold.extrude(outline,FP_T).translate([0,0,z0])
     # Pi pocket walls
     a=PI[0]-PK_CL; b=PI[1]-PK_CL; c=PI[2]+PK_CL; d=PI[3]+PK_CL
     wall=box(a-PK_WALL,b-PK_WALL,z0-PK_HT,c+PK_WALL,d+PK_WALL,z0)-box(a,b,z0-PK_HT-1,c,d,z0+0.01)
@@ -48,9 +52,9 @@ def draw(fn):
         for p in m.slice(z).to_polygons():
             p=np.asarray(p); v+=list(map(tuple,p))+[tuple(p[0])]; cd+=[Path.MOVETO]+[Path.LINETO]*(len(p)-1)+[Path.CLOSEPOLY]
         ax.add_patch(PathPatch(Path(v,cd),fc=c,ec='k',lw=0.6))
-    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard 70 × 50\nholes 65.5 × 45.5, 6 mm bosses\nM2 self-tappers',PB),('GPIO breakout, turned 90°\n55 × 65, holes 48 × 57\n9 mm bosses',BO)]:
+    for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 self-tappers',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n9 mm bosses\n70 mm from the Pi',BO)]:
         ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,fc='none',ec='r',ls='--')); ax.text((x0+x1)/2,(y0+y1)/2,lab,ha='center',va='center',fontsize=8,color='r')
-    ax.set_xlim(45,255); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
+    ax.set_xlim(10,255); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
     ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)
     fig.tight_layout(); fig.savefig(fn,dpi=90)
 if __name__=='__main__':

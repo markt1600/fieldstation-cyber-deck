@@ -51,7 +51,7 @@ for i,(title,z0,z1) in enumerate(LAYERS):
         ax.annotate('PC1 HDMI + USB-A → Pi\n(micro-HDMI adapter)',xy=(160,150),xytext=(160,70),fontsize=8,arrowprops=dict(arrowstyle='->',color='r'))
         ax.annotate('console edge: HDMI → screen,\nUSB-A → keyboard cable',xy=(90,214),xytext=(150,218),fontsize=8,arrowprops=dict(arrowstyle='->',color='r'))
 # section through the stack at x = XS (screen, KVM, breakout, perfboard, floor plate)
-XS=92.0
+XS=60.0
 for a in fig.axes[:3]: a.axvline(XS,color='k',ls='-.',lw=0.8); a.text(XS+1,2,'section',fontsize=7)
 ax=fig.add_subplot(gs[1,1])
 ax.add_patch(Rectangle((0,0),FLOOR_Z,PH,fc='#f8f9fa',ec='k',lw=1.2)); ax.axvspan(0,T,color='#ced4da')
@@ -62,9 +62,9 @@ for lab,bx,c,h in items:
     ax.add_patch(Rectangle((bx[2],bx[1]),bx[5]-bx[2],bx[4]-bx[1],fc=c if h is None else 'none',ec=c if h else 'k',hatch=h,alpha=0.6 if h is None else 0.9,lw=0.8,label=lab))
 def gap(z0,z1,y,txt):
     ax.annotate('',xy=(z0,y),xytext=(z1,y),arrowprops=dict(arrowstyle='<->',lw=0.8)); ax.text((z0+z1)/2,y+2,txt,ha='center',fontsize=7)
-gap(T+SC_T,25,175,'4'); gap(48,50,185,'2'); gap(48,FLOOR_Z-9-1.6-15,120,'17')
+gap(T+SC_T,25,175,'4'); gap(48,53,150,'5')
 ax.text(12,160,'screen',rotation=90,fontsize=8,va='center'); ax.text(36,160,'KVM',rotation=90,fontsize=8,va='center')
-ax.text(67,170,'breakout\n(35 mm space)',fontsize=7,ha='center',va='center'); ax.text(74,115,'perfboard\nwire space',fontsize=7,ha='center',va='center')
+ax.text(70,135,'breakout\n(35 mm space)',fontsize=7,ha='center',va='center')
 ax.text(40,50,'speaker pod',fontsize=8,ha='center'); ax.text(84,140,'floor plate',rotation=90,fontsize=7,va='center')
 ax.set_xlim(-4,FLOOR_Z+4); ax.set_ylim(-4,PH+8); ax.set_aspect('equal')
 ax.set_title('Section at x = %.0f mm, seen from the right (panel on the left)\nnumbers = gaps in mm'%XS,fontsize=11)

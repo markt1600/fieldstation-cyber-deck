@@ -79,7 +79,7 @@ plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+
 plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle',M+20+w('port_tray')+25,M+60,0)])
 
 # floor plate on its own (Pi pocket, perfboard bosses; breakout bosses to come)
-plate('B5_floor_plate.3mf',[('floor_plate',28,70,0),('kvm_spacer',28,4,0)])
+plate('B5_floor_plate.3mf',[('floor_plate',10,70,0),('kvm_spacer',28,4,0)])
 
 # panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
 plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])
