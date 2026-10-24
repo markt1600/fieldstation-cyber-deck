@@ -12,6 +12,8 @@ FP_EXT=(18.0,100.5,56.0,190.0)          # extension to the left, between the lef
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
+# strap loops: a 20 mm hook-and-loop strap threads under a bar below and above the pocket and runs over the Pi case
+STRAP_W,STRAP_GAP,STRAP_BAR,STRAP_LEN=26.0,3.0,2.5,8.0
 # 70 x 50 perfboard, 2 mm holes on 65.5 x 45.5 centres (measured): M2 heat-set inserts (3.2 mm hole, 4.3 mm deep) on 6 mm bosses
 # turned 90 deg (50 across, 70 up) and placed between the breakout and the Pi
 PB=(82.0,100.0,132.0,170.0); PB_HX,PB_HY=45.5,65.5; BOSS_H,BOSS_D=6.0,8.0
@@ -38,6 +40,12 @@ def build_floor_plate():
     for y in ((b+d)/2,):
         wall=wall-box(a-PK_WALL-1,y-12,z0-PK_HT-1,a+0.1,y+12,z0+0.01)-box(c-0.1,y-12,z0-PK_HT-1,c+PK_WALL+1,y+12,z0+0.01)
     p=p+wall
+    xc=(PI[0]+PI[2])/2
+    for yc in ((FP[1]+b-PK_WALL)/2,(d+PK_WALL+FP[3])/2):       # centred in the strips below and above the pocket
+        for sx in (-1,1):
+            x0=xc+sx*STRAP_W/2; x1=x0+sx*3.0
+            p=p+box(min(x0,x1),yc-STRAP_LEN/2,z0-STRAP_GAP-STRAP_BAR,max(x0,x1),yc+STRAP_LEN/2,z0)
+        p=p+box(xc-STRAP_W/2-3.0,yc-STRAP_LEN/2,z0-STRAP_GAP-STRAP_BAR,xc+STRAP_W/2+3.0,yc+STRAP_LEN/2,z0-STRAP_GAP)
     for holes,h,d,l in ((pb_holes(),BOSS_H,M2_D,M2_L),(bo_holes(),BO_BOSS_H,INS_D,INS_L)):
         for x,y in holes:
             p=p+Manifold.cylinder(h,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-h])
@@ -54,6 +62,8 @@ def draw(fn):
         ax.add_patch(PathPatch(Path(v,cd),fc=c,ec='k',lw=0.6))
     for lab,(x0,y0,x1,y1) in [('Pi 5 + X1202 case',PI),('perfboard, turned 90°\n50 × 70, holes 45.5 × 65.5\nM2 inserts',PB),('GPIO breakout\n55 × 65, holes 48 × 57\n2 bosses (8.2 mm) on the far side;\nthe Pi side rests on its connector\n70 mm from the Pi',BO)]:
         ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,fc='none',ec='r',ls='--')); ax.text((x0+x1)/2,(y0+y1)/2,lab,ha='center',va='center',fontsize=8,color='r')
+    xc=(PI[0]+PI[2])/2
+    for yy in (93.8,204.3): ax.text(xc,yy,'strap loop',ha='center',va='center',fontsize=7,color='#c1121f')
     ax.set_xlim(10,255); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
     ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)
     fig.tight_layout(); fig.savefig(fn,dpi=90)

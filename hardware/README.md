@@ -37,7 +37,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate: Pi case pocket, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
+| B5 | Floor plate: Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The KVM remote button lives in the open pocket at the left end of the lid's hinge strip; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -58,7 +58,7 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 | M3 × 10 bolt + nut | 6 | D-size USB socket flanges |
 | M4 × 40 bolt + nyloc nut | 2 | Kickstand pivots |
 | 4.56 mm magnet cube | 24 | Pod baffles 16, tray door 8 |
-| Small cable tie (PMS7003 cradle), foam gasket tape, VHB tape, epoxy, polyfill | – | Pod and sensor seals, post feet and lid cradle, dovetail joins, pod damping |
+| 20 mm hook-and-loop strap, about 40 cm (Pi case), small cable tie (PMS7003 cradle), foam gasket tape, VHB tape, epoxy, polyfill | – | Pod and sensor seals, post feet and lid cradle, dovetail joins, pod damping |
 | Loctite 770 primer + 406 (or 3M Primer 94 + VHB) | – | Kickstands to the polypropylene case |
 
 ## Assembly notes
@@ -69,6 +69,7 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 4. **Panels.** The halves print back face down, so the visible front is the top surface. Dry-fit the dovetails, then epoxy the halves face down on a flat surface. Glue the splice strip behind the base-panel seam above the window.
 5. **Lid.** The cradle halves can be dry-fitted. Screw the overlay onto the cradle, drop the assembly into the lid so the overlay centres it, then fix it with VHB (or Dual Lock if you want it removable). The roughly 6 mm gap around the cradle is intentional; it clears the lid's tapered walls and curved floor edge.
 6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs mid-thickness in front of the inlet face, pointing at the panel. The front of the cradle has two chambers split by a rib: the outlet chamber, and an inlet chamber that also holds the plugs. Drop the sensor in from the back, face first, with the board on the side where the sleeve wall is open, feeding the wires out through the slot in the inlet chamber's end wall. Hold it in with a cable tie round the sleeve and over the sensor's back, between the guide ridges. Then seal it so it only breathes through the louvres: foam gasket round the lip, and foam or putty in the wire slot and the small notch where the header pins pass. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
+6b. **Pi.** Drop the Pi case into its pocket and hold it down with a 20 mm hook-and-loop strap threaded under the two loops above and below the pocket and over the top of the case. Keep the strap clear of the Pi's ports.
 7. **KVM.** Stick the 2 mm spacer (B5) to the back of the screen case with VHB, centred about 40 mm in from the screen's left edge and 50 mm down from its top, then stick the KVM onto it with its console edge (HDMI, USB-A) facing the top of the case and its built-in cables facing down. The spacer lifts it clear of the top-left screen clamp. Use right-angle HDMI and USB-A plugs on the console side, and coil the spare host cable over the perfboard, not the breakout. See [docs/internal_layout.png](docs/internal_layout.png).
 8. **Kickstands.** Glue the hinge plates (35 × 40 mm) to flat areas with the pivot about 75 mm up the back of the case, one each side.
 
