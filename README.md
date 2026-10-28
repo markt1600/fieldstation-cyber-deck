@@ -95,3 +95,14 @@ Most content is used locally. Online services, embedded websites, Spotify and Co
 Check Python syntax with `python -m compileall -q .` in a source-only checkout, and JavaScript syntax with `node --check dist/<changed-file>.js`. Test navigation and playback on the target touchscreen. UI confirmations can be tested without actually rebooting or powering off.
 
 Commit reviewed source changes here before deploying them to the device. Keep machine-specific configuration and content backups separately. This repository does not yet include an automated installer or full integration-test suite.
+
+
+## Offline games and learning
+
+The offline Games page provides graphical launch tiles for Crispy Doom with Freedoom Phase 2, LTris 2, XBoard/GNU Chess, a Pac-Man-style maze game and LinCity-NG. Games open in the local desktop; close the game window to return. The original commercial Doom levels are not bundled. Install Debian ARM64 packages into the user directory with `sh scripts/install_offline_games.sh`. This assumes the Pi desktop SDL2 dependencies, bubblewrap, xset and mkfontdir are already present; check missing libraries on other images. Launch requests are fixed allowlisted choices restricted to the local same-origin browser.
+
+Kolibri 0.19.5 is installed in a separate Python environment at `~/fieldstation-kolibri`. Create it with `python3 -m venv ~/fieldstation-kolibri` and `~/fieldstation-kolibri/bin/pip install kolibri==0.19.5`, then run `python3 scripts/setup_offline_learning.py`. All course data and local learner progress live at `/media/library/Education/Kolibri` on the SSD. Setup generates a private local administrator credential in `~/.config/fieldstation-kolibri-admin` (mode 0600); never commit it. Learners can browse as guests or create local learner profiles; an online Khan Academy account is not needed.
+
+Kolibri listens on loopback ports 8085 and 8086. Fieldstation proxies `/kolibri/` for its local embedded view; exercise content remains on the separate 8086 origin. Education links to a learning overview with download progress. The official English US-curriculum channel ID is `c9d7f950ab6b5a1199e3d6c10d7f0103`; its catalogue contains about 67 GB of files. `scripts/download_khan.py` imports a sample first and then the complete channel, resuming existing downloads. On the device this runs as the enabled `fieldstation-khan-download` user service, with logs on the SSD. Content is not bundled in GitHub and retains its source licences.
+
+The Chromium launcher uses `--hide-crash-restore-bubble` to suppress the restore-tabs prompt at startup while retaining the normal full-screen mode and F11 exit.

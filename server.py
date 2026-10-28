@@ -31,6 +31,9 @@ import audio_compat
 import codex_launcher
 import power_control
 import offline_maps
+import games
+import kolibri_proxy
+import learning_status
 ALLOWED = {'.pdf', '.epub', '.zim', '.mp3', '.m4a', '.ogg', '.wav', '.mp4', '.webm', '.mkv', '.avi', '.mov', '.m4v', '.flac', '.html'}
 CACHE = {'at': 0, 'items': [], 'files': {}}
 VIDEO = {'.mp4', '.webm', '.mkv', '.avi', '.mov', '.m4v'}
@@ -149,7 +152,25 @@ class Handler(BaseHTTPRequestHandler):
     def send_json(self, value, status=200):
         data = json.dumps(value).encode()
         self.send_response(status); self.send_header('Content-Type','application/json'); self.send_header('Content-Length',str(len(data))); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(data)
+    def do_PATCH(self):
+        if self.path.startswith('/kolibri/'): return kolibri_proxy.serve(self)
+        return self.send_json({'error':'Method not allowed.'},405)
+    do_PUT = do_PATCH
+    do_DELETE = do_PATCH
     def do_POST(self):
+        if self.path.startswith('/kolibri/'): return kolibri_proxy.serve(self)
+        if self.path == '/api/games/launch':
+            host = self.headers.get('Host', '')
+            if self.client_address[0] not in {'127.0.0.1','::1'} or host not in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'} or self.headers.get('Origin') != 'http://' + host or self.headers.get('X-Fieldstation') != 'games':
+                return self.send_json({'error':'Launch games from Fieldstation on the Pi.'},403)
+            try:
+                length=int(self.headers.get('Content-Length','0'))
+                if not 0 < length <= 128: raise ValueError('Invalid request.')
+                payload=json.loads(self.rfile.read(length))
+                if not isinstance(payload,dict): raise ValueError('Invalid request.')
+                return self.send_json(games.launch(payload.get('game')))
+            except (ValueError,TypeError): return self.send_json({'error':'Choose a listed game.'},400)
+            except (RuntimeError,OSError,subprocess.TimeoutExpired) as e: return self.send_json({'error':str(e)},503)
         if self.path == '/api/power':
             host = self.headers.get('Host', '')
             if self.client_address[0] not in {'127.0.0.1', '::1'} or host not in {f'127.0.0.1:{self.server.server_port}', f'localhost:{self.server.server_port}'} or self.headers.get('Origin') != 'http://' + host or self.headers.get('X-Fieldstation') != 'power':
@@ -229,6 +250,7 @@ class Handler(BaseHTTPRequestHandler):
         return self.send_json({'message': 'VLC launch requested in a separate window. Use VLC to check playback.'})
     def do_HEAD(self): self.do_GET(head=True)
     def do_GET(self, head=False):
+        if self.path.startswith('/kolibri/'): return kolibri_proxy.serve(self,head)
         route = urlparse(self.path).path
         if route == '/api/art-status': return self.send_json(art_gallery.status())
         if route == '/api/art': return self.send_json(art_gallery.query(parse_qs(urlparse(self.path).query)))
@@ -262,6 +284,7 @@ class Handler(BaseHTTPRequestHandler):
         if route.startswith('/api/private/'):
             if head: return self.send_error(405)
             return self.private_request()
+        if route == '/api/learning-status': return self.send_json(learning_status.status())
         if route == '/api/maps': return self.send_json(offline_maps.manifest())
         if route == '/api/maps/search':
             params=parse_qs(urlparse(self.path).query)
@@ -312,7 +335,7 @@ class Handler(BaseHTTPRequestHandler):
                 try: p=audio_compat.compatible(resolved)
                 except (OSError, ValueError, subprocess.SubprocessError): return self.send_error(422, 'Unable to prepare compatible audio')
         else:
-            assets={'/power.js':'power.js','/art.js':'art.js','/playlists-page.js':'playlists-page.js','/codex.js':'codex.js','/energy.js':'energy.js','/viewer.js':'viewer.js','/spotify.js':'spotify.js','/air.js':'air.js','/':'index.html','/ask.js':'ask.js','/app.js':'app.js','/videos.js':'videos.js','/media.js':'media.js','/topics.js':'topics.js','/wifi.js':'wifi.js','/sharing.js':'sharing.js','/catalogue.js':'catalogue.js','/private.js':'private.js','/style.css':'style.css','/favicon.svg':'favicon.svg'}
+            assets={'/learning.html':'learning.html','/learning.js':'learning.js','/games.html':'games.html','/games.js':'games.js','/power.js':'power.js','/art.js':'art.js','/playlists-page.js':'playlists-page.js','/codex.js':'codex.js','/energy.js':'energy.js','/viewer.js':'viewer.js','/spotify.js':'spotify.js','/air.js':'air.js','/':'index.html','/ask.js':'ask.js','/app.js':'app.js','/videos.js':'videos.js','/media.js':'media.js','/topics.js':'topics.js','/wifi.js':'wifi.js','/sharing.js':'sharing.js','/catalogue.js':'catalogue.js','/private.js':'private.js','/style.css':'style.css','/favicon.svg':'favicon.svg'}
             if route not in assets: return self.send_error(404)
             p=BASE/'dist'/assets[route]
         try:

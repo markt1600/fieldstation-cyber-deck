@@ -4,6 +4,7 @@ function renderBrowseModes(){
  node.hidden=!enabled;$('#filter').hidden=view!=='downloads';
  if(!enabled){node.innerHTML='';return;}
  node.innerHTML=['reading','listening'].map(m=>'<button class="action" aria-pressed="'+(browseMode===m)+'" data-mode="'+m+'">'+(m==='reading'?'Reading · topics & chapters':'Listening · audio lessons')+'</button>').join('');
+ if(view==='education'){const button=document.createElement('button');button.className='action';button.textContent='▣ Khan Academy · lessons & exercises';button.onclick=()=>openFieldstationSite('kolibri');node.prepend(button);}
  node.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{browseMode=b.dataset.mode;$('#search').value='';delete $('#results').dataset.topics;renderRows()});
 }
 function renderMediaContents(){
