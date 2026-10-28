@@ -9,5 +9,5 @@ if not os.path.ismount('/media/library'):raise SystemExit('SSD is not mounted.')
 env=dict(os.environ,KOLIBRI_HOME=str(HOME))
 # Download a video and an interactive exercise first so the viewer can be checked.
 subprocess.run([str(EXE),'manage','importcontent','--node_ids','bc3ac45347f3556ba8169b59ae452b01,a54ad8cc9e4256c3a39fc7bfa35a93e6','network',CHANNEL],env=env,check=True)
-subprocess.run([str(EXE),'manage','importcontent','--fail-on-error','network',CHANNEL],env=env,check=True)
-(HOME/'download-complete').write_text('English Khan Academy import completed.\n')
+subprocess.run([str(EXE),'manage','importcontent','network',CHANNEL],env=env,check=True)
+(HOME/'download-pass-finished').write_text('Import pass finished. Some source files may be unavailable; see download.log for errors.\n')
