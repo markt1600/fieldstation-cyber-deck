@@ -30,6 +30,7 @@ import audio_settings
 import audio_compat
 import codex_launcher
 import power_control
+import offline_maps
 ALLOWED = {'.pdf', '.epub', '.zim', '.mp3', '.m4a', '.ogg', '.wav', '.mp4', '.webm', '.mkv', '.avi', '.mov', '.m4v', '.flac', '.html'}
 CACHE = {'at': 0, 'items': [], 'files': {}}
 VIDEO = {'.mp4', '.webm', '.mkv', '.avi', '.mov', '.m4v'}
@@ -261,6 +262,19 @@ class Handler(BaseHTTPRequestHandler):
         if route.startswith('/api/private/'):
             if head: return self.send_error(405)
             return self.private_request()
+        if route == '/api/maps': return self.send_json(offline_maps.manifest())
+        if route == '/api/maps/search':
+            params=parse_qs(urlparse(self.path).query)
+            try:
+                lon=float(params.get('lon',['0'])[0]);lat=float(params.get('lat',['0'])[0])
+                if not (-180<=lon<=180 and -90<=lat<=90):raise ValueError()
+                return self.send_json(offline_maps.search(params.get('q',[''])[0][:100],lon,lat))
+            except ValueError:return self.send_json({'error':'Invalid search coordinates.'},400)
+        if route == '/api/maps/route':
+            if self.headers.get('Host','') not in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'}:return self.send_json({'error':'Local request required.'},403)
+            try:return self.send_json(offline_maps.route(parse_qs(urlparse(self.path).query)))
+            except ValueError as e:return self.send_json({'error':str(e)},400)
+            except Exception:return self.send_json({'error':'No route available. Check coverage, road access, or try a shorter route.'},503)
         if route == '/api/library':
             items = inventory()
             try: disk = shutil.disk_usage(ROOT); storage = dict(total=disk.total, free=disk.free)
@@ -269,7 +283,12 @@ class Handler(BaseHTTPRequestHandler):
                 with socket.create_connection(('127.0.0.1', 8080), timeout=.2): kiwix=True
             except OSError: kiwix=False
             return self.send_json(dict(items=items, scanning=SCAN_LOCK.locked(), scanError=SCAN_ERROR, storage=storage, libraryConnected=ROOT.is_dir(), mediaConnected=any(r.is_dir() for r in media_roots()), mediaSources=[dict(path=str(r),connected=r.is_dir()) for r in media_roots()], kiwix=kiwix, root=str(ROOT), media=str(MEDIA)))
-        if route.startswith(('/art-image/','/art-thumb/')):
+        if route.startswith('/map-data/'):
+            p=offline_maps.file_path(route)
+            if p is None:return self.send_error(404)
+        elif route in ('/maps.html','/maps.js'):
+            p=BASE/'dist'/route[1:]
+        elif route.startswith(('/art-image/','/art-thumb/')):
             p=art_gallery.image_path(route.rsplit('/',1)[-1],route.startswith('/art-thumb/'))
             if p is None:return self.send_error(404)
         elif route.startswith('/api/video-thumbnail/'):

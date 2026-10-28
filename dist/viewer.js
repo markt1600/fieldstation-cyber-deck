@@ -67,18 +67,18 @@ async function openBookReader(book){
  }catch(e){if(version!==bookReaderVersion||!$('#viewer').open)return;body.innerHTML='<p>'+esc(e.message)+'</p><button class="action" id="book-fallback">Open original book</button>';$('#book-fallback').onclick=()=>{$('#viewer').close();original()};}
 }
 
-const fieldstationSites={meridian:{title:'Meridian',url:'https://dailymag.marktan.ai/'},marktan:{title:'marktan.ai',url:'https://www.marktan.ai/'}};
+const fieldstationSites={maps:{title:'Offline maps',url:'/maps.html',offline:true},meridian:{title:'Meridian',url:'https://dailymag.marktan.ai/'},marktan:{title:'marktan.ai',url:'https://www.marktan.ai/'}};
 function openFieldstationSite(key){
  const site=fieldstationSites[key];if(!site)return;
  closeKiwix(false);kiwixReading=true;document.body.classList.add('reading-kiwix');
  for(const id of ['art','home','catalogue','private','energy','browser','discover','ask','spotify','codex','playlists-page','youtube'])$('#'+id).hidden=true;
  $('#kiwix-reader').hidden=false;$('#kiwix-title').textContent=site.title;
- $('#share-article').hidden=true;$('#kiwix-start').hidden=false;$('#kiwix-start').textContent='Site home';
+ $('#share-article').hidden=true;$('#kiwix-start').hidden=false;$('#kiwix-start').textContent=site.offline?'Map home':'Site home';
  document.querySelectorAll('nav button[data-view],nav button[data-site]').forEach(b=>{const active=b.dataset.site===key;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  const frame=document.createElement('iframe');frame.title=site.title;frame.src=site.url;
  frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms allow-popups allow-downloads');frame.referrerPolicy='strict-origin-when-cross-origin';frame.allowFullscreen=true;
  $('#kiwix-frame').replaceChildren(frame);$('#kiwix-start').onclick=()=>{frame.src=site.url};
- document.querySelector('footer span:last-child').textContent='Internet required';window.scrollTo(0,0);
+ document.querySelector('footer span:last-child').textContent=site.offline?'Offline maps on SSD':'Internet required';window.scrollTo(0,0);
  $('#kiwix-return').focus();
 }
 document.querySelectorAll('[data-site]').forEach(button=>button.onclick=()=>openFieldstationSite(button.dataset.site));

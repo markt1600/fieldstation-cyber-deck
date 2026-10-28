@@ -10,10 +10,40 @@ A Raspberry Pi touchscreen interface for an offline library, music and video, ar
 - Music-video and concert thumbnails with artist captions; local video playback through VLC.
 - Spotify integration and controls for a separately installed PipeWire EQ/limiter chain.
 - Offline art galleries and randomized full-screen exhibitions.
+- Offline maps with a world overview, detailed Southeast Asia coverage, highest-detail Singapore/Malaysia maps, local place search, and regional driving/walking/cycling route planning.
 - Battery voltage, UPS-reported percentage, measured-runtime estimates, and particulate-sensor readings on supported hardware.
 - Wi-Fi controls and confirmed reboot/shutdown actions in the sidebar.
 - Embedded websites with a persistent sidebar and maximize/restore controls.
 - Optional local Codex terminal and read-only VeraCrypt file browsing.
+
+## Offline maps
+
+Open **Offline maps** in the offline sidebar. The viewer stays inside Fieldstation and supports touch navigation, coverage selection, place-name search and maximising. Expand **Offline directions**, select start and destination on the map, choose a travel mode, then calculate a route. Tap a direction to view that turn on the map.
+
+The deployed collection (28 October 2026) uses about 2.6 GB on the internal SSD, including dependencies and the address-search source/index:
+
+| Coverage | Map detail | Archive size |
+| --- | --- | --- |
+| World | Zoom 0-8 overview | 560 MB |
+| Southeast Asia | Zoom 0-12 | 798 MB |
+| Singapore and Malaysia, including Malaysian Borneo | Zoom 0-15, source maximum | 516 MB |
+
+Files live in `/media/library/Maps` (override with `FIELD_MAPS` for the web server). MapLibre, PMTiles, fonts and sprites are served locally; viewing does not use a CDN. GeoNames provides world-city search plus Singapore/Malaysia place records. An additional 939,329-record Geofabrik/OpenStreetMap index supports streets, landmarks, mapped house numbers and postcodes in Singapore/Malaysia. Search accepts common abbreviations and prioritises results near the map centre. Address coverage is incomplete, and unit numbers generally are not available. Map zoom beyond the source maximum enlarges existing detail.
+
+BRouter runs as the user service `fieldstation-routing`, bound only to `127.0.0.1:17777`. Regional road segments cover Singapore/Malaysia. Routing is offline planning with distance, estimated duration and turn instructions, not live traffic, spoken navigation or automatic GPS tracking. Its walking profile is derived from the bundled pedestrian template, with mountain difficulty limited to SAC T1 and no hiking-route preference. Route availability depends on downloaded OpenStreetMap roads and access tags; route estimates are not guarantees of access.
+
+Provision on a 64-bit Raspberry Pi with Python 3.12+, curl and a mounted writable SSD:
+
+```sh
+python3 scripts/install_offline_maps.py
+python3 scripts/install_map_places.py
+python3 scripts/install_map_addresses.py
+python3 scripts/install_offline_routing.py
+```
+
+The scripts download map data and local runtime dependencies; the routing installer enables its user service. Map archives are published only after PMTiles verification. There is no automatic map update schedule. The map installer preserves existing finished archives, so it is not an in-place update command. Keep download files and runtime binaries out of Git.
+
+Sources and attribution: [Protomaps / OpenStreetMap](https://docs.protomaps.com/basemaps/downloads), [BRouter](https://github.com/abrensch/brouter), and [GeoNames, CC BY 4.0](https://www.geonames.org/). OpenStreetMap attribution remains visible on the map. Dependency licence files are retained with downloaded viewer assets.
 
 ## Hardware
 
