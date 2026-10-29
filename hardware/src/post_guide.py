@@ -25,7 +25,7 @@ def panel_view(ax,mirror,title):
         cx=(a+b)/2; ax.annotate('',xy=(cx+(b-a)*0.35*np.sign(cx-X(x)),(fy0+fy1)/2),xytext=(X(x),(fy0+fy1)/2),arrowprops=dict(arrowstyle='->',color='k',lw=1.2))
         ax.text(X(x),y+9,n,ha='center',fontsize=12,weight='bold',color=COL[n])
     ax.set_xlim(-8,PW+8); ax.set_ylim(-8,PH+8); ax.set_aspect('equal'); ax.set_title(title,fontsize=12); ax.set_xticks([]); ax.set_yticks([])
-ax1=fig.add_axes([0.02,0.38,0.47,0.48]); panel_view(ax1,False,'Seen from the FRONT (through the panel)\nsquares = post columns, dashed = feet on the case floor')
+ax1=fig.add_axes([0.02,0.38,0.47,0.48]); panel_view(ax1,False,'Seen from the FRONT (through the panel)\nsquares = post columns, dashed = feet on the floor plate')
 ax2=fig.add_axes([0.51,0.38,0.47,0.48]); panel_view(ax2,True,'Panel FACE DOWN on the bench (how you screw them on)\nleft and right swap: TL is now at the top right')
 for i,n in enumerate(['TL','TR','ML','MR']):
     img,proj=render([(tm(g['build_post'](n)),(0.62,0.66,0.70))],view=(0.15,-1.0,0.55),up=(0,0,1),W=420,H=520,margin=20)
@@ -34,6 +34,6 @@ for i,n in enumerate(['TL','TR','ML','MR']):
     side='right' if x<PW/2 else 'left'; extra=' and down' if n in ('TL','TR') else ''
     ax.set_title('%s: %s\nfoot reaches %s%s (toward the middle)'%(n,NAMES[n],side,extra),fontsize=11,color=COL[n])
 fig.text(0.02,0.975,'FLOOR POSTS: where each one goes',fontsize=18,weight='bold',va='top')
-fig.text(0.02,0.952,'Each post screws to the back of the panel (M3 × 10 from the front) and stands on the case floor on VHB.\nEvery foot points in toward the middle of the case, away from the curved floor edge. Bottom row: each post standing on its foot, viewed from the bottom edge of the case.',fontsize=10.5,va='top',color='#444')
+fig.text(0.02,0.952,'Each post screws to the back of the panel (M3 × 10 from the front) and its foot is screwed to the floor plate from underneath (two M3 × 8 countersunk screws into inserts in the foot).\nEvery foot points in toward the middle of the case, away from the curved floor edge. Bottom row: each post standing on its foot, viewed from the bottom edge of the case.',fontsize=10.5,va='top',color='#444')
 fig.savefig('../docs/post_guide.png',dpi=90)
 print('wrote ../docs/post_guide.png')

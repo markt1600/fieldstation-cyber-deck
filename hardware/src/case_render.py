@@ -39,7 +39,7 @@ parts['PMS7003 cradle']=(mv(S['body']),(0.95,0.62,0.25),1)
 parts['PMS7003 + adapter board']=(mv(sens),SENSOR,1)
 po=None
 for n in F['POSTS']:
-    m=F['build_post'](n).mirror([0,0,1]).translate([0,0,FLOOR_Z-F['VHB']]); po=m if po is None else po+m
+    m=F['build_post'](n).mirror([0,0,1]).translate([0,0,FLOOR_Z-F['FLOOR_PAD']]); po=m if po is None else po+m
 parts['Floor posts ×4']=(po,PLA,3)
 parts['KVM spacer (VHB both sides)']=(box(67,125,T+F['SC_T']+1.1,127,185,T+F['SC_T']+3.1),FOAM,4)
 kvm=box(42,114,25,139,205,48)

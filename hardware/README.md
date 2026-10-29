@@ -34,10 +34,11 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B2 | Base panel right half, both speaker pod bodies |
 | B1p, B2p | Panel halves on their own, front face up (B1p also has the seam splice strip, B2p the lid's tray door, outside face up) |
 | B3p | Four floor posts and four screen clamps on their own (use a brim) |
+| B6 | Four floor posts (v2: 6 mm feet with inserts, screw to the floor plate) and the two speaker-pod brackets |
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate: Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
+| B5 | Floor plate in two pieces (main + right strip, dovetailed) covering the whole flat floor: post and pod-bracket screw holes, Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The KVM remote button lives in the open pocket at the left end of the lid's hinge strip; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -48,9 +49,10 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 
 | Item | Qty | Used for |
 |---|---|---|
-| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 41 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 2 (GPIO breakout) |
+| M3 heat-set insert (M3 × 5.7, for a 4.0 mm hole) | 53 (+ spares) | Pods 8, screen clamps 8, port tray 4, posts 4, PMS7003 cradle 3, keyboard cradle 12, floor plate 2 (GPIO breakout), post feet 8, pod brackets 4 |
 | M2 heat-set insert (for a 3.2 mm hole, up to 4 mm long) + M2 × 5 pan screw | 4 | Perfboard on the floor plate |
 | M3 × 6 pan screw | 2 | GPIO breakout on the floor plate |
+| M3 × 8 countersunk | 12 | Up through the floor plate into the post feet (8) and pod brackets (4) |
 | M3 × 8 countersunk | 24 | Lid overlay, screen clamps, port tray, sensor cradle |
 | M3 × 10 countersunk | 4 | Floor posts |
 | M3 × 20 countersunk | 8 | Speaker pods through the panel |
@@ -60,6 +62,15 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 | 4.56 mm magnet cube | 24 | Pod baffles 16, tray door 8 |
 | 20 mm hook-and-loop strap, about 40 cm (Pi case), small cable tie (PMS7003 cradle), foam gasket tape, VHB tape, epoxy, polyfill | – | Pod and sensor seals, post feet and lid cradle, dovetail joins, pod damping |
 | Loctite 770 primer + 406 (or 3M Primer 94 + VHB) | – | Kickstands to the polypropylene case |
+
+## Base frame (v2): build it outside the case, then drop it in
+
+1. Fit the inserts: two in each post foot (underside), two in each pod bracket foot, plus the posts' panel-end inserts.
+2. Epoxy a pod bracket to the upper side wall of each speaker-pod body, its foot flush with the pod's back, on the side toward the middle of the case. The wires still leave through the pod's rear hole and run out under the pod.
+3. Screw the pods (with drivers and baffles) and the four posts to the back of the panel as before.
+4. Epoxy the two floor-plate pieces together at the dovetails. With the panel face down, lay the plate on the post feet and pod-bracket feet and screw it on from underneath: 12 × M3 × 8 countersunk.
+5. Fit the Pi, breakout and perfboard to the plate and do the wiring while it's all out of the case.
+6. Put VHB on the plate's underside (Primer 94 on the case floor) and lower the whole frame into the base. The panel comes off later by its front screws; the frame stays put.
 
 ## Assembly notes
 
