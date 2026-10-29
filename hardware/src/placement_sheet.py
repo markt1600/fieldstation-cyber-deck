@@ -51,7 +51,7 @@ rows=[(1,'Screen in its case','Behind the 156 × 88 mm window, held by the corne
       (4,'Port tray','Recessed pocket between the pods. 4 × M3 × 8. Detail below','B3 / B3a'),
       (5,'PMS7003 cradle','Behind the AIR louvres, snout to the panel. 3 × M3 × 8','B3 / B3a'),
       (6,'Floor posts ×4','2 top corners, 2 beside the pods. M3 × 10 from the front; VHB feet','B3'),
-      (7,'TEMP column','Vent slots; KVM remote button holder goes here','B2 (pending)'),
+      (7,'TEMP column','Vent slots only','B1'),
       (8,'Panel seam','Halves epoxied at the dovetails; splice strip behind, above the window','B1 + B2')]
 y=0.97
 lg.text(0.0,y,'#',fontsize=10,fontweight='bold',color='#666'); lg.text(0.08,y,'Part',fontsize=10,fontweight='bold',color='#666'); lg.text(0.80,y,'Plate',fontsize=10,fontweight='bold',color='#666')
@@ -65,7 +65,7 @@ lg.text(0.0,0.02,'Dashed blue: mounted behind the panel. Brown squares: posts.\n
 ax=fig.add_axes([0.03,0.25,0.50,0.23]); cx,cy,W,H=F['PK_CX'],F['PK_CY'],F['PK_W'],F['PK_H']
 ax.add_patch(Rectangle((cx-W/2,cy-H/2),W,H,fc='#e9ebe8',ec=INK,lw=1.3))
 labels=[]
-for i,((x,y),t) in enumerate(zip(F['USB'],['USB-A  (to Pi USB 3)','USB-A  (to Pi USB 3)','USB-C  (KVM laptop input)'])):
+for i,((x,y),t) in enumerate(zip(F['USB'],['USB-A  (to Pi USB 3)','USB-A  (to Pi USB 3)','USB-C'])):
     ax.add_patch(Rectangle((x-13,y-15.5),26,31,fc=PART,ec='none')); ax.add_patch(Circle((x,y),12.1,fc='#6b7178',ec='none'))
     for dx,dy in [(-9.5,12),(9.5,-12)]: ax.add_patch(Circle((x+dx,y+dy),1.65,fc='white',ec='none'))
     ax.text(x,y,['A','A','C'][i],ha='center',va='center',color='white',fontsize=11,fontweight='bold')

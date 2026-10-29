@@ -28,7 +28,6 @@ clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
 parts['pms7003_cradle']=tm(S['body'])   # placed mirrored in the base (board toward the screen); that mirror and the export reflection cancel
 parts['panel_splice']=tm(Manifold.cube([40,10,2]))
-parts['kvm_spacer']=tm(Manifold.cube([60,60,2.0]))   # VHB both sides: KVM to the back of the screen
 FPm=ns('floorplate.py',"if __name__"); _fp=FPm['build_floor_plate'](); _fa,_fb=FPm['split_plate'](_fp)
 parts['floor_plate']=tm(_fa.mirror([0,0,1])); parts['floor_plate_strip']=tm(_fb.mirror([0,0,1]))   # glued face down
 for _k in ('L','R'): parts['pod_bracket_'+_k]=tm(FPm['build_pod_bracket'](_k).mirror([0,0,1]))      # foot on the bed
@@ -81,7 +80,7 @@ plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+
 plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle',M+20+w('port_tray')+25,M+60,0)])
 
 # floor plate on its own (Pi pocket, perfboard bosses; breakout bosses to come)
-plate('B5_floor_plate.3mf',[('floor_plate',10,70,0),('floor_plate_strip',10,200,90),('kvm_spacer',150,4,0)])
+plate('B5_floor_plate.3mf',[('floor_plate',10,70,0),('floor_plate_strip',10,200,90)])
 
 # panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
 plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])

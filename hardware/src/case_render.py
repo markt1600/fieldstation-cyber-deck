@@ -41,10 +41,6 @@ po=None
 for n in F['POSTS']:
     m=F['build_post'](n).mirror([0,0,1]).translate([0,0,FLOOR_Z-F['FLOOR_PAD']]); po=m if po is None else po+m
 parts['Floor posts ×4']=(po,PLA,3)
-parts['KVM spacer (VHB both sides)']=(box(67,125,T+F['SC_T']+1.1,127,185,T+F['SC_T']+3.1),FOAM,4)
-kvm=box(42,114,25,139,205,48)
-for x in (70,82,100,112): kvm=kvm+Manifold.cylinder(18,3.2,3.2,16).rotate([90,0,0]).translate([x,114,36.5])   # host cables (stubs)
-parts['KVM (C2-H46)']=(kvm,KVM,5)
 parts['Pi 5 in X1202 case']=(box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3),PI,6)
 bo=FP['BO']; zb=FLOOR_Z-3-FP['BO_BOSS_H']
 brk=box(bo[0],bo[1],zb-1.6,bo[2],bo[3],zb)+box(bo[0]+3,bo[1]+3,zb-1.6-10,bo[0]+11,bo[3]-3,zb-1.6)+box(bo[2]-11,bo[1]+3,zb-1.6-10,bo[2]-3,bo[3]-3,zb-1.6)+box(bo[0]+18,bo[3]-12,zb-1.6-9,bo[2]-18,bo[3]-4,zb-1.6)
@@ -100,10 +96,10 @@ ax=fig.add_axes([0.02,0.07,0.96,0.44]); ax.imshow(img2); ax.set_axis_off()
 ax.set_title('Exploded, front to back in assembly order (panel at the front, case at the back)',fontsize=14,loc='left',color='#1d2124')
 labels_column(ax,img2,proj2,anch2,top=True)
 steps=("BUILD THE FRAME OUTSIDE THE CASE  1 Inserts into every printed part (two under each post foot and pod-bracket foot) · 2 Epoxy a bracket to each pod body\n"
-       "   3 On the panel's back: pods, port tray + controls, PMS7003 cradle, screen + clamps, posts (M3 × 10 from the front) · 4 Spacer + KVM onto the screen back (VHB)\n"
+       "   3 On the panel's back: pods, port tray + controls, PMS7003 cradle, screen + clamps, posts (M3 × 10 from the front)\n"
        "   5 Floor plate pieces epoxied together, laid on the feet and screwed on from underneath (12 × M3 × 8 csk) · 6 Pi, breakout, perfboard onto the plate; wire it all\n"
        "   7 VHB on the plate's underside, Primer 94 on the case floor, lower the whole frame into the base")
 fig.text(0.02,0.02,steps,fontsize=11,family='monospace',color='#1d2124',linespacing=1.6)
 fig.text(0.02,0.985,'FIELDSTATION — base assembly in the Peli 1400',fontsize=20,fontweight='bold',color='#1d2124',va='top')
-fig.text(0.02,0.968,'Parts from the CAD model; the Pi, KVM, boards and screen are shown as their measured outlines. The case shell is approximate.',fontsize=11,color='#555',va='top')
+fig.text(0.02,0.968,'Parts from the CAD model; the Pi, boards and screen are shown as their measured outlines. The case shell is approximate.',fontsize=11,color='#555',va='top')
 plt.savefig('../docs/case_assembly.png',facecolor='white'); print('saved')

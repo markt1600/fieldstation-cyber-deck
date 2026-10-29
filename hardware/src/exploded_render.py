@@ -5,7 +5,6 @@ ORDER=[('Base panel',-270,0,'Base panel (front face toward you)'),
        ('Port tray',0,0,'Port tray + controls'),('Speaker pods ×2',0,0,'Speaker pods ×2 (front-mounted drivers)'),
        ('PMS7003 cradle',0,0,'PMS7003 cradle'),('PMS7003 + adapter board',0,0,None),
        ('Screen (7" in case)',0,10,'Screen in its case'),('Screen clamps ×4',55,20,'Screen clamps ×4'),
-       ('KVM spacer (VHB both sides)',95,35,'KVM spacer (VHB both sides)'),('KVM (C2-H46)',130,45,'KVM (stuck to the screen back)'),
        ('Floor posts ×4',205,25,'Floor posts ×4 (M3 × 10 from the front)'),
        ('Pod brackets ×2 (epoxied to the pods)',245,10,'Pod brackets ×2 (epoxied to the pods)'),
        ('Pi 5 in X1202 case',300,80,'Pi 5 in X1202 case (strapped into its pocket)'),
@@ -30,7 +29,7 @@ for i,(k,pt) in enumerate(num):
     ax.annotate(str(k),xy=q,xytext=(tx,ty),ha='center',va='center',fontsize=13,weight='bold',color='white',
                 bbox=dict(boxstyle='circle,pad=0.35',fc='#c1121f',ec='white'),arrowprops=dict(arrowstyle='-',lw=1,color='#c1121f'))
 fig.text(0.02,0.975,'FIELDSTATION base, exploded in assembly order',fontsize=22,weight='bold',va='top')
-fig.text(0.02,0.95,'Front of the panel at the right, case at the left. Build the frame (1–14) outside the case, then lower it in as one piece.',fontsize=12,color='#444',va='top')
+fig.text(0.02,0.95,'Front of the panel at the right, case at the left. Build the frame (1–12) outside the case, then lower it in as one piece.',fontsize=12,color='#444',va='top')
 cols=3; per=int(np.ceil(len(legend)/cols))
 for ci in range(cols):
     fig.text(0.03+ci*0.32,0.11,'\n'.join(legend[ci*per:(ci+1)*per]),fontsize=12,va='top',family='monospace',linespacing=1.7)

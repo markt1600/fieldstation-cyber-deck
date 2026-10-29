@@ -15,7 +15,7 @@ Where each part goes: [docs/placement_sheet.png](docs/placement_sheet.png). What
 - **Base panel** (302.5 × 228.8 × 4 mm, sits 8 mm below the rim): 7" Waveshare HDMI LCD (H) in its case behind a 156 × 88 mm window; TEMP column on the left, vent slots only, no sensor (the screen's HDMI and micro-USB plugs come out of its left edge into the space behind it); AIR column (Plantower PMS7003 behind louvres) on the right; two Dayton ND65-4 speaker pods along the bottom with a recessed port pocket between them.
 - **Port pocket** (106 × 76 mm, floor 18 mm deep so nothing touches the keyboard): 2 × USB-A and 1 × USB-C D-size sockets on top; power button, 12 V DC jack, audio button and volume pot below; a 24 × 12 mm slot at the very bottom for the keyboard cable, in line with the lid's cable slot.
 - **Behind the panel:** Pi 5 in a Geekworm X1202-C1 case (UPS, 4 × 18650) on the case floor behind the screen, with the GPIO breakout and a soldered perfboard beside it, all on a printed floor plate.
-- **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, a magnetic accessory tray along the hinge, and an open pocket at the hinge's left end for the KVM remote.
+- **Lid:** wedge cradle that levels the trackball keyboard (286 × 149 mm), a 2.8 mm overlay that finishes flush with the keys, a USB-A pass-through for the keyboard cable, a magnetic accessory tray along the hinge, and an open storage pocket at the hinge's left end.
 - **Back of the case:** two folding kickstands that stop at a 15° lean.
 
 ![Port pocket](docs/port_pocket.png) ![Front panel](docs/placement_sheet.png) ![Lid](docs/lid_layout_render.png)
@@ -38,10 +38,10 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate in two pieces (main + right strip, dovetailed) covering the whole flat floor: post and pod-bracket screw holes, Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses); 60 × 60 × 2 mm KVM spacer |
+| B5 | Floor plate in two pieces (main + right strip, dovetailed) covering the whole flat floor: post and pod-bracket screw holes, Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses) |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
-The KVM remote button lives in the open pocket at the left end of the lid's hinge strip; its cable runs through the keyboard cable slots. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
+The open pocket at the left end of the lid's hinge strip is spare storage. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
 
 **Settings:** PETG, 0.2 mm layers, 4 walls, textured PEI plate. Use a brim on B3 (the posts are 87 mm tall). The whole set uses about 850–900 g.
 
@@ -83,7 +83,6 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 5. **Lid.** The cradle halves can be dry-fitted. Screw the overlay onto the cradle, drop the assembly into the lid so the overlay centres it, then fix it to the lid floor with 1.1 mm VHB, with 3M Primer 94 on the lid side. The cradle height assumes 1.1 mm of tape, so avoid Dual Lock: its extra height would push the trackball against the base panel when the lid closes. The roughly 6 mm gap around the cradle is intentional; it clears the lid's tapered walls and curved floor edge.
 6. **PMS7003 sensor.** Fit the adapter board and Dupont plugs first. The cradle is built for the board lying on the label face (3.5 mm above it), overhanging the inlet face by 6.5 mm and the board end by 9 mm, with the plugs mid-thickness in front of the inlet face, pointing at the panel. The front of the cradle has two chambers split by a rib: the outlet chamber, and an inlet chamber that also holds the plugs. Drop the sensor in from the back, face first, with the board on the side where the sleeve wall is open, feeding the wires out through the slot in the inlet chamber's end wall. Hold it in with a cable tie round the sleeve and over the sensor's back, between the guide ridges. Then seal it so it only breathes through the louvres: foam gasket round the lip, and foam or putty in the wire slot and the small notch where the header pins pass. See [docs/pms7003_cradle.png](docs/pms7003_cradle.png).
 6b. **Pi.** Drop the Pi case into its pocket and hold it down with a 20 mm hook-and-loop strap: thread it under the loop on the left, through the finger gap in the pocket wall, across the front of the Pi case in its bottom third (clear of the GPIO ribbon), out through the right-hand gap and under the right loop. Keep it clear of the Pi's ports.
-7. **KVM.** Stick the 2 mm spacer (B5) to the back of the screen case with VHB, centred about 40 mm in from the screen's left edge and 50 mm down from its top, then stick the KVM onto it with its console edge (HDMI, USB-A) facing the top of the case and its built-in cables facing down. The spacer lifts it clear of the top-left screen clamp. Use right-angle HDMI and USB-A plugs on the console side, and coil the spare host cable over the perfboard, not the breakout. See [docs/internal_layout.png](docs/internal_layout.png).
 8. **Kickstands.** Glue the hinge plates (35 × 40 mm) to flat areas with the pivot about 75 mm up the back of the case, one each side.
 
 ## Source (`src/`)
@@ -114,5 +113,6 @@ The case interior dimensions come from measurements of the real Peli 1400: 99 mm
 
 ## Still to do
 
-- When the KVM arrives: check its remote puck passes the 24 × 12 mm keyboard slot in the port tray and the 24 × 14 mm lid slot. If not, widen KB_PASS in frame.py and reprint the tray; open the lid slot by hand.
+- The StarTech KVM was dropped from the build (it didn't fit), so the KVM mount, spacer and remote holder are gone.
+
 
