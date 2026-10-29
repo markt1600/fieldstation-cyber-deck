@@ -65,6 +65,8 @@ The KVM remote button lives in the open pocket at the left end of the lid's hing
 
 ## Base frame (v2): build it outside the case, then drop it in
 
+![Frame v2](docs/frame_v2.png)
+
 1. Fit the inserts: two in each post foot (underside), two in each pod bracket foot, plus the posts' panel-end inserts.
 2. Epoxy a pod bracket to the upper side wall of each speaker-pod body, its foot flush with the pod's back, on the side toward the middle of the case. The wires still leave through the pod's rear hole and run out under the pod.
 3. Screw the pods (with drivers and baffles) and the four posts to the back of the panel as before.
@@ -106,7 +108,7 @@ python placement_sheet.py # redraws ../docs/placement_sheet.png
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Slim kickstand: hinge plate with a short stop wedge, flat 22 × 5 mm leg |
 | `floorplate.py` | Floor plate glued to the case floor: Pi case pocket, perfboard and breakout bosses |
-| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py`, `case_render.py`, `exploded_render.py`, `post_guide.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
+| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py`, `case_render.py`, `exploded_render.py`, `frame_render.py`, `post_guide.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
 
