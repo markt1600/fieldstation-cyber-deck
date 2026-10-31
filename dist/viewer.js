@@ -67,7 +67,7 @@ async function openBookReader(book){
  }catch(e){if(version!==bookReaderVersion||!$('#viewer').open)return;body.innerHTML='<p>'+esc(e.message)+'</p><button class="action" id="book-fallback">Open original book</button>';$('#book-fallback').onclick=()=>{$('#viewer').close();original()};}
 }
 
-const fieldstationSites={kolibri:{title:'Khan Academy · Offline learning',url:'/learning.html',offline:true},games:{title:'Games',url:'/games.html',offline:true},maps:{title:'Offline maps',url:'/maps.html',offline:true},meridian:{title:'Meridian',url:'https://dailymag.marktan.ai/'},marktan:{title:'marktan.ai',url:'https://www.marktan.ai/'}};
+const fieldstationSites={tools:{title:'Offline tools',url:'/tools.html',offline:true},kolibri:{title:'Khan Academy · Offline learning',url:'/learning.html',offline:true},games:{title:'Games',url:'/games.html',offline:true},maps:{title:'Offline maps',url:'/maps.html',offline:true},meridian:{title:'Meridian',url:'https://dailymag.marktan.ai/'},marktan:{title:'marktan.ai',url:'https://www.marktan.ai/'}};
 function openFieldstationSite(key){
  const site=fieldstationSites[key];if(!site)return;
  closeKiwix(false);kiwixReading=true;document.body.classList.add('reading-kiwix');

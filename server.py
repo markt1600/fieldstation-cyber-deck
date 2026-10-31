@@ -32,6 +32,7 @@ import codex_launcher
 import power_control
 import offline_maps
 import games
+import offline_tools
 import kolibri_proxy
 import learning_status
 ALLOWED = {'.pdf', '.epub', '.zim', '.mp3', '.m4a', '.ogg', '.wav', '.mp4', '.webm', '.mkv', '.avi', '.mov', '.m4v', '.flac', '.html'}
@@ -159,6 +160,19 @@ class Handler(BaseHTTPRequestHandler):
     do_DELETE = do_PATCH
     def do_POST(self):
         if self.path.startswith('/kolibri/'): return kolibri_proxy.serve(self)
+        if self.path in {'/api/tools/launch', '/api/tools/translate'}:
+            host = self.headers.get('Host', '')
+            if self.client_address[0] not in {'127.0.0.1','::1'} or host not in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'} or self.headers.get('Origin') != 'http://' + host or self.headers.get('X-Fieldstation') != 'tools':
+                return self.send_json({'error':'Open tools from Fieldstation on the Pi.'},403)
+            try:
+                length=int(self.headers.get('Content-Length','0'))
+                if not 0 < length <= 16000: raise ValueError('Invalid request size.')
+                payload=json.loads(self.rfile.read(length))
+                if not isinstance(payload,dict): raise ValueError('Invalid request.')
+                result=offline_tools.launch(payload.get('app')) if self.path.endswith('/launch') else offline_tools.translate(payload)
+                return self.send_json(result)
+            except (ValueError,TypeError) as e: return self.send_json({'error':str(e)},400)
+            except (RuntimeError,OSError,subprocess.TimeoutExpired) as e: return self.send_json({'error':str(e)},503)
         if self.path == '/api/games/launch':
             host = self.headers.get('Host', '')
             if self.client_address[0] not in {'127.0.0.1','::1'} or host not in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'} or self.headers.get('Origin') != 'http://' + host or self.headers.get('X-Fieldstation') != 'games':
@@ -284,6 +298,7 @@ class Handler(BaseHTTPRequestHandler):
         if route.startswith('/api/private/'):
             if head: return self.send_error(405)
             return self.private_request()
+        if route == '/api/tools/status': return self.send_json(offline_tools.status())
         if route == '/api/learning-status': return self.send_json(learning_status.status())
         if route == '/api/maps': return self.send_json(offline_maps.manifest())
         if route == '/api/maps/search':
@@ -335,7 +350,7 @@ class Handler(BaseHTTPRequestHandler):
                 try: p=audio_compat.compatible(resolved)
                 except (OSError, ValueError, subprocess.SubprocessError): return self.send_error(422, 'Unable to prepare compatible audio')
         else:
-            assets={'/game-art/kart.png':'game-art/kart.png','/game-art/supertux.svg':'game-art/supertux.svg','/game-art/bubbles.png':'game-art/bubbles.png','/game-art/hedgewars.png':'game-art/hedgewars.png','/game-art/action.png':'game-art/action.png','/game-art/catan.png':'game-art/catan.png','/game-art/monopoly.png':'game-art/monopoly.png','/game-art/rts.png':'game-art/rts.png','/game-art/solitaire.png':'game-art/solitaire.png','/game-art/freecell.png':'game-art/freecell.png','/game-art/spider.png':'game-art/spider.png','/game-art/mahjong.svg':'game-art/mahjong.svg','/game-art/transport.png':'game-art/transport.png','/game-art/credits.txt':'game-art/credits.txt','/game-art/doom.png':'game-art/doom.png','/game-art/blocks.png':'game-art/blocks.png','/game-art/chess.svg':'game-art/chess.svg','/game-art/pacman.png':'game-art/pacman.png','/game-art/city.png':'game-art/city.png','/learning.html':'learning.html','/learning.js':'learning.js','/games.html':'games.html','/games.js':'games.js','/power.js':'power.js','/art.js':'art.js','/playlists-page.js':'playlists-page.js','/codex.js':'codex.js','/energy.js':'energy.js','/viewer.js':'viewer.js','/spotify.js':'spotify.js','/air.js':'air.js','/':'index.html','/ask.js':'ask.js','/app.js':'app.js','/videos.js':'videos.js','/media.js':'media.js','/topics.js':'topics.js','/wifi.js':'wifi.js','/sharing.js':'sharing.js','/catalogue.js':'catalogue.js','/private.js':'private.js','/style.css':'style.css','/favicon.svg':'favicon.svg'}
+            assets={'/tools.html':'tools.html','/tools.css':'tools.css','/tools.js':'tools.js','/game-art/kart.png':'game-art/kart.png','/game-art/supertux.svg':'game-art/supertux.svg','/game-art/bubbles.png':'game-art/bubbles.png','/game-art/hedgewars.png':'game-art/hedgewars.png','/game-art/action.png':'game-art/action.png','/game-art/catan.png':'game-art/catan.png','/game-art/monopoly.png':'game-art/monopoly.png','/game-art/rts.png':'game-art/rts.png','/game-art/solitaire.png':'game-art/solitaire.png','/game-art/freecell.png':'game-art/freecell.png','/game-art/spider.png':'game-art/spider.png','/game-art/mahjong.svg':'game-art/mahjong.svg','/game-art/transport.png':'game-art/transport.png','/game-art/credits.txt':'game-art/credits.txt','/game-art/doom.png':'game-art/doom.png','/game-art/blocks.png':'game-art/blocks.png','/game-art/chess.svg':'game-art/chess.svg','/game-art/pacman.png':'game-art/pacman.png','/game-art/city.png':'game-art/city.png','/learning.html':'learning.html','/learning.js':'learning.js','/games.html':'games.html','/games.js':'games.js','/power.js':'power.js','/art.js':'art.js','/playlists-page.js':'playlists-page.js','/codex.js':'codex.js','/energy.js':'energy.js','/viewer.js':'viewer.js','/spotify.js':'spotify.js','/air.js':'air.js','/':'index.html','/ask.js':'ask.js','/app.js':'app.js','/videos.js':'videos.js','/media.js':'media.js','/topics.js':'topics.js','/wifi.js':'wifi.js','/sharing.js':'sharing.js','/catalogue.js':'catalogue.js','/private.js':'private.js','/style.css':'style.css','/favicon.svg':'favicon.svg'}
             if route not in assets: return self.send_error(404)
             p=BASE/'dist'/assets[route]
         try:

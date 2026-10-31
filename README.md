@@ -117,3 +117,12 @@ Games now include SuperTuxKart, SuperTux, Frozen Bubble, OpenTTD, Hedgewars, Blo
 Additional games use a read-only merged `/usr` runtime with minimal standard devices and explicitly bound graphics devices. Warzone uses its native binary and an explicit data path. GTKAtlantic and its local monopd server share a private network namespace; connect to `localhost:1234` in the client. This Monopoly-style client has no built-in AI opponents. Pioneers includes local server and AI executables. No commercial game assets are required.
 
 Short desktop launch checks were performed; these do not establish performance across all levels. Start 3D games with modest graphics settings. Original package artwork and licence notices are included in `dist/game-art/credits.txt`.
+
+
+### Offline productivity tools
+
+The sidebar's **Calculator, translate & docs** page contains a local scientific calculator, text translation and fixed desktop launch buttons for the installed LibreOffice Writer, Calc and Draw. Calculator expressions use a bounded parser (no JavaScript eval). Document launch and translation POST endpoints require the Pi's local same-origin browser.
+
+Translation supports English, Japanese, Malay, French and Korean using eight Argos language models and CPU CTranslate2 inference. Non-English pairs pivot through English. Models and a Python virtualenv are stored under `/media/library/Tools/Translation` (about 1 GB). Create the venv with `python3 -m venv /media/library/Tools/Translation/venv`, install `ctranslate2 sentencepiece` into it, then run `python3 scripts/install_translation.py`. Model source URLs are recorded on the SSD. Translation makes no network requests and does not persist submitted text. Requests are limited to 2,000 characters, one at a time, with a 90-second timeout. Machine translation quality varies, especially across pivot pairs and Malay/Indonesian vocabulary.
+
+Validated all eight direct directions and a French-to-Japanese pivot, calculator arithmetic/functions/precedence, local-origin rejection, and DOCX/PDF export. Word and PDF editing may alter complex document layouts; save a copy before editing.
