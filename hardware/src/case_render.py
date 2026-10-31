@@ -39,19 +39,16 @@ parts['PMS7003 cradle']=(mv(S['body']),(0.95,0.62,0.25),1)
 parts['PMS7003 + adapter board']=(mv(sens),SENSOR,1)
 po=None
 for n in F['POSTS']:
-    m=F['build_post'](n).mirror([0,0,1]).translate([0,0,FLOOR_Z-F['VHB']]); po=m if po is None else po+m
+    m=F['build_post'](n).mirror([0,0,1]).translate([0,0,FLOOR_Z-F['FLOOR_PAD']]); po=m if po is None else po+m
 parts['Floor posts ×4']=(po,PLA,3)
-parts['KVM spacer (VHB both sides)']=(box(67,125,T+F['SC_T']+1.1,127,185,T+F['SC_T']+3.1),FOAM,4)
-kvm=box(42,114,25,139,205,48)
-for x in (70,82,100,112): kvm=kvm+Manifold.cylinder(18,3.2,3.2,16).rotate([90,0,0]).translate([x,114,36.5])   # host cables (stubs)
-parts['KVM (C2-H46)']=(kvm,KVM,5)
 parts['Pi 5 in X1202 case']=(box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3),PI,6)
 bo=FP['BO']; zb=FLOOR_Z-3-FP['BO_BOSS_H']
 brk=box(bo[0],bo[1],zb-1.6,bo[2],bo[3],zb)+box(bo[0]+3,bo[1]+3,zb-1.6-10,bo[0]+11,bo[3]-3,zb-1.6)+box(bo[2]-11,bo[1]+3,zb-1.6-10,bo[2]-3,bo[3]-3,zb-1.6)+box(bo[0]+18,bo[3]-12,zb-1.6-9,bo[2]-18,bo[3]-4,zb-1.6)
 parts['GPIO breakout (turned 90°)']=(brk,PCB,7)
 pbd=FP['PB']; zp=FLOOR_Z-3-FP['BOSS_H']
 parts['Soldered perfboard']=(box(pbd[0],pbd[1],zp-1.6,pbd[2],pbd[3],zp),(0.75,0.62,0.35),7)
-parts['Floor plate (glued to the case floor)']=(FP['build_floor_plate'](),PLA,8)
+parts['Pod brackets ×2 (epoxied to the pods)']=(FP['build_pod_bracket']('L')+FP['build_pod_bracket']('R'),(0.95,0.62,0.25),10)
+parts['Floor plate (posts and brackets screw to it; taped to the case floor)']=(FP['build_floor_plate'](),PLA,8)
 # Peli 1400 base shell (approximate: straight walls, rounded corners), open at the front
 IW,IH,RR,W=306.5,232.9,21.0,3.0
 def rr(w,h,r,cx,cy): return F['rrect'](w,h,r,cx,cy)
@@ -81,8 +78,8 @@ for k,(m,c,g) in parts.items():
     t=tm(mm); items.append((t,c)); b=t.bounds
     anch.append((k,[(b[0][0]+b[1][0])/2,b[1][1],(b[0][2]+b[1][2])/2]))
 view1=(0.3,1.0,0.3)
-EXP={0:-230,1:0,2:45,3:0,4:85,5:120,6:215,7:310,8:350,9:480}
-LIFT={0:0,1:0,2:15,3:0,4:30,5:45,6:70,7:95,8:105,9:140}
+EXP={0:-230,1:0,2:45,3:150,4:85,5:120,6:215,7:310,8:370,9:500,10:300}
+LIFT={0:0,1:0,2:15,3:-20,4:30,5:45,6:70,7:95,8:110,9:150,10:60}
 items2=[];anch2=[]
 for k,(m,c,g) in cache.items():
     t=m.copy(); t.apply_translation([0,LIFT[g],EXP[g]]); items2.append((t,c)); b=t.bounds
@@ -98,10 +95,11 @@ t0=time.time(); img2,proj2=render(items2,view=view2,up=(0,1,0),W=1700,H=1250,mar
 ax=fig.add_axes([0.02,0.07,0.96,0.44]); ax.imshow(img2); ax.set_axis_off()
 ax.set_title('Exploded, front to back in assembly order (panel at the front, case at the back)',fontsize=14,loc='left',color='#1d2124')
 labels_column(ax,img2,proj2,anch2,top=True)
-steps=("ORDER  1 Inserts into every printed part · 2 Floor plate: inserts, then glue it to the case floor (Primer 94 / 770) · 3 Pi in its pocket, breakout and perfboard on the bosses\n"
-       "       4 On the panel's back: pods, port tray + controls, PMS7003 cradle, screen + clamps · 5 Spacer + KVM onto the screen back (VHB), plug in the console side\n"
-       "       6 Posts onto the panel (M3 × 10), VHB on their feet · 7 Connect everything, coil the spare KVM cable over the perfboard · 8 Lower the panel into the case: posts land on the floor")
+steps=("BUILD THE FRAME OUTSIDE THE CASE  1 Inserts into every printed part (two under each post foot and pod-bracket foot) · 2 Epoxy a bracket to each pod body\n"
+       "   3 On the panel's back: pods, port tray + controls, PMS7003 cradle, screen + clamps, posts (M3 × 10 from the front)\n"
+       "   5 Floor plate pieces epoxied together, laid on the feet and screwed on from underneath (12 × M3 × 8 csk) · 6 Pi, breakout, perfboard onto the plate; wire it all\n"
+       "   7 VHB on the plate's underside, Primer 94 on the case floor, lower the whole frame into the base")
 fig.text(0.02,0.02,steps,fontsize=11,family='monospace',color='#1d2124',linespacing=1.6)
 fig.text(0.02,0.985,'FIELDSTATION — base assembly in the Peli 1400',fontsize=20,fontweight='bold',color='#1d2124',va='top')
-fig.text(0.02,0.968,'Parts from the CAD model; the Pi, KVM, boards and screen are shown as their measured outlines. The case shell is approximate.',fontsize=11,color='#555',va='top')
+fig.text(0.02,0.968,'Parts from the CAD model; the Pi, boards and screen are shown as their measured outlines. The case shell is approximate.',fontsize=11,color='#555',va='top')
 plt.savefig('../docs/case_assembly.png',facecolor='white'); print('saved')

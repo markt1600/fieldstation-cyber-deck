@@ -121,7 +121,13 @@ def build_tray():
     for x,y in TRAY_INS: body=body-Manifold.cylinder(6.0,2.0,2.0,32).translate([x,y,-0.01])
     return body.translate([0,0,T])        # place behind panel
 # ---------------- posts ----------------
-POST_H=BASE_DEPTH-RIM_DROP-T-VHB         # floor to panel back, less VHB tape
+FLOOR_PAD=3.0                            # posts stand on the 3 mm floor plate; M3 x 8 countersunk screws come up through the plate into inserts in their feet
+POST_H=BASE_DEPTH-RIM_DROP-T-FLOOR_PAD   # pad top to panel back
+def foot_holes(name):
+    """two M3 screw holes through each foot, clear of the column, on the foot's centre line"""
+    x,y=POSTS[name]; sx=1 if x<PW/2 else -1
+    fy=(y-4.0) if name in ('TL','TR') else y
+    return [(x+sx*9.0,fy),(x+sx*16.0,fy)]
 def build_post(name):
     """10 mm column; foot reaches inward onto the flat floor (the case floor has a ~18 mm fillet at the walls)"""
     x,y=POSTS[name]; c=10.0
@@ -130,7 +136,9 @@ def build_post(name):
     fy0,fy1=(y-13,y+5) if name in ('TL','TR') else (y-5,y+5)
     foot=rect(fx0,fy0,fx1,fy1)
     col=Manifold.extrude(rrect(c,c,2,x,y),POST_H)
-    ft=Manifold.extrude(foot,3.0)
+    ft=Manifold.extrude(foot,6.0)                               # 6 mm foot holds the heat-set inserts
     gus=Manifold.batch_hull([Manifold.extrude(foot,0.01),Manifold.extrude(rrect(c,c,2,x,y),0.01).translate([0,0,16])])
     post=col+ft+gus
+    for hx,hy in foot_holes(name):                              # M3 insert from the underside of the foot
+        post=post-Manifold.cylinder(6.0,2.0,2.0,32).translate([hx,hy,-0.01])
     return post-Manifold.cylinder(6.5,2.0,2.0,32).translate([x,y,POST_H-6.5+0.01])

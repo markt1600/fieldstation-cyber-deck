@@ -7,9 +7,25 @@ from manifold3d import Manifold
 def box(x0,y0,z0,x1,y1,z1): return Manifold.cube([x1-x0,y1-y0,z1-z0]).translate([x0,y0,z0])
 FLOOR_Z=BASE_DEPTH-RIM_DROP
 FP_T=3.0
-FP=(52.0,85.0,250.0,211.0)              # x0,y0,x1,y1: clear of the post feet (x 21-47 / 255.5-281.5) and the floor fillet
-FP_EXT=(18.0,100.5,56.0,190.0)          # extension to the left, between the left posts' feet (y 88.5-98.5 and 192-210)
-FP_TAB=(246.0,101.0,258.5,139.0)        # small tab on the right for the strap loop (clear of the right posts' feet and the sensor cradle)
+FP=(18.0,88.0,284.5,211.0)              # whole flat floor: under all four post feet, kept clear of the speaker pods (y < 88) for their wires
+SEAM_X=255.0                            # printed in two pieces (bed 256 mm): main plate + right strip, joined by dovetails
+SEAM_TABS=(118.0,182.0)                 # dovetail centres along the seam
+# speaker-pod brackets: an L-bracket epoxied to each pod's upper side wall, screwed down into the plate.
+# They sit along the pods' upper edge (y 88-97), so the floor under the pods stays open for the speaker wires.
+POD_BRK={'L':(64.0,90.0),'R':(PW-90.0,PW-64.0)}   # x range: inboard of each pod's rear cable hole (pod centre), so its wires can pass
+BRK_Y0,BRK_Y1,BRK_LEG_T,BRK_FOOT_T,BRK_TOP=88.2,97.0,3.0,6.0,60.0
+def brk_holes(k):
+    x0,x1=POD_BRK[k]; return [(x0+6.0,(BRK_Y0+BRK_LEG_T+BRK_Y1)/2),(x1-6.0,(BRK_Y0+BRK_LEG_T+BRK_Y1)/2)]
+def build_pod_bracket(k):
+    x0,x1=POD_BRK[k]; zf=FLOOR_Z-FP_T                           # top of the plate
+    foot=box(x0,BRK_Y0,zf-BRK_FOOT_T,x1,BRK_Y1,zf)
+    leg=box(x0,BRK_Y0,BRK_TOP,x1,BRK_Y0+BRK_LEG_T,zf)
+    b=foot+leg
+    for xe in (x0,x1-3.0):                                       # end gussets
+        b=b+Manifold.batch_hull([box(xe,BRK_Y0,zf-BRK_FOOT_T,xe+3.0,BRK_Y1,zf-BRK_FOOT_T+0.01),box(xe,BRK_Y0,zf-22.0,xe+3.0,BRK_Y0+BRK_LEG_T,zf-21.99)])
+    for hx,hy in brk_holes(k):                                   # M3 insert from the underside of the foot
+        b=b-Manifold.cylinder(6.0,2.0,2.0,32).translate([hx,hy,zf-6.0+0.01])
+    return b
 # Pi 5 + X1202-C1 case footprint and its pocket
 PI=(145.0,105.0,145.0+98.75,105.0+90.2)
 PK_CL,PK_WALL,PK_HT=0.5,2.0,6.0
@@ -33,8 +49,15 @@ def pb_holes():
     return [(cx+sx*PB_HX/2,cy+sy*PB_HY/2) for sx in (-1,1) for sy in (-1,1)]
 def build_floor_plate():
     z1=FLOOR_Z; z0=z1-FP_T
-    outline=rrect(FP[2]-FP[0],FP[3]-FP[1],6.0,(FP[0]+FP[2])/2,(FP[1]+FP[3])/2)+rrect(FP_EXT[2]-FP_EXT[0],FP_EXT[3]-FP_EXT[1],4.0,(FP_EXT[0]+FP_EXT[2])/2,(FP_EXT[1]+FP_EXT[3])/2)+rrect(FP_TAB[2]-FP_TAB[0],FP_TAB[3]-FP_TAB[1],3.0,(FP_TAB[0]+FP_TAB[2])/2,(FP_TAB[1]+FP_TAB[3])/2)
+    outline=rrect(FP[2]-FP[0],FP[3]-FP[1],6.0,(FP[0]+FP[2])/2,(FP[1]+FP[3])/2)
     p=Manifold.extrude(outline,FP_T).translate([0,0,z0])
+    # countersunk M3 holes for the screws that come up through the plate into the post feet and pod brackets
+    def csk_up(hx,hy):
+        return Manifold.cylinder(FP_T+0.02,1.7,1.7,24).translate([hx,hy,z0-0.01])+Manifold.cylinder(1.95,1.7,3.45,32).translate([hx,hy,z1-1.95+0.001])
+    for n in POSTS:
+        for hx,hy in foot_holes(n): p=p-csk_up(hx,hy)
+    for k in POD_BRK:
+        for hx,hy in brk_holes(k): p=p-csk_up(hx,hy)
     # Pi pocket walls
     a=PI[0]-PK_CL; b=PI[1]-PK_CL; c=PI[2]+PK_CL; d=PI[3]+PK_CL
     wall=box(a-PK_WALL,b-PK_WALL,z0-PK_HT,c+PK_WALL,d+PK_WALL,z0)-box(a,b,z0-PK_HT-1,c,d,z0+0.01)
@@ -44,7 +67,7 @@ def build_floor_plate():
     p=p+wall
     # strap runs left to right over the front of the Pi case, through the finger notches in the side walls
     yc=STRAP_Y
-    for xl in ((PB[2]+4.0+a-PK_WALL)/2, c+PK_WALL+1.0+STRAP_LEN/2):     # left: between perfboard bosses and wall; right: on a plate tab
+    for xl in ((PB[2]+4.0+a-PK_WALL)/2, c+PK_WALL+0.5+STRAP_LEN/2):     # left: between perfboard bosses and wall; right: on a plate tab
         for sy in (-1,1):
             y0=yc+sy*STRAP_W/2; y1=y0+sy*3.0
             p=p+box(xl-STRAP_LEN/2,min(y0,y1),z0-STRAP_GAP-STRAP_BAR,xl+STRAP_LEN/2,max(y0,y1),z0)
@@ -54,6 +77,15 @@ def build_floor_plate():
             p=p+Manifold.cylinder(h,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-h])
             p=p-Manifold.cylinder(l+0.3,d/2,d/2,32).translate([x,y,z0-h-0.01])
     return p
+def split_plate(m):
+    """main plate (x < SEAM_X, with dovetail tabs) and right strip"""
+    from manifold3d import CrossSection
+    L=rect(-10,-10,SEAM_X,PH+10)
+    for yc in SEAM_TABS:
+        L=L+poly([(SEAM_X-1,yc-3.0),(SEAM_X,yc-3.0),(SEAM_X+6.0,yc-5.0),(SEAM_X+6.0,yc+5.0),(SEAM_X,yc+3.0),(SEAM_X-1,yc+3.0)])
+    big=Manifold.extrude(L,200).translate([0,0,-100])
+    bigc=Manifold.extrude(L.offset(0.25,JoinType.Miter),200).translate([0,0,-100])
+    return m^big, m-bigc
 def draw(fn):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt, numpy as np
     from matplotlib.path import Path; from matplotlib.patches import PathPatch
@@ -68,8 +100,12 @@ def draw(fn):
     yc=STRAP_Y
     ax.annotate('strap loops: the strap runs left to right\nover the front of the Pi case, through the\nfinger gaps in the pocket walls',xy=(252,yc),xytext=(160,165),fontsize=7,color='#c1121f',arrowprops=dict(arrowstyle='->',color='#c1121f'))
     ax.annotate('',xy=(138,yc),xytext=(165,163),arrowprops=dict(arrowstyle='->',color='#c1121f'))
-    ax.set_xlim(10,262); ax.set_ylim(80,215); ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
-    ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = pocket walls and M3 insert bosses)',fontsize=10)
+    ax.plot([SEAM_X,SEAM_X],[FP[1],FP[3]],'k--',lw=0.8); ax.text(SEAM_X+1,FP[3]+2,'seam (dovetailed)',fontsize=7)
+    for n,(x,y) in POSTS.items(): ax.text(x+(14 if x<PW/2 else -14),y+(8 if n in ('TL','TR') else 8),'post '+n,ha='center',fontsize=7,color='#1d3557')
+    for k,(bx0,bx1) in POD_BRK.items(): ax.text((bx0+bx1)/2,FP[1]-5,'pod bracket',ha='center',fontsize=7,color='#1d3557')
+    ax.set_xlim(10,290); ax.set_ylim(75,218);
+    ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm, up)')
+    ax.set_title('Floor plate B5, seen from the front of the case (light = 3 mm plate, dark = walls and bosses)\nposts and pod brackets: M3 × 8 countersunk screws up through the plate into inserts in their feet',fontsize=10)
     fig.tight_layout(); fig.savefig(fn,dpi=90)
 if __name__=='__main__':
     draw('../docs/floor_plate.png'); m=build_floor_plate(); print('floor plate volume %.1f cm3'%(m.volume()/1000), 'perfboard holes',[(round(x,2),round(y,2)) for x,y in pb_holes()])

@@ -28,8 +28,9 @@ clamp=C['c'].mirror([0,0,1]).translate([0,0,C['H']])
 for i in range(1,5): parts[f'screen_clamp_{i}']=tm(clamp)
 parts['pms7003_cradle']=tm(S['body'])   # placed mirrored in the base (board toward the screen); that mirror and the export reflection cancel
 parts['panel_splice']=tm(Manifold.cube([40,10,2]))
-parts['kvm_spacer']=tm(Manifold.cube([60,60,2.0]))   # VHB both sides: KVM to the back of the screen
-FPm=ns('floorplate.py'); parts['floor_plate']=tm(FPm['build_floor_plate']().mirror([0,0,1]))   # glued face down
+FPm=ns('floorplate.py',"if __name__"); _fp=FPm['build_floor_plate'](); _fa,_fb=FPm['split_plate'](_fp)
+parts['floor_plate']=tm(_fa.mirror([0,0,1])); parts['floor_plate_strip']=tm(_fb.mirror([0,0,1]))   # glued face down
+for _k in ('L','R'): parts['pod_bracket_'+_k]=tm(FPm['build_pod_bracket'](_k).mirror([0,0,1]))      # foot on the bed
 for s in ('L','R'):
     parts['stand_plate_'+s]=tm(K['plate'])
     parts['stand_leg_'+s]=tm(K['leg'].rotate([0,90,0]))
@@ -79,7 +80,7 @@ plate('speaker_pods_complete_x2.3mf',[('pod_body_L',c-85,c+5,0),('pod_body_R',c+
 plate('B3a_port_tray_and_sensor.3mf',[('port_tray',M+20,M+60,0),('pms7003_cradle',M+20+w('port_tray')+25,M+60,0)])
 
 # floor plate on its own (Pi pocket, perfboard bosses; breakout bosses to come)
-plate('B5_floor_plate.3mf',[('floor_plate',10,70,0),('kvm_spacer',28,4,0)])
+plate('B5_floor_plate.3mf',[('floor_plate',10,70,0),('floor_plate_strip',10,200,90)])
 
 # panel halves on their own (pods and baffles already printed); the seam splice strip rides with the left half
 plate('B1p_base_panel_left_only.3mf',[('base_panel_L',M,M+12,0),('panel_splice',M+w('base_panel_L')+10,M+20,90)])
@@ -91,3 +92,9 @@ for i,n in enumerate(['post_TL','post_TR','post_ML','post_MR']): items.append((n
 cx=M+20
 for i in range(4): items.append((f'screen_clamp_{i+1}',cx+i*(cw+10),M+20+h('post_TL')+20,0))
 plate('B3p_posts_and_screen_clamps.3mf',items)
+
+# v2 posts (shorter, screw down into the floor plate) with the two speaker-pod brackets
+items=[]
+for i,n in enumerate(['post_TL','post_TR','post_ML','post_MR']): items.append((n,M+20+i*(pw+14),M+20,0))
+items.append(('pod_bracket_L',M+20,M+30+h('post_TL'),0)); items.append(('pod_bracket_R',M+20+w('pod_bracket_L')+15,M+30+h('post_TL'),0))
+plate('B6_posts_v2_and_pod_brackets.3mf',items)
