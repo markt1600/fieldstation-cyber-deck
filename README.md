@@ -106,3 +106,14 @@ Kolibri 0.19.5 is installed in a separate Python environment at `~/fieldstation-
 Kolibri listens on loopback ports 8085 and 8086. Fieldstation proxies `/kolibri/` for its local embedded view; exercise content remains on the separate 8086 origin. Education links to a learning overview with download progress. The official English US-curriculum channel ID is `c9d7f950ab6b5a1199e3d6c10d7f0103`; its catalogue contains about 67 GB of files. `scripts/download_khan.py` imports a sample first and then the complete channel, resuming existing downloads. On the device this runs as the enabled `fieldstation-khan-download` user service, with logs on the SSD. Content is not bundled in GitHub and retains its source licences.
 
 The Chromium launcher uses `--hide-crash-restore-bubble` to suppress the restore-tabs prompt at startup while retaining the normal full-screen mode and F11 exit.
+
+
+### Additional offline games
+
+Run `python3 scripts/install_extra_games.py` on the Pi to download Debian ARM64 packages and extract them into `~/fieldstation-games/root`, without changing system packages. The installer also compiles the local GSettings schemas. Existing base games use `scripts/install_offline_games.sh`.
+
+Games now include SuperTuxKart, SuperTux, Frozen Bubble, OpenTTD, Hedgewars, Blob Wars, Warzone 2100, Pioneers, GTKAtlantic, Aisleriot, FreeCell, Spider and Mahjongg. The Games page groups graphical cards by genre. Aisleriot provides over 80 solitaire variants; Mahjongg is tile-matching solitaire.
+
+Additional games use a read-only merged `/usr` runtime with minimal standard devices and explicitly bound graphics devices. Warzone uses its native binary and an explicit data path. GTKAtlantic and its local monopd server share a private network namespace; connect to `localhost:1234` in the client. This Monopoly-style client has no built-in AI opponents. Pioneers includes local server and AI executables. No commercial game assets are required.
+
+Short desktop launch checks were performed; these do not establish performance across all levels. Start 3D games with modest graphics settings. Original package artwork and licence notices are included in `dist/game-art/credits.txt`.

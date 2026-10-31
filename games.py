@@ -6,9 +6,23 @@ import threading
 import time
 ROOT = Path.home() / 'fieldstation-games/root'
 LOCK = threading.Lock()
+EXTRA = {'kart': ('SuperTuxKart','/usr/games/supertuxkart'), 'supertux': ('SuperTux','/usr/games/supertux2'), 'bubbles': ('Frozen Bubble','/usr/games/frozen-bubble'), 'transport': ('OpenTTD','/usr/games/openttd'), 'hedgewars': ('Hedgewars','/usr/games/hedgewars'), 'action': ('Blob Wars','/usr/games/blobwars'), 'catan': ('Pioneers','/usr/games/pioneers'), 'monopoly': ('GTKAtlantic','/usr/games/gtkatlantic'), 'rts': ('Warzone 2100','/usr/games/warzone2100'), 'solitaire': ('Solitaire · Aisleriot','/usr/games/sol'), 'freecell': ('FreeCell','/usr/games/ace-freecell'), 'spider': ('Spider Solitaire','/usr/games/ace-spider'), 'mahjong': ('Mahjongg','/usr/games/gnome-mahjongg')}
 GAMES = {'doom': 'Doom · Freedoom', 'blocks': 'Falling blocks', 'chess': 'Chess', 'pacman': 'Pac-Man style', 'city': 'LinCity-NG'}
+GAMES.update({key: value[0] for key,value in EXTRA.items()})
+
+def extra_prefix():
+    return ['/usr/bin/bwrap', '--bind', '/', '/', '--dev', '/dev', '--dev-bind', '/dev/dri', '/dev/dri', '--overlay-src', '/usr', '--overlay-src', str(ROOT/'usr'), '--ro-overlay', '/usr']
+
 def command(game):
     base = ROOT / 'usr'
+    if game == 'kart':
+        return extra_prefix()+['/usr/games/supertuxkart', '--root=/usr/share/games/supertuxkart', '--windowed', '--screensize=960x540']
+    if game == 'rts':
+        return [str(base/'games/warzone2100.real'), '--datadir='+str(base/'share/games/warzone2100'), '--window', '--resolution=960x540', '--noshadows']
+    if game == 'monopoly':
+        return extra_prefix()+['--unshare-net','/usr/bin/python3',str(Path(__file__).with_name('scripts')/'offline_monopoly.py')]
+    if game in EXTRA:
+        return extra_prefix()+[EXTRA[game][1]]
     if game == 'doom':
         return [str(base/'games/crispy-doom'), '-iwad', str(base/'share/games/doom/freedoom2.wad'), '-window', '-width', '960', '-height', '600']
     prefix = ['/usr/bin/bwrap', '--bind', '/', '/', '--tmpfs', '/usr/share']
@@ -43,8 +57,14 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) != 3 or sys.argv[1] != '--run' or sys.argv[2] not in GAMES:
         raise SystemExit('Choose a listed game.')
-    for fonts in ['misc', '75dpi']:
-        subprocess.run(['xset','+fp',str(ROOT/'usr/share/fonts/X11'/fonts)],capture_output=True,timeout=5)
-    subprocess.run(['xset','fp','rehash'],capture_output=True,timeout=5)
+    if sys.argv[2] not in EXTRA:
+        try:
+            for fonts in ['misc', '75dpi']:
+                subprocess.run(['xset','+fp',str(ROOT/'usr/share/fonts/X11'/fonts)],capture_output=True,timeout=3)
+            subprocess.run(['xset','fp','rehash'],capture_output=True,timeout=3)
+        except subprocess.TimeoutExpired:
+            pass
+    os.environ['SUPERTUXKART_DATADIR']='/usr/share/games/supertuxkart'
+    os.environ['LD_LIBRARY_PATH']=str(ROOT/'usr/lib/aarch64-linux-gnu')
     args = command(sys.argv[2])
     os.execvpe(args[0],args,os.environ)
