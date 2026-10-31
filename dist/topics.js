@@ -4,7 +4,6 @@ function renderBrowseModes(){
  node.hidden=!enabled;$('#filter').hidden=view!=='downloads';
  if(!enabled){node.innerHTML='';return;}
  node.innerHTML=['reading','listening'].map(m=>'<button class="action" aria-pressed="'+(browseMode===m)+'" data-mode="'+m+'">'+(m==='reading'?'Reading · topics & chapters':'Listening · audio lessons')+'</button>').join('');
- if(view==='education'){const button=document.createElement('button');button.className='action';button.textContent='▣ Khan Academy · lessons & exercises';button.onclick=()=>openFieldstationSite('kolibri');node.prepend(button);}
  node.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{browseMode=b.dataset.mode;$('#search').value='';delete $('#results').dataset.topics;renderRows()});
 }
 function renderMediaContents(){
@@ -88,6 +87,7 @@ function libraryResources(tree){
  });
 }
 function libraryCard(r){return '<article class="library-resource"><div class="resource-symbol" aria-hidden="true">'+categoryGraphic(audioFormats.includes(r.item.format)?'Music Videos & Concerts':r.item.format==='ZIM'?'World & Asian':'Learning & How-to')+'</div><div class="format">'+esc(r.item.format==='ZIM'?'COLLECTION':r.item.format)+'</div><div class="row-text"><h3>'+esc(r.title)+'</h3><p>'+esc(r.description||(r.meta?.pages?r.meta.pages+' pages':'Available offline'))+'</p></div><div class="library-actions"><button class="action" data-lib-open="'+esc(r.item.id)+'">'+(audioFormats.includes(r.item.format)?'Listen':['WEBM','MP4'].includes(r.item.format)?'Watch':r.item.format==='ZIM'?'Browse':'Read')+'</button>'+(r.meta?.entries.length?'<button class="action secondary" data-lib-contents="'+esc(r.item.id)+'">Contents</button>':'')+'</div></article>';}
+function khanAcademyCard(){return '<article class="library-resource"><div class="resource-symbol" aria-hidden="true">'+categoryGraphic('Learning & How-to')+'</div><div class="format">OFFLINE LESSONS</div><div class="row-text"><h3>Khan Academy</h3><p>Maths, science and more · videos &amp; interactive exercises</p></div><div class="library-actions"><button class="action" data-khan-open>Browse lessons</button></div></article>'; }
 async function renderLibrary(version){
  const root=$('#results'),q=$('#search').value.trim().toLowerCase();$('#filter').hidden=true;$('#search').placeholder='Search books, subjects and chapters';$('#search').setAttribute('aria-label',$('#search').placeholder);
  $('#browse-modes').hidden=true;
@@ -105,7 +105,7 @@ async function renderLibrary(version){
   }else if(!librarySubject&&!q){
    $('#summary').textContent=all.length+' resources · '+groups.length+' subjects · available offline';
    const featured=view==='library'?['wikipedia','gutenberg','ifixit','appropedia'].map(n=>all.find(r=>r.item.format==='ZIM'&&r.item.name.toLowerCase().includes(n))).filter(Boolean):all.filter(r=>r.item.format==='ZIM');
-   html+='<h2>'+ (view==='languages'?'Dictionaries & reference':view==='education'?'Explore & learn':'Start exploring')+'</h2><div class="library-featured">'+featured.map(libraryCard).join('')+'</div><div class="section-heading"><h2>Browse by subject</h2><button class="action secondary" data-lib-subject="*">View all resources</button></div><div class="library-subjects">'+groups.map(g=>{const [title,description,icon]=libraryLabels[g]||[g,'Books and guides','▤'];return '<button class="library-subject" data-lib-subject="'+esc(g)+'"><span class="library-icon" aria-hidden="true">'+icon+'</span><strong>'+esc(title)+'</strong><span>'+esc(description)+'</span><small>'+all.filter(r=>r.subject===g).length+' resources →</small></button>';}).join('')+'</div>';
+   html+='<h2>'+ (view==='languages'?'Dictionaries & reference':view==='education'?'Explore & learn':'Start exploring')+'</h2><div class="library-featured">'+(view==='education'?khanAcademyCard():'')+featured.map(libraryCard).join('')+'</div><div class="section-heading"><h2>Browse by subject</h2><button class="action secondary" data-lib-subject="*">View all resources</button></div><div class="library-subjects">'+groups.map(g=>{const [title,description,icon]=libraryLabels[g]||[g,'Books and guides','▤'];return '<button class="library-subject" data-lib-subject="'+esc(g)+'"><span class="library-icon" aria-hidden="true">'+icon+'</span><strong>'+esc(title)+'</strong><span>'+esc(description)+'</span><small>'+all.filter(r=>r.subject===g).length+' resources →</small></button>';}).join('')+'</div>';
   }else{
    const rows=all.filter(r=>(!librarySubject||librarySubject==='*'||r.subject===librarySubject)&&(!q||[r.title,r.subject,r.description,r.item.folder,...(r.meta?.entries||[]).map(e=>e.title)].join(' ').toLowerCase().includes(q)));
    $('#summary').textContent=rows.length+' resources'+(q?' matching “'+$('#search').value.trim()+'”':'');
@@ -113,7 +113,7 @@ async function renderLibrary(version){
    if(rows.length>libraryLimit)html+='<button class="action" id="library-more">Show more resources</button>';
    if(q)html+='<section id="library-text-results" aria-live="polite"><h2>Inside the PDFs</h2><p>Searching page text…</p></section>';
   }
-  root.innerHTML=html;$('#library-more')?.addEventListener('click',()=>{libraryLimit+=48;renderRows()});
+  root.innerHTML=html;root.querySelector('[data-khan-open]')?.addEventListener('click',()=>openFieldstationSite('kolibri'));$('#library-more')?.addEventListener('click',()=>{libraryLimit+=48;renderRows()});
   root.querySelectorAll('[data-lib-subject]').forEach(b=>b.onclick=()=>{librarySubject=b.dataset.libSubject;libraryBook='';libraryLimit=48;$('#search').value='';renderRows();window.scrollTo(0,0)});
   root.querySelectorAll('[data-lib-open]').forEach(b=>b.onclick=()=>{const r=all.find(r=>r.item.id===b.dataset.libOpen);openItem({...r.item,title:r.title})});
   root.querySelectorAll('[data-lib-contents]').forEach(b=>b.onclick=()=>{libraryBook=b.dataset.libContents;$('#search').value='';renderRows();window.scrollTo(0,0)});
