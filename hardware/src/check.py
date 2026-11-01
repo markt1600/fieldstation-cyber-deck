@@ -26,6 +26,7 @@ for n in POSTS: parts['post'+n]=build_post(n).mirror([0,0,1]).translate([0,0,FLO
 _FP={'__name__':'lib'}; exec(open('floorplate.py').read().split("if __name__")[0],_FP)
 parts['floor_plate']=_FP['build_floor_plate']()
 for _k in ('L','R'): parts['pod_bracket_'+_k]=_FP['build_pod_bracket'](_k)
+parts['plate_splice']=_FP['build_splice']()
 # boards sit on the floor plate (3 mm); the Pi in its pocket, the boards on 6 mm bosses
 parts['pi']=box(145,105,FLOOR_Z-3-62.75,145+98.75,105+90.2,FLOOR_Z-3)
 # breakout turned 90 deg: 55 x 65; 35 mm from the plate, incl. parts under the board around its 9 mm bosses

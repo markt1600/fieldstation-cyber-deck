@@ -38,7 +38,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
-| B5 | Floor plate in two pieces (main + right strip, dovetailed) covering the whole flat floor: post and pod-bracket screw holes, Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses) |
+| B5 | Floor plate in two pieces (main + right strip, dovetailed, plus a 15 × 48 × 2 mm splice strip glued across the seam on top) covering the whole flat floor: post and pod-bracket screw holes, Pi case pocket with two strap loops, insert bosses for the perfboard (6 mm) and the GPIO breakout (two 8.2 mm bosses) |
 | speaker_pods_complete_x2 | Both complete pods (bodies and baffles) on one plate, if you print the pods separately from B1/B2 |
 
 The open pocket at the left end of the lid's hinge strip is spare storage. The PMS7003 cradle on B3/B3a is printed mirrored so its board side faces the screen.
@@ -67,10 +67,12 @@ The open pocket at the left end of the lid's hinge strip is spare storage. The P
 
 ![Frame v2](docs/frame_v2.png)
 
+Where every insert goes: [docs/insert_map.png](docs/insert_map.png)
+
 1. Fit the inserts: two in each post foot (underside), two in each pod bracket foot, plus the posts' panel-end inserts.
 2. Epoxy a pod bracket to the upper side wall of each speaker-pod body, its foot flush with the pod's back, on the side toward the middle of the case. The wires still leave through the pod's rear hole and run out under the pod.
 3. Screw the pods (with drivers and baffles) and the four posts to the back of the panel as before.
-4. Epoxy the two floor-plate pieces together at the dovetails. With the panel face down, lay the plate on the post feet and pod-bracket feet and screw it on from underneath: 12 × M3 × 8 countersunk.
+4. Epoxy the two floor-plate pieces together at the dovetails, and epoxy the splice strip across the seam on the top side (between the Pi pocket and the right edge, above the strap loop). With the panel face down, lay the plate on the post feet and pod-bracket feet and screw it on from underneath: 12 × M3 × 8 countersunk.
 5. Fit the Pi, breakout and perfboard to the plate and do the wiring while it's all out of the case.
 6. Put VHB on the plate's underside (Primer 94 on the case floor) and lower the whole frame into the base. The panel comes off later by its front screws; the frame stays put.
 
@@ -107,7 +109,7 @@ python placement_sheet.py # redraws ../docs/placement_sheet.png
 | `pms7003_v2.py` | Ducted PMS7003 cradle |
 | `kickstand.py` | Slim kickstand: hinge plate with a short stop wedge, flat 22 × 5 mm leg |
 | `floorplate.py` | Floor plate glued to the case floor: Pi case pocket, perfboard and breakout bosses |
-| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py`, `case_render.py`, `exploded_render.py`, `frame_render.py`, `post_guide.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
+| `placement_sheet.py`, `assembly_sheet.py`, `pms_diagram.py`, `layout_sheet.py`, `case_render.py`, `exploded_render.py`, `frame_render.py`, `post_guide.py`, `insert_map.py` | The placement, exploded-assembly, sensor-cradle and internal-layout drawings in `docs/` |
 
 The case interior dimensions come from measurements of the real Peli 1400: 99 mm rim to floor, a 30 mm lid, and about 306.5 × 232.9 mm inside at the rim.
 

@@ -10,6 +10,7 @@ FP_T=3.0
 FP=(18.0,88.0,284.5,211.0)              # whole flat floor: under all four post feet, kept clear of the speaker pods (y < 88) for their wires
 SEAM_X=255.0                            # printed in two pieces (bed 256 mm): main plate + right strip, joined by dovetails
 SEAM_TABS=(118.0,182.0)                 # dovetail centres along the seam
+SPLICE=(247.5,140.0,262.5,188.0,2.0)    # seam splice strip glued on top across the seam: x0,y0,x1,y1,thickness (clear of the Pi pocket, strap loop and TR foot)
 # speaker-pod brackets: an L-bracket epoxied to each pod's upper side wall, screwed down into the plate.
 # They sit along the pods' upper edge (y 88-97), so the floor under the pods stays open for the speaker wires.
 POD_BRK={'L':(64.0,90.0),'R':(PW-90.0,PW-64.0)}   # x range: inboard of each pod's rear cable hole (pod centre), so its wires can pass
@@ -77,6 +78,9 @@ def build_floor_plate():
             p=p+Manifold.cylinder(h,BOSS_D/2,BOSS_D/2,40).translate([x,y,z0-h])
             p=p-Manifold.cylinder(l+0.3,d/2,d/2,32).translate([x,y,z0-h-0.01])
     return p
+def build_splice():
+    x0,y0,x1,y1,t=SPLICE; z=FLOOR_Z-FP_T
+    return Manifold.extrude(rrect(x1-x0,y1-y0,2.0,(x0+x1)/2,(y0+y1)/2),t).translate([0,0,z-t])
 def split_plate(m):
     """main plate (x < SEAM_X, with dovetail tabs) and right strip"""
     from manifold3d import CrossSection
