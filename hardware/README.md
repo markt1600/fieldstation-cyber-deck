@@ -34,7 +34,7 @@ Bambu Studio 3MF plates for a Bambu Lab P1S (256 mm bed). Every part is already 
 | B2 | Base panel right half, both speaker pod bodies |
 | B1p, B2p | Panel halves on their own, front face up (B1p also has the seam splice strip, B2p the lid's tray door, outside face up) |
 | B3p | Four floor posts and four screen clamps on their own (use a brim) |
-| B6 | Four floor posts (v2: 6 mm feet with inserts, screw to the floor plate) and the two speaker-pod brackets |
+| B6 | Four floor posts (v2: 6 mm feet with inserts, screw to the floor plate) and the two speaker-pod brackets (optional) |
 | B3 | Port tray, four floor posts, four screen clamps, PMS7003 cradle |
 | B3a | Port tray and PMS7003 cradle (the same parts as on B3, for printing them first) |
 | B4 | Two kickstand hinge plates and legs |
@@ -70,7 +70,7 @@ The open pocket at the left end of the lid's hinge strip is spare storage. The P
 Where every insert goes: [docs/insert_map.png](docs/insert_map.png)
 
 1. Fit the inserts: two in each post foot (underside), two in each pod bracket foot, plus the posts' panel-end inserts.
-2. Epoxy a pod bracket to the upper side wall of each speaker-pod body, its foot flush with the pod's back, on the side toward the middle of the case. The wires still leave through the pod's rear hole and run out under the pod.
+2. (Optional; the four screwed-down posts are usually stiff enough on their own.) Epoxy a pod bracket to the upper side wall of each speaker-pod body, its foot flush with the pod's back, on the side toward the middle of the case. The wires still leave through the pod's rear hole and run out under the pod.
 3. Screw the pods (with drivers and baffles) and the four posts to the back of the panel as before.
 4. Epoxy the two floor-plate pieces together at the dovetails, and epoxy the splice strip across the seam on the top side (between the Pi pocket and the right edge, above the strap loop). With the panel face down, lay the plate on the post feet and pod-bracket feet and screw it on from underneath: 12 × M3 × 8 countersunk.
 5. Fit the Pi, breakout and perfboard to the plate and do the wiring while it's all out of the case.
